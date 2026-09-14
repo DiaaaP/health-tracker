@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#3b185f" />
+  <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
+  <title>Sana — цикл күнделігі</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <div class="app-shell">
+    <aside class="side-rail" aria-label="Негізгі навигация">
+      <a class="brand" href="#home" aria-label="Sana басты беті">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span class="brand-name">Sana</span>
+      </a>
+      <nav class="rail-nav">
+        <button class="nav-item active" data-view="home" type="button"><span>⌂</span><b data-i18n="navHome">Басты</b></button>
+        <button class="nav-item" data-view="calendar" type="button"><span>□</span><b data-i18n="navCalendar">Күнтізбе</b></button>
+        <button class="nav-item" data-view="insights" type="button"><span>⌁</span><b data-i18n="navInsights">Талдау</b></button>
+        <button class="nav-item" data-view="profile" type="button"><span>◯</span><b data-i18n="navProfile">Профиль</b></button>
+      </nav>
+      <div class="privacy-note"><span>⌾</span><p data-i18n="privacyShort">Деректер осы құрылғыда сақталады</p></div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="todayLabel">Бүгін • 15 қыркүйек</p>
+          <h1 id="pageTitle">Сәлем, Амина</h1>
+        </div>
+        <div class="top-actions">
+          <div class="language-switch" aria-label="Тілді таңдау">
+            <button class="lang active" data-lang="kk" type="button">ҚАЗ</button>
+            <button class="lang" data-lang="ru" type="button">РУС</button>
+          </div>
+          <button class="icon-button" id="privacyButton" type="button" aria-label="Құпиялылық режимі">◉</button>
+          <div class="avatar" aria-label="Амина">А</div>
+        </div>
+      </header>
+
+      <section class="view active" id="homeView" data-view-panel="home">
+        <div class="dashboard-grid">
+          <article class="cycle-card surface">
+            <div class="section-heading">
+              <div><p class="eyebrow" data-i18n="currentCycle">Қазіргі цикл</p><h2 data-i18n="cycleStatus">Денеңіздің ырғағы</h2></div>
+              <button class="text-button" data-go="calendar" type="button" data-i18n="details">Толығырақ</button>
+            </div>
+            <div class="cycle-content">
+              <div class="cycle-ring" role="img" aria-label="Циклдің 14-күні">
+                <svg viewBox="0 0 240 240" aria-hidden="true">
+                  <circle class="ring-track" cx="120" cy="120" r="98"></circle>
+                  <circle class="ring-progress" cx="120" cy="120" r="98"></circle>
+                </svg>
+                <div class="ring-copy">
+                  <span class="phase-pill" data-i18n="ovulationPhase">Овуляция кезеңі</span>
+                  <strong>14</strong>
+                  <b data-i18n="dayOfCycle">цикл күні</b>
+                  <small data-i18n="nextPeriod">Келесі етеккірге 14 күн</small>
+                </div>
+              </div>
+              <div class="cycle-side">
+                <div class="forecast-item"><span class="forecast-icon fertile">✦</span><div><small data-i18n="fertility">Құнарлылық</small><strong data-i18n="highPhase">Жоғары фаза</strong><p data-i18n="fertileDates">13–18 қыркүйек</p></div></div>
+                <div class="forecast-item"><span class="forecast-icon">↻</span><div><small data-i18n="cycleLength">Цикл ұзақтығы</small><strong>28 <span data-i18n="days">күн</span></strong><p data-i18n="regularRhythm">Тұрақты ырғақ</p></div></div>
+                <button class="primary-button" id="logPeriodButton" type="button"><span>●</span><span data-i18n="markPeriod">Етеккірді белгілеу</span></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="daily-card surface">
+            <div class="section-heading compact"><div><p class="eyebrow" data-i18n="dailyCheck">Күнделікті белгі</p><h2 data-i18n="howFeel">Өзіңізді қалай сезінесіз?</h2></div><span class="tiny-lock">⌾</span></div>
+            <div class="mood-row" role="group" aria-label="Көңіл-күй">
+              <button class="mood" data-mood="happy" type="button"><span>☺</span><b data-i18n="happy">Қуанышты</b></button>
+              <button class="mood selected" data-mood="calm" type="button"><span>◡</span><b data-i18n="calm">Сабырлы</b></button>
+              <button class="mood" data-mood="sensitive" type="button"><span>♡</span><b data-i18n="sensitive">Сезімтал</b></button>
+              <button class="mood" data-mood="sad" type="button"><span>☹</span><b data-i18n="sad">Мұңды</b></button>
+            </div>
+            <button class="secondary-button full" data-go="log" type="button" data-i18n="addSymptoms">Белгілерді қосу</button>
+          </article>
+
+          <article class="tip-card">
+            <div class="tip-orbit" aria-hidden="true"><span>✦</span></div>
+            <div><p class="eyebrow light" data-i18n="todayTip">Бүгінгі кеңес</p><h2 data-i18n="listenBody">Денеңізді тыңдаңыз</h2><p data-i18n="tipText">Қуат деңгейі жоғары болуы мүмкін. Жайлы қозғалыс пен жеткілікті су ішуге көңіл бөліңіз.</p></div>
+          </article>
+
+          <article class="week-card surface">
+            <div class="section-heading compact"><div><p class="eyebrow" data-i18n="weekOverview">Апта көрінісі</p><h2 data-i18n="rhythm">Сіздің ырғағыңыз</h2></div><span class="trend">+12%</span></div>
+            <div class="mini-chart" aria-label="Апталық қуат деңгейі">
+              <div style="--h:36%"><i></i><small>Дс</small></div><div style="--h:48%"><i></i><small>Сс</small></div><div style="--h:61%"><i></i><small>Ср</small></div><div class="today" style="--h:82%"><i></i><small>Бс</small></div><div style="--h:74%"><i></i><small>Жм</small></div><div style="--h:58%"><i></i><small>Сб</small></div><div style="--h:44%"><i></i><small>Жс</small></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="calendarView" data-view-panel="calendar">
+        <div class="calendar-layout">
+          <article class="surface calendar-card">
+            <div class="calendar-head"><button id="prevMonth" class="icon-button" type="button">‹</button><div><p class="eyebrow" data-i18n="cycleCalendar">Цикл күнтізбесі</p><h2 id="monthTitle">Қыркүйек 2026</h2></div><button id="nextMonth" class="icon-button" type="button">›</button></div>
+            <div class="weekdays"><span>Дс</span><span>Сс</span><span>Ср</span><span>Бс</span><span>Жм</span><span>Сб</span><span>Жс</span></div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <div class="legend"><span><i class="period-dot"></i><b data-i18n="period">Етеккір</b></span><span><i class="fertile-dot"></i><b data-i18n="fertileWindow">Қолайлы кезең</b></span><span><i class="today-dot"></i><b data-i18n="today">Бүгін</b></span></div>
+          </article>
+          <aside class="surface day-summary">
+            <p class="eyebrow" data-i18n="selectedDay">Таңдалған күн</p><h2 id="selectedDate">15 қыркүйек</h2>
+            <div class="summary-status"><span>✦</span><div><b data-i18n="ovulationPhase">Овуляция кезеңі</b><small data-i18n="highChance">Ықтималдық жоғары</small></div></div>
+            <div class="data-list"><div><span data-i18n="prediction">Болжам</span><b data-i18n="nextPeriodDate">29 қыркүйек</b></div><div><span data-i18n="loggedMood">Көңіл-күй</span><b id="calendarMood">Сабырлы</b></div><div><span data-i18n="energy">Күш-қуат</span><b id="calendarEnergy">Жоғары</b></div></div>
+            <button class="primary-button full" data-go="log" type="button" data-i18n="logThisDay">Осы күнді белгілеу</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="insightsView" data-view-panel="insights">
+        <div class="insights-grid">
+          <article class="surface insight-lead"><p class="eyebrow" data-i18n="cycleAnalysis">Цикл талдауы</p><h2 data-i18n="stableCycle">Соңғы 3 цикл тұрақты</h2><p data-i18n="analysisText">Сіздің орташа цикліңіз 28 күн. Ұзақтықтағы ауытқу 2 күннен аспайды.</p><div class="stat-pair"><div><strong>28</strong><span data-i18n="avgDays">орташа күн</span></div><div><strong>5</strong><span data-i18n="avgPeriod">етеккір күні</span></div></div></article>
+          <article class="surface pattern-card"><div class="section-heading compact"><div><p class="eyebrow" data-i18n="wellbeing">Хал-жағдай</p><h2 data-i18n="energyPattern">Қуат үлгісі</h2></div></div><div class="line-chart" aria-label="Цикл бойынша қуат деңгейі"><svg viewBox="0 0 600 180" preserveAspectRatio="none"><defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9d70c6" stop-opacity=".38"/><stop offset="1" stop-color="#9d70c6" stop-opacity="0"/></linearGradient></defs><path class="area" d="M0 140 C65 135 90 115 140 120 S235 160 290 115 S370 38 430 55 S515 100 600 75 L600 180 L0 180Z"/><path class="line" d="M0 140 C65 135 90 115 140 120 S235 160 290 115 S370 38 430 55 S515 100 600 75"/></svg><div><span>1</span><span>7</span><span>14</span><span>21</span><span>28</span></div></div></article>
+          <article class="surface insight-note"><span class="note-icon">◎</span><div><p class="eyebrow" data-i18n="observation">Бақылау</p><h2 data-i18n="headachePattern">Бас ауруы цикл соңында жиілейді</h2><p data-i18n="observeText">Келесі екі циклде бақылауды жалғастырыңыз. Қатты немесе әдеттен тыс ауырсыну болса, дәрігерге жүгініңіз.</p></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="profileView" data-view-panel="profile">
+        <div class="profile-layout">
+          <article class="surface profile-card"><div class="profile-hero"><div class="profile-avatar">А</div><div><p class="eyebrow" data-i18n="yourProfile">Сіздің профиліңіз</p><h2>Амина</h2><p data-i18n="cycleMode">Циклді бақылау режимі</p></div></div><div class="settings-list"><button type="button"><span>◎</span><div><b data-i18n="notifications">Хабарламалар</b><small data-i18n="notificationsDesc">Етеккір және цикл болжамдары</small></div><i>›</i></button><button type="button"><span>文</span><div><b data-i18n="language">Тіл</b><small id="languageValue">Қазақша</small></div><i>›</i></button><button type="button"><span>⌾</span><div><b data-i18n="privacy">Құпиялылық</b><small data-i18n="localStorage">Осы құрылғыда сақтау</small></div><i>›</i></button></div></article>
+          <article class="privacy-card"><span>⌾</span><div><h2 data-i18n="privateDiary">Жеке күнделік</h2><p data-i18n="privacyText">Бұл демонстрация енгізілген деректерді браузердің жергілікті жадында сақтайды. Ортақ құрылғыда қолдансаңыз, жазбаларды тазалаңыз.</p><button id="clearData" class="ghost-light" type="button" data-i18n="clearData">Деректерді тазалау</button></div></article>
+          <p class="medical-note" data-i18n="medicalNote">Sana медициналық диагноз қоймайды. Денсаулығыңызға қатысты сұрақтар болса, дәрігермен кеңесіңіз.</p>
+        </div>
+      </section>
+
+      <section class="view" id="logView" data-view-panel="log">
+        <article class="surface logger">
+          <div class="logger-head"><button class="icon-button" data-go="home" type="button">×</button><div><p class="eyebrow" data-i18n="dailyLog">Күнделікті журнал</p><h2 data-i18n="howFeelToday">Бүгін өзіңізді қалай сезінесіз?</h2></div><span class="date-chip" id="loggerDate">15 қыркүйек</span></div>
+          <div class="form-section"><h3 data-i18n="mood">Көңіл-күй</h3><div class="choice-grid" id="moodChoices"><button data-value="happy" type="button">☺<b data-i18n="happy">Қуанышты</b></button><button class="selected" data-value="calm" type="button">◡<b data-i18n="calm">Сабырлы</b></button><button data-value="sensitive" type="button">♡<b data-i18n="sensitive">Сезімтал</b></button><button data-value="sad" type="button">☹<b data-i18n="sad">Мұңды</b></button><button data-value="angry" type="button">⌁<b data-i18n="angry">Ашулы</b></button></div></div>
+          <div class="form-section"><h3 data-i18n="symptoms">Белгілер</h3><div class="chips" id="symptomChoices"><button data-value="pain" type="button" data-i18n="pain">Ауырсыну</button><button data-value="headache" type="button" data-i18n="headache">Бас ауруы</button><button data-value="bloating" type="button" data-i18n="bloating">Іш кебуі</button><button data-value="skin" type="button" data-i18n="skin">Бөртпе</button><button data-value="back" type="button" data-i18n="backPain">Бел ауруы</button><button class="selected" data-value="none" type="button" data-i18n="none">Ешқандай</button></div></div>
+          <div class="form-section"><h3 data-i18n="energy">Күш-қуат</h3><div class="segmented" id="energyChoices"><button data-value="low" type="button" data-i18n="low">Төмен</button><button data-value="medium" type="button" data-i18n="medium">Орташа</button><button class="selected" data-value="high" type="button" data-i18n="high">Жоғары</button></div></div>
+          <div class="form-section"><label for="notes" data-i18n="notes">Жазбалар</label><textarea id="notes" rows="4" data-i18n-placeholder="notesPlaceholder" placeholder="Өзіңіз үшін қысқа жазба қалдырыңыз..."></textarea></div>
+          <button class="primary-button full large" id="saveLog" type="button" data-i18n="saveToday">Бүгінгіні сақтау</button>
+        </article>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Мобильді навигация">
+      <button class="active" data-view="home" type="button"><span>⌂</span><b data-i18n="navHome">Басты</b></button>
+      <button data-view="calendar" type="button"><span>□</span><b data-i18n="navCalendar">Күнтізбе</b></button>
+      <button data-view="insights" type="button"><span>⌁</span><b data-i18n="navInsights">Талдау</b></button>
+      <button data-view="profile" type="button"><span>◯</span><b data-i18n="navProfile">Профиль</b></button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
+  <script src="./app.js"></script>
+</body>
+</html>

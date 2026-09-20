@@ -5,8 +5,13 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.staticfiles import StaticFiles
 
-from .database import get_connection, init_db, row_to_log
-from .schemas import DailyLog, DailyLogCreate, Period, PeriodCreate
+try:
+    from .database import get_connection, init_db, row_to_log
+    from .schemas import DailyLog, DailyLogCreate, Period, PeriodCreate
+except ImportError:
+    # Support direct launch: python backend/main.py
+    from database import get_connection, init_db, row_to_log
+    from schemas import DailyLog, DailyLogCreate, Period, PeriodCreate
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -111,3 +116,9 @@ def get_summary() -> dict[str, int | str]:
 
 
 app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=8000)

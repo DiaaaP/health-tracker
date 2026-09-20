@@ -470,6 +470,12 @@ button, textarea {
 .form-section h3, .form-section label {
   display: block; font: 700 1.02rem Georgia,serif; margin-bottom: 12px;
 }
+.form-label-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;
+}
+.form-label-row label {
+  margin-bottom: 0;
+}
 .choice-grid {
   display: grid; grid-template-columns: repeat(5,1fr); gap: 9px;
 }

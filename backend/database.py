@@ -35,6 +35,14 @@ def init_db() -> None:
                 end_date TEXT,
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL COLLATE NOCASE UNIQUE,
+                password_hash TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
             """
         )
 
@@ -43,3 +51,13 @@ def row_to_log(row: sqlite3.Row) -> dict:
     result = dict(row)
     result["symptoms"] = json.loads(result["symptoms"])
     return result
+
+
+def row_to_user(row: sqlite3.Row) -> dict:
+    """Return only public user fields; never expose password_hash."""
+    return {
+        "id": row["id"],
+        "name": row["name"],
+        "email": row["email"],
+        "created_at": row["created_at"],
+    }

@@ -1,4 +1,5 @@
 import json
+import sqlite3
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -6,12 +7,29 @@ from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.staticfiles import StaticFiles
 
 try:
-    from .database import get_connection, init_db, row_to_log
-    from .schemas import DailyLog, DailyLogCreate, Period, PeriodCreate
+    from .auth import hash_password, verify_password
+    from .database import get_connection, init_db, row_to_log, row_to_user
+    from .schemas import (
+        AuthResponse,
+        DailyLog,
+        DailyLogCreate,
+        Period,
+        PeriodCreate,
+        UserLogin,
+        UserRegister,
+    )
 except ImportError:
-    # Support direct launch: python backend/main.py
-    from database import get_connection, init_db, row_to_log
-    from schemas import DailyLog, DailyLogCreate, Period, PeriodCreate
+    from auth import hash_password, verify_password
+    from database import get_connection, init_db, row_to_log, row_to_user
+    from schemas import (
+        AuthResponse,
+        DailyLog,
+        DailyLogCreate,
+        Period,
+        PeriodCreate,
+        UserLogin,
+        UserRegister,
+    )
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -35,6 +53,53 @@ app = FastAPI(
 @app.get("/api/health")
 def health_check() -> dict[str, str]:
     return {"status": "ok", "service": "sana-api"}
+
+
+@app.post(
+    "/api/auth/register",
+    response_model=AuthResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def register_user(payload: UserRegister):
+    email = str(payload.email).lower()
+    password_hash = hash_password(payload.password.get_secret_value())
+
+    try:
+        with get_connection() as connection:
+            cursor = connection.execute(
+                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                (payload.name, email, password_hash),
+            )
+            row = connection.execute(
+                "SELECT * FROM users WHERE id = ?", (cursor.lastrowid,)
+            ).fetchone()
+    except sqlite3.IntegrityError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="An account with this email already exists",
+        ) from error
+
+    if row is None:
+        raise HTTPException(status_code=500, detail="User was not created")
+    return {"message": "Registration successful", "user": row_to_user(row)}
+
+
+@app.post("/api/auth/login", response_model=AuthResponse)
+def login_user(payload: UserLogin):
+    email = str(payload.email).lower()
+    with get_connection() as connection:
+        row = connection.execute(
+            "SELECT * FROM users WHERE email = ?", (email,)
+        ).fetchone()
+
+    if row is None or not verify_password(
+        payload.password.get_secret_value(), row["password_hash"]
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password",
+        )
+    return {"message": "Login successful", "user": row_to_user(row)}
 
 
 @app.get("/api/logs", response_model=list[DailyLog])

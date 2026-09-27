@@ -27,6 +27,15 @@ python -m uvicorn backend.main:app --reload
 
 SQLite-база `backend/sana.db` создаётся автоматически и не сохраняется в Git.
 
+## Регистрация
+
+- `POST /api/auth/register` — создаёт пользователя.
+- `POST /api/auth/login` — проверяет email и пароль.
+
+Пользователи сохраняются в таблице `users`. Пароли в открытом виде не хранятся:
+backend сохраняет только защищённый hash с индивидуальной солью. Проверить оба
+запроса можно через Swagger по адресу http://127.0.0.1:8000/docs.
+
 ## Публичная frontend-версия
 
 GitHub Pages: https://diaaap.github.io/health-tracker/

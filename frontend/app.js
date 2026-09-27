@@ -29,25 +29,4 @@ document.querySelector('#saveLog').addEventListener('click',async()=>{const note
 document.querySelector('#logPeriodButton').addEventListener('click',async()=>{const payload={start_date:new Date().toISOString().slice(0,10),end_date:null};try{await sendToApi('/api/periods',payload)}catch(error){console.info('Backend unavailable; using local storage.',error);localStorage.setItem('sana-period-marked','true')}showToast(t('periodSaved'));document.querySelector('.ring-progress').style.strokeDashoffset='286'});document.querySelector('.avatar').addEventListener('click',()=>setView('profile'));;document.querySelector('#clearData').addEventListener('click',()=>{['sana-mood','sana-energy','sana-symptoms','sana-notes','sana-period-marked'].forEach(k=>localStorage.removeItem(k));showToast(t('cleared'))});document.querySelector('#prevMonth').addEventListener('click',()=>{shownMonth--;if(shownMonth<0){shownMonth=11;shownYear--}state.selectedDate=0;updateSelectedDate();renderCalendar()});document.querySelector('#nextMonth').addEventListener('click',()=>{shownMonth++;if(shownMonth>11){shownMonth=0;shownYear++}state.selectedDate=0;updateSelectedDate();renderCalendar()});document.querySelector('#insertTemplate').addEventListener('click',()=>{const notes=document.querySelector('#notes');notes.value=t('templateText');notes.focus()});document.querySelector('#notes').value=localStorage.getItem('sana-notes')||'';
 applyProfileName(localStorage.getItem('sana-user-name'));applyLanguage(state.lang);renderCalendar();
 document.querySelector('.avatar').addEventListener('click',()=>setView('profile'));
-function updateChartLanguage(){
-  const isRu = state.lang === 'ru';
-
-  const chartTexts = document.querySelectorAll('.line-chart [data-chart-text]');
-
-  chartTexts.forEach(el => {
-    const ru = el.dataset.ru;
-    const kk = el.dataset.kk;
-    el.textContent = isRu ? ru : kk;
-  });
-}
-
-const originalApplyLanguage = applyLanguage;
-
-applyLanguage = function(lang){
-  originalApplyLanguage(lang);
-  updateChartLanguage();
-};
-
-updateChartLanguage();
-
 

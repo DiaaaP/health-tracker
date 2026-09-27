@@ -833,4 +833,69 @@ button, textarea {
   border-radius: 12px;
 }
 ```
+/* ===== CLICK FIX ===== */
 
+/* Декоративные элементы не должны перехватывать клики */
+.ambient,
+.ambient-one,
+.ambient-two,
+.tip-orbit {
+  pointer-events: none !important;
+}
+
+/* Интерфейс всегда поверх декоративных слоёв */
+.app-shell {
+  position: relative;
+  z-index: 10;
+}
+
+.side-rail,
+.workspace,
+.topbar,
+.view,
+.surface,
+.bottom-nav,
+.modal-backdrop,
+.auth-modal,
+button,
+a,
+input,
+textarea,
+select {
+  position: relative;
+}
+
+/* Кнопки и ссылки должны принимать клики */
+button,
+a,
+input,
+textarea,
+select {
+  pointer-events: auto !important;
+}
+
+/* Навигация */
+.side-rail,
+.bottom-nav,
+.topbar {
+  z-index: 50;
+}
+
+/* Контент */
+.workspace {
+  z-index: 20;
+}
+
+/* Не даём декоративным слоям перекрывать приложение */
+.ambient {
+  z-index: 0 !important;
+}
+
+/* Модальные окна должны быть выше всего */
+.modal-backdrop {
+  z-index: 9999 !important;
+}
+
+.auth-modal {
+  z-index: 10000 !important;
+}

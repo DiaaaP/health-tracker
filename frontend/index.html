@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#3b185f" />
   <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
   <title>Sana — цикл күнделігі</title>
-  <link rel="stylesheet" href="./styles.css?v=3" />
+  <link rel="stylesheet" href="./styles.css?v=4" />
 </head>
 <body>
   <div class="ambient ambient-one"></div>
@@ -125,7 +125,7 @@
 
       <section class="view" id="profileView" data-view-panel="profile">
         <div class="profile-layout">
-          <article class="surface profile-card"><div class="profile-hero"><div class="profile-avatar" id="profileAvatar">А</div><div><p class="eyebrow" data-i18n="yourProfile">Сіздің профиліңіз</p><h2 id="profileName">Амина</h2><p data-i18n="cycleMode">Циклді бақылау режимі</p></div></div><div class="settings-list"><button data-open-register type="button"><span>＋</span><div><b data-i18n="createAccount">Аккаунт құру</b><small data-i18n="createAccountShort">Деректеріңізді тіркеңіз</small></div><i>›</i></button><button type="button"><span>◎</span><div><b data-i18n="notifications">Хабарламалар</b><small data-i18n="notificationsDesc">Етеккір және цикл болжамдары</small></div><i>›</i></button><button type="button"><span>文</span><div><b data-i18n="language">Тіл</b><small id="languageValue">Қазақша</small></div><i>›</i></button><button type="button"><span>⌾</span><div><b data-i18n="privacy">Құпиялылық</b><small data-i18n="localStorage">Осы құрылғыда сақтау</small></div><i>›</i></button></div></article>
+          <article class="surface profile-card"><div class="profile-hero"><div class="profile-avatar" id="profileAvatar">А</div><div><p class="eyebrow" data-i18n="yourProfile">Сіздің профиліңіз</p><h2 id="profileName">Амина</h2><p data-i18n="cycleMode">Циклді бақылау режимі</p></div></div><div class="settings-list"><button data-open-register type="button"><span>＋</span><div><b data-i18n="createAccount">Аккаунт құру</b><small data-i18n="createAccountShort">Деректеріңізді тіркеңіз</small></div><i>›</i></button><button data-open-login type="button"><span>→</span><div><b data-i18n="loginAccount">Аккаунтқа кіру</b><small data-i18n="loginAccountShort">Email және құпиясөз арқылы</small></div><i>›</i></button><button type="button"><span>◎</span><div><b data-i18n="notifications">Хабарламалар</b><small data-i18n="notificationsDesc">Етеккір және цикл болжамдары</small></div><i>›</i></button><button type="button"><span>文</span><div><b data-i18n="language">Тіл</b><small id="languageValue">Қазақша</small></div><i>›</i></button><button type="button"><span>⌾</span><div><b data-i18n="privacy">Құпиялылық</b><small data-i18n="localStorage">Осы құрылғыда сақтау</small></div><i>›</i></button></div></article>
           <article class="privacy-card"><span>⌾</span><div><h2 data-i18n="privateDiary">Жеке күнделік</h2><p data-i18n="privacyText">Бұл демонстрация енгізілген деректерді браузердің жергілікті жадында сақтайды. Ортақ құрылғыда қолдансаңыз, жазбаларды тазалаңыз.</p><button id="clearData" class="ghost-light" type="button" data-i18n="clearData">Деректерді тазалау</button></div></article>
           <p class="medical-note" data-i18n="medicalNote">Sana медициналық диагноз қоймайды. Денсаулығыңызға қатысты сұрақтар болса, дәрігермен кеңесіңіз.</p>
         </div>
@@ -170,320 +170,24 @@
     </section>
   </div>
 
+  <div class="modal-backdrop" id="loginModal" hidden>
+    <section class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <button class="modal-close" id="closeLogin" type="button" aria-label="Закрыть">×</button>
+      <p class="eyebrow" data-i18n="account">Аккаунт</p>
+      <h2 id="loginTitle" data-i18n="loginAccount">Аккаунтқа кіру</h2>
+      <p class="modal-description" data-i18n="loginDescription">Тіркелген email мен құпиясөзді енгізіңіз.</p>
+      <form id="loginForm">
+        <label for="loginEmail" data-i18n="email">Email</label>
+        <input id="loginEmail" name="email" type="email" maxlength="254" autocomplete="email" required placeholder="amina@example.com" />
+        <label for="loginPassword" data-i18n="password">Құпиясөз</label>
+        <input id="loginPassword" name="password" type="password" minlength="8" maxlength="128" autocomplete="current-password" required data-i18n-placeholder="passwordPlaceholder" placeholder="Кемінде 8 таңба" />
+        <p class="form-message" id="loginMessage" role="status" aria-live="polite"></p>
+        <button class="primary-button full large" id="loginSubmit" type="submit" data-i18n="login">Кіру</button>
+      </form>
+    </section>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=3"></script>
-  ```html
-  <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-
-  <script src="./app.js?v=3"></script>
-
-  <style>
-    .pattern-card .line-chart {
-      position: relative;
-      height: auto;
-      min-height: 270px;
-      margin-top: 18px;
-      padding-left: 38px;
-    }
-
-    .pattern-card .line-chart svg {
-      display: block;
-      width: 100%;
-      height: 190px;
-      overflow: visible;
-    }
-
-    .pattern-card .line-chart .area {
-      fill: url(#area);
-      opacity: .9;
-    }
-
-    .pattern-card .line-chart .line {
-      fill: none;
-      stroke: var(--plum);
-      stroke-width: 5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .chart-scale {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 190px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: .62rem;
-      pointer-events: none;
-    }
-
-    .chart-scale span {
-      background: rgba(255,255,255,.85);
-      padding-right: 5px;
-      white-space: nowrap;
-    }
-
-    .pattern-card .line-chart > div:not(.chart-scale) {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: .68rem;
-      margin-top: 7px;
-    }
-
-    .chart-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 16px;
-      margin-top: 17px;
-      padding-top: 13px;
-      border-top: 1px solid var(--line);
-      font-size: .7rem;
-      color: var(--muted);
-    }
-
-    .chart-legend span {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .chart-legend i {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .energy-high {
-      background: var(--plum);
-    }
-
-    .energy-medium {
-      background: #b98bd7;
-    }
-
-    .energy-low {
-      background: #e3d1ee;
-    }
-
-    .chart-explanation {
-      margin-top: 14px;
-      padding: 15px 17px;
-      background: #f7effb;
-      border-radius: 15px;
-      color: var(--muted);
-      font-size: .76rem;
-      line-height: 1.55;
-    }
-
-    .chart-explanation strong {
-      display: block;
-      color: var(--plum);
-      font-size: .84rem;
-      margin-bottom: 5px;
-    }
-
-    @media (max-width: 680px) {
-      .pattern-card .line-chart {
-        padding-left: 34px;
-        min-height: 260px;
-      }
-
-      .pattern-card .line-chart svg {
-        height: 175px;
-      }
-
-      .chart-scale {
-        height: 175px;
-      }
-
-      .chart-legend {
-        flex-direction: column;
-        gap: 8px;
-      }
-    }
-  </style>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const chart = document.querySelector('.pattern-card .line-chart');
-
-      if (!chart || chart.dataset.enhanced === 'true') return;
-
-      chart.dataset.enhanced = 'true';
-
-      const scale = document.createElement('div');
-      scale.className = 'chart-scale';
-
-      scale.innerHTML = `
-        <span>Жоғары</span>
-        <span>Орташа</span>
-        <span>Төмен</span>
-      `;
-
-      chart.prepend(scale);
-
-      const legend = document.createElement('div');
-      legend.className = 'chart-legend';
-
-      legend.innerHTML = `
-        <span>
-          <i class="energy-high"></i>
-          Жоғары қуат
-        </span>
-
-        <span>
-          <i class="energy-medium"></i>
-          Орташа қуат
-        </span>
-
-        <span>
-          <i class="energy-low"></i>
-          Төмен қуат
-        </span>
-      `;
-
-      chart.after(legend);
-
-      const explanation = document.createElement('div');
-      explanation.className = 'chart-explanation';
-
-      explanation.innerHTML = `
-        <strong>Диаграмманы қалай оқу керек?</strong>
-        Сызық цикл бойындағы қуат деңгейінің өзгерісін көрсетеді.
-        Сызық жоғары болған сайын, белгіленген қуат деңгейі жоғары.
-        Бұл график цикл кезінде самочувствиедегі қайталанатын өзгерістерді байқауға көмектеседі.
-      `;
-
-      legend.after(explanation);
-    });
-  </script>
-
-</body>
-</html>
-```
-
-
-
-<style>
-  .chart-explanation {
-    margin-top: 18px;
-    padding: 16px 18px;
-    background: #f7effb;
-    border-radius: 16px;
-    color: var(--muted);
-    font-size: .78rem;
-    line-height: 1.55;
-  }
-
-  .chart-explanation strong {
-    display: block;
-    color: var(--plum);
-    font-size: .85rem;
-    margin-bottom: 4px;
-  }
-
-  .chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 15px;
-    font-size: .72rem;
-    color: var(--muted);
-  }
-
-  .chart-legend span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .chart-legend i {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .energy-high {
-    background: var(--plum);
-  }
-
-  .energy-medium {
-    background: #b98bd7;
-  }
-
-  .energy-low {
-    background: #e3d1ee;
-  }
-
-  .chart-scale {
-    position: absolute;
-    left: -2px;
-    top: 8px;
-    height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    color: var(--muted);
-    font-size: .62rem;
-    pointer-events: none;
-  }
-
-  .chart-scale span {
-    background: rgba(255,255,255,.8);
-    padding-right: 4px;
-  }
-
-  .pattern-card .line-chart {
-    padding-left: 28px;
-  }
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const chart = document.querySelector('.pattern-card .line-chart');
-
-  if (!chart || chart.dataset.enhanced === 'true') return;
-
-  chart.dataset.enhanced = 'true';
-
-  const scale = document.createElement('div');
-  scale.className = 'chart-scale';
-  scale.innerHTML = `
-    <span>Высокий</span>
-    <span>Средний</span>
-    <span>Низкий</span>
-  `;
-
-  chart.prepend(scale);
-
-  const legend = document.createElement('div');
-  legend.className = 'chart-legend';
-  legend.innerHTML = `
-    <span><i class="energy-high"></i> Высокая энергия</span>
-    <span><i class="energy-medium"></i> Средняя энергия</span>
-    <span><i class="energy-low"></i> Низкая энергия</span>
-  `;
-
-  chart.after(legend);
-
-  const explanation = document.createElement('div');
-  explanation.className = 'chart-explanation';
-  explanation.innerHTML = `
-    <strong>Как читать диаграмму?</strong>
-    Линия показывает изменение уровня энергии в течение цикла.
-    Чем выше линия, тем выше отмеченный уровень энергии.
-    Данные помогают замечать повторяющиеся изменения самочувствия.
-  `;
-
-  legend.after(explanation);
-});
-</script>
-```
-
+  <script src="./app.js?v=4"></script>
 </body>
 </html>

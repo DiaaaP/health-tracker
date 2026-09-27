@@ -11,73 +11,7 @@ const months={kk:['Қаңтар','Ақпан','Наурыз','Сәуір','Ма�
 function t(k){return copy[state.lang][k]||k}function showToast(message){const el=document.querySelector('#toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2100)}
 function setView(view){state.view=view;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.viewPanel===view));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const name=localStorage.getItem('sana-user-name')||'Амина';const titles={home:state.lang==='kk'?`Сәлем, ${name}`:`Здравствуйте, ${name}`,calendar:t('navCalendar'),insights:t('navInsights'),profile:t('navProfile'),log:t('dailyLog')};document.querySelector('#pageTitle').textContent=titles[view];window.scrollTo({top:0,behavior:'smooth'})}
 function updateSelectedDate(){const el=document.querySelector('#selectedDate');if(!state.selectedDate){el.textContent=t('chooseDay');return}el.textContent=`${state.selectedDate} ${months[state.lang][shownMonth].toLowerCase()}`}
-function applyLanguage(lang){
-  state.lang=lang;
-  localStorage.setItem('sana-lang',lang);
-  document.documentElement.lang=lang;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const key=el.dataset.i18n;
-    el.textContent=t(key);
-  });
-
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
-    el.placeholder=t(el.dataset.i18nPlaceholder);
-  });
-  document.querySelectorAll('.lang').forEach(b=>{
-    b.classList.toggle('active',b.dataset.lang===lang);
-  });
-  const languageValue=document.querySelector('#languageValue');
-  if(languageValue){
-    languageValue.textContent=
-      lang==='kk' ? 'Қазақша' : 'Русский';
-  }
-  const todayLabel=document.querySelector('#todayLabel');
-  if(todayLabel){
-    todayLabel.textContent=
-      lang==='kk'
-        ? 'Бүгін • 15 қыркүйек'
-        : 'Сегодня • 15 сентября';
-  }
-  const loggerDate=document.querySelector('#loggerDate');
-  if(loggerDate){
-    loggerDate.textContent=
-      lang==='kk'
-        ? '15 қыркүйек'
-        : '15 сентября';
-  }
-  const calendarMood=document.querySelector('#calendarMood');
-  if(calendarMood){
-    calendarMood.textContent=t(state.mood);
-  }
-
-  const calendarEnergy=document.querySelector('#calendarEnergy');
-  if(calendarEnergy){
-    calendarEnergy.textContent=t(state.energy);
-  }
-  const week=lang==='kk'
-    ? ['Дс','Сс','Ср','Бс','Жм','Сб','Жс']
-    : ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-
-  document.querySelectorAll('.weekdays span').forEach((el,i)=>{
-    el.textContent=week[i];
-  });
-
-  document.querySelectorAll('.mini-chart small').forEach((el,i)=>{
-    el.textContent=week[i];
-  });
-  document.querySelectorAll('[data-chart-i18n]').forEach(el=>{
-    const key=el.dataset.chartI18n;
-    el.textContent=t(key);
-  });
-  const toast=document.querySelector('#toast');
-  if(toast){
-    toast.textContent=t('saved');
-  }
-
-  updateSelectedDate();
-  renderCalendar();
-  setView(state.view);
-}
+function applyLanguage(lang){state.lang=lang;localStorage.setItem('sana-lang',lang);document.documentElement.lang=lang;document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{el.placeholder=t(el.dataset.i18nPlaceholder)});document.querySelectorAll('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));document.querySelector('#languageValue').textContent=lang==='kk'?'Қазақша':'Русский';document.querySelector('#todayLabel').textContent=lang==='kk'?'Бүгін • 15 қыркүйек':'Сегодня • 15 сентября';document.querySelector('#loggerDate').textContent=lang==='kk'?'15 қыркүйек':'15 сентября';document.querySelector('#calendarMood').textContent=t(state.mood);document.querySelector('#calendarEnergy').textContent=t(state.energy);const week=lang==='kk'?['Дс','Сс','Ср','Бс','Жм','Сб','Жс']:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];document.querySelectorAll('.weekdays span').forEach((el,i)=>el.textContent=week[i]);document.querySelectorAll('.mini-chart small').forEach((el,i)=>el.textContent=week[i]);document.querySelector('#toast').textContent=t('saved');updateSelectedDate();renderCalendar();setView(state.view)}
 function renderCalendar(){document.querySelector('#monthTitle').textContent=`${months[state.lang][shownMonth]} ${shownYear}`;const grid=document.querySelector('#calendarGrid');grid.innerHTML='';const first=(new Date(shownYear,shownMonth,1).getDay()+6)%7;const days=new Date(shownYear,shownMonth+1,0).getDate();const prevDays=new Date(shownYear,shownMonth,0).getDate();for(let i=first-1;i>=0;i--)addDay(prevDays-i,true);for(let d=1;d<=days;d++)addDay(d,false);while(grid.children.length%7)addDay(grid.children.length-days-first+1,true);function addDay(day,muted){const b=document.createElement('button');b.type='button';b.className='calendar-day';if(muted)b.classList.add('muted');if(!muted&&shownMonth===8&&[1,2,3,4,5].includes(day))b.classList.add('period');if(!muted&&shownMonth===8&&day>=13&&day<=18)b.classList.add('fertile');if(!muted&&shownMonth===8&&day===15)b.classList.add('today');if(!muted&&day===state.selectedDate)b.classList.add('selected');b.textContent=day;b.addEventListener('click',()=>{if(muted)return;state.selectedDate=day;updateSelectedDate();renderCalendar()});grid.appendChild(b)}}
 async function sendToApi(path,payload){const response=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await response.json().catch(()=>({}));if(!response.ok){const error=new Error(data.detail||`API error: ${response.status}`);error.status=response.status;throw error}return data}
 function saveLogLocally(notes){localStorage.setItem('sana-mood',state.mood);localStorage.setItem('sana-energy',state.energy);localStorage.setItem('sana-symptoms',JSON.stringify(state.symptoms));localStorage.setItem('sana-notes',notes)}
@@ -94,4 +28,5 @@ document.querySelectorAll('#symptomChoices button').forEach(b=>b.addEventListene
 document.querySelector('#saveLog').addEventListener('click',async()=>{const notes=document.querySelector('#notes').value;const payload={entry_date:new Date().toISOString().slice(0,10),mood:state.mood,energy:state.energy,symptoms:state.symptoms,notes};try{await sendToApi('/api/logs',payload)}catch(error){console.info('Backend unavailable; using local storage.',error);saveLogLocally(notes)}document.querySelector('#calendarMood').textContent=t(state.mood);document.querySelector('#calendarEnergy').textContent=t(state.energy);showToast(t('saved'));setTimeout(()=>setView('home'),500)});
 document.querySelector('#logPeriodButton').addEventListener('click',async()=>{const payload={start_date:new Date().toISOString().slice(0,10),end_date:null};try{await sendToApi('/api/periods',payload)}catch(error){console.info('Backend unavailable; using local storage.',error);localStorage.setItem('sana-period-marked','true')}showToast(t('periodSaved'));document.querySelector('.ring-progress').style.strokeDashoffset='286'});document.querySelector('.avatar').addEventListener('click',()=>setView('profile'));;document.querySelector('#clearData').addEventListener('click',()=>{['sana-mood','sana-energy','sana-symptoms','sana-notes','sana-period-marked'].forEach(k=>localStorage.removeItem(k));showToast(t('cleared'))});document.querySelector('#prevMonth').addEventListener('click',()=>{shownMonth--;if(shownMonth<0){shownMonth=11;shownYear--}state.selectedDate=0;updateSelectedDate();renderCalendar()});document.querySelector('#nextMonth').addEventListener('click',()=>{shownMonth++;if(shownMonth>11){shownMonth=0;shownYear++}state.selectedDate=0;updateSelectedDate();renderCalendar()});document.querySelector('#insertTemplate').addEventListener('click',()=>{const notes=document.querySelector('#notes');notes.value=t('templateText');notes.focus()});document.querySelector('#notes').value=localStorage.getItem('sana-notes')||'';
 applyProfileName(localStorage.getItem('sana-user-name'));applyLanguage(state.lang);renderCalendar();
+document.querySelector('.avatar').addEventListener('click',()=>setView('profile'));
 document.querySelector('.avatar').addEventListener('click',()=>setView('profile'));

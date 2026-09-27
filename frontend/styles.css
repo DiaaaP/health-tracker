@@ -6,6 +6,13 @@
 * {
   box-sizing: border-box;
 }
+.icon-sprite {
+  position: absolute; width: 0; height: 0; overflow: hidden;
+}
+.ui-icon {
+  width: 22px; height: 22px; display: block; flex: 0 0 auto;
+  fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
 body {
   margin: 0; min-height: 100vh; background: linear-gradient(145deg,#fbf7fd 0%,#f4eaf9 52%,#f8f3fb 100%);
   overflow-x: hidden;
@@ -38,8 +45,11 @@ button, textarea {
 }
 .brand-mark {
   width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--plum);
-  color: #fff; font-family: Georgia,serif; font-size: 24px; font-weight: 700;
+  color: #fff;
   box-shadow: 0 9px 22px rgba(59,24,95,.22);
+}
+.brand-icon {
+  width: 25px; height: 25px; stroke-width: 1.65;
 }
 .brand-name {
   font-family: Georgia,serif; font-size: 26px; font-weight: 700;
@@ -51,8 +61,8 @@ button, textarea {
   border: 0; background: transparent; color: var(--muted); display: flex; align-items: center; gap: 13px;
   padding: 13px 14px; border-radius: 14px; cursor: pointer; text-align: left;
 }
-.nav-item span {
-  font-size: 21px; width: 25px; text-align: center;
+.nav-item .ui-icon {
+  width: 22px; height: 22px;
 }
 .nav-item b {
   font-size: .91rem;
@@ -66,6 +76,9 @@ button, textarea {
 .privacy-note {
   margin-top: auto; display: flex; gap: 10px; color: var(--muted); font-size: .78rem; line-height: 1.45;
   padding: 14px;
+}
+.privacy-note .ui-icon {
+  width: 18px; height: 18px; margin-top: 1px;
 }
 .privacy-note p {
   margin: 0;
@@ -98,7 +111,13 @@ button, textarea {
 }
 .icon-button {
   width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 12px; background: #fff;
-  color: var(--plum); cursor: pointer; font-size: 1.35rem;
+  color: var(--plum); cursor: pointer; display: grid; place-items: center;
+}
+.icon-button .ui-icon {
+  width: 19px; height: 19px;
+}
+.icon-back {
+  transform: rotate(180deg);
 }
 .avatar {
   width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
@@ -195,6 +214,9 @@ button, textarea {
   width: 38px; height: 38px; border-radius: 12px; background: #e8daf0; display: grid; place-items: center;
   color: var(--plum); font-weight: 900;
 }
+.forecast-icon .ui-icon {
+  width: 20px; height: 20px;
+}
 .forecast-icon.fertile {
   background: var(--plum); color: #fff;
 }
@@ -213,6 +235,12 @@ button, textarea {
 .primary-button {
   background: var(--plum); color: #fff; box-shadow: 0 8px 20px rgba(59,24,95,.2);
 }
+.primary-button .ui-icon {
+  width: 18px; height: 18px;
+}
+#logPeriodButton {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
 .primary-button:hover {
   background: #2f104e; transform: translateY(-1px);
 }
@@ -230,10 +258,10 @@ button, textarea {
 }
 .mood {
   border: 1px solid var(--line); background: #fbf8fd; border-radius: 14px; padding: 10px 4px;
-  color: var(--muted); cursor: pointer;
+  color: var(--muted); cursor: pointer; display: grid; justify-items: center; gap: 7px;
 }
-.mood span {
-  display: block; font-size: 1.35rem;
+.mood .ui-icon {
+  width: 25px; height: 25px;
 }
 .mood b {
   font-size: .68rem;
@@ -244,9 +272,15 @@ button, textarea {
 .tiny-lock {
   color: var(--plum);
 }
+.tiny-lock .ui-icon {
+  width: 19px; height: 19px;
+}
 .tip-orbit {
   width: 70px; height: 70px; flex: 0 0 70px; border-radius: 50%; display: grid; place-items: center;
   background: rgba(255,255,255,.11); border: 1px solid rgba(255,255,255,.24); font-size: 1.5rem;
+}
+.tip-orbit .ui-icon {
+  width: 28px; height: 28px;
 }
 .tip-card h2 {
   font: 700 1.4rem Georgia,serif; margin: 5px 0 7px;
@@ -353,8 +387,8 @@ button, textarea {
   display: flex; align-items: center; gap: 12px; padding: 16px; background: #efe3f6; border-radius: 16px;
   color: var(--plum);
 }
-.summary-status > span {
-  font-size: 1.5rem;
+.summary-status > .ui-icon {
+  width: 25px; height: 25px;
 }
 .summary-status div {
   display: flex; flex-direction: column;
@@ -489,6 +523,9 @@ button, textarea {
   width: 64px; height: 64px; flex: 0 0 64px; border-radius: 20px; background: var(--plum); color: #fff;
   display: grid; place-items: center; font-size: 1.6rem;
 }
+.note-icon .ui-icon {
+  width: 28px; height: 28px;
+}
 .profile-layout {
   max-width: 850px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px;
 }
@@ -510,6 +547,15 @@ button, textarea {
   gap: 11px; align-items: center; padding: 16px 4px; text-align: left; border-bottom: 1px solid var(--line);
   cursor: pointer;
 }
+.setting-icon {
+  width: 22px; height: 22px; color: var(--plum);
+}
+.setting-chevron {
+  width: 16px; height: 16px; color: var(--muted);
+}
+.settings-list button:hover {
+  color: var(--plum);
+}
 .settings-list div {
   display: flex; flex-direction: column;
 }
@@ -520,8 +566,8 @@ button, textarea {
   background: var(--plum); color: #fff; border-radius: 22px; padding: 26px; display: flex; gap: 16px;
   box-shadow: 0 18px 45px rgba(59,24,95,.18);
 }
-.privacy-card > span {
-  font-size: 1.5rem;
+.privacy-icon {
+  width: 27px; height: 27px;
 }
 .privacy-card h2 {
   font: 700 1.25rem Georgia,serif; margin: 0 0 8px;
@@ -563,7 +609,10 @@ button, textarea {
 }
 .choice-grid button {
   border: 1px solid var(--line); background: #fbf8fd; border-radius: 14px; padding: 13px 5px; cursor: pointer;
-  font-size: 1.25rem;
+  color: var(--muted); display: grid; justify-items: center;
+}
+.choice-grid .ui-icon {
+  width: 27px; height: 27px;
 }
 .choice-grid b {
   display: block; font-size: .7rem; margin-top: 5px;
@@ -858,11 +907,11 @@ button, textarea {
     border: 0; background: transparent; color: var(--muted); padding: 7px 9px; border-radius: 12px;
     cursor: pointer;
   }
-  .bottom-nav span, .bottom-nav b {
+  .bottom-nav .ui-icon, .bottom-nav b {
     display: block;
   }
-  .bottom-nav span {
-    font-size: 1.2rem;
+  .bottom-nav .ui-icon {
+    width: 20px; height: 20px; margin: 0 auto;
   }
   .bottom-nav b {
     font-size: .62rem; margin-top: 2px;

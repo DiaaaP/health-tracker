@@ -172,5 +172,122 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
   <script src="./app.js?v=3"></script>
+<style>
+  .chart-explanation {
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: #f7effb;
+    border-radius: 16px;
+    color: var(--muted);
+    font-size: .78rem;
+    line-height: 1.55;
+  }
+
+  .chart-explanation strong {
+    display: block;
+    color: var(--plum);
+    font-size: .85rem;
+    margin-bottom: 4px;
+  }
+
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 15px;
+    font-size: .72rem;
+    color: var(--muted);
+  }
+
+  .chart-legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .chart-legend i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .energy-high {
+    background: var(--plum);
+  }
+
+  .energy-medium {
+    background: #b98bd7;
+  }
+
+  .energy-low {
+    background: #e3d1ee;
+  }
+
+  .chart-scale {
+    position: absolute;
+    left: -2px;
+    top: 8px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: .62rem;
+    pointer-events: none;
+  }
+
+  .chart-scale span {
+    background: rgba(255,255,255,.8);
+    padding-right: 4px;
+  }
+
+  .pattern-card .line-chart {
+    padding-left: 28px;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const chart = document.querySelector('.pattern-card .line-chart');
+
+  if (!chart || chart.dataset.enhanced === 'true') return;
+
+  chart.dataset.enhanced = 'true';
+
+  const scale = document.createElement('div');
+  scale.className = 'chart-scale';
+  scale.innerHTML = `
+    <span>Высокий</span>
+    <span>Средний</span>
+    <span>Низкий</span>
+  `;
+
+  chart.prepend(scale);
+
+  const legend = document.createElement('div');
+  legend.className = 'chart-legend';
+  legend.innerHTML = `
+    <span><i class="energy-high"></i> Высокая энергия</span>
+    <span><i class="energy-medium"></i> Средняя энергия</span>
+    <span><i class="energy-low"></i> Низкая энергия</span>
+  `;
+
+  chart.after(legend);
+
+  const explanation = document.createElement('div');
+  explanation.className = 'chart-explanation';
+  explanation.innerHTML = `
+    <strong>Как читать диаграмму?</strong>
+    Линия показывает изменение уровня энергии в течение цикла.
+    Чем выше линия, тем выше отмеченный уровень энергии.
+    Данные помогают замечать повторяющиеся изменения самочувствия.
+  `;
+
+  legend.after(explanation);
+});
+</script>
+```
+
 </body>
 </html>

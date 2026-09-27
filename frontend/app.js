@@ -25,3 +25,65 @@ document.querySelector('#saveLog').addEventListener('click',async()=>{const note
 document.querySelector('#logPeriodButton').addEventListener('click',async()=>{const payload={start_date:new Date().toISOString().slice(0,10),end_date:null};try{await sendToApi('/api/periods',payload)}catch(error){console.info('Backend unavailable; using local storage.',error);localStorage.setItem('sana-period-marked','true')}showToast(t('periodSaved'));document.querySelector('.ring-progress').style.strokeDashoffset='286'});document.querySelector('.avatar').addEventListener('click',()=>setView('profile'));;document.querySelector('#clearData').addEventListener('click',()=>{['sana-mood','sana-energy','sana-symptoms','sana-notes','sana-period-marked'].forEach(k=>localStorage.removeItem(k));showToast(t('cleared'))});document.querySelector('#prevMonth').addEventListener('click',()=>{shownMonth--;if(shownMonth<0){shownMonth=11;shownYear--}state.selectedDate=0;updateSelectedDate();renderCalendar()});document.querySelector('#nextMonth').addEventListener('click',()=>{shownMonth++;if(shownMonth>11){shownMonth=0;shownYear++}state.selectedDate=0;updateSelectedDate();renderCalendar()});document.querySelector('#insertTemplate').addEventListener('click',()=>{const notes=document.querySelector('#notes');notes.value=t('templateText');notes.focus()});document.querySelector('#notes').value=localStorage.getItem('sana-notes')||'';
 applyProfileName(localStorage.getItem('sana-user-name'));applyLanguage(state.lang);renderCalendar();
 document.querySelector('.avatar').addEventListener('click',()=>setView('profile'));
+// ===== FIX: возвращаем кликабельность интерфейса =====
+(function () {
+  // Навигация
+  document.querySelectorAll('[data-view]').forEach(btn => {
+    btn.style.pointerEvents = 'auto';
+    btn.addEventListener('click', function () {
+      const view = this.dataset.view;
+      if (view) setView(view);
+    });
+  });
+
+  // Кнопки перехода
+  document.querySelectorAll('[data-go]').forEach(btn => {
+    btn.style.pointerEvents = 'auto';
+    btn.addEventListener('click', function () {
+      const view = this.dataset.go;
+      if (view) setView(view);
+    });
+  });
+
+  // Переключение языка
+  document.querySelectorAll('.lang').forEach(btn => {
+    btn.style.pointerEvents = 'auto';
+    btn.addEventListener('click', function () {
+      applyLanguage(this.dataset.lang);
+    });
+  });
+
+  // Кнопка профиля
+  const avatar = document.querySelector('#profileButton');
+  if (avatar) {
+    avatar.style.pointerEvents = 'auto';
+    avatar.onclick = () => setView('profile');
+  }
+
+  // Кнопки календаря
+  ['#prevMonth', '#nextMonth'].forEach(selector => {
+    const btn = document.querySelector(selector);
+    if (btn) btn.style.pointerEvents = 'auto';
+  });
+
+  // Кнопки настроек профиля
+  document.querySelectorAll('[data-open-register]').forEach(btn => {
+    btn.style.pointerEvents = 'auto';
+    btn.onclick = () => setRegisterModal(true);
+  });
+
+  // Убираем случайное перекрытие
+  document.querySelectorAll('button, a, input, textarea, select').forEach(el => {
+    el.style.pointerEvents = 'auto';
+  });
+
+  // Нижняя навигация
+  document.querySelectorAll('.bottom-nav button').forEach(btn => {
+    btn.style.pointerEvents = 'auto';
+  });
+
+  // Боковая навигация
+  document.querySelectorAll('.rail-nav button').forEach(btn => {
+    btn.style.pointerEvents = 'auto';
+  });
+})();

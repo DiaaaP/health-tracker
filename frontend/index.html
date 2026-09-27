@@ -7,7 +7,7 @@
   <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
   <title>Sana — цикл күнделігі</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./styles.css?v=7" />
+  <link rel="stylesheet" href="./styles.css?v=8" />
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true">
@@ -50,7 +50,7 @@
         <button class="nav-item" data-view="chat" type="button"><svg class="ui-icon"><use href="#icon-spark"></use></svg><b data-i18n="navChat">AI чат</b></button>
         <button class="nav-item" data-view="profile" type="button"><svg class="ui-icon"><use href="#icon-user"></use></svg><b data-i18n="navProfile">Профиль</b></button>
       </nav>
-      <div class="privacy-note"><svg class="ui-icon"><use href="#icon-lock"></use></svg><p data-i18n="privacyShort">Деректер осы құрылғыда сақталады</p></div>
+      <div class="privacy-note"><span class="side-profile-avatar" id="sideProfileAvatar">А</span><div><b id="sideProfileName">Амина</b><p data-i18n="privacyShort">Деректер осы құрылғыда сақталады</p></div></div>
     </aside>
 
     <main class="workspace">
@@ -97,6 +97,22 @@
                 <button class="primary-button" id="logPeriodButton" type="button"><svg class="ui-icon"><use href="#icon-drop"></use></svg><span data-i18n="markPeriod">Етеккірді белгілеу</span></button>
               </div>
             </div>
+          </article>
+
+          <article class="home-calendar-card surface">
+            <div class="section-heading compact">
+              <div><p class="eyebrow" data-i18n="cycleCalendar">Цикл күнтізбесі</p><h2 id="homeMonthTitle">Қыркүйек 2026</h2></div>
+              <button class="text-button" data-go="calendar" type="button" data-i18n="details">Толығырақ</button>
+            </div>
+            <div class="home-weekdays"><span>Дс</span><span>Сс</span><span>Ср</span><span>Бс</span><span>Жм</span><span>Сб</span><span>Жс</span></div>
+            <div class="home-calendar-grid" id="homeCalendarGrid"></div>
+            <div class="home-calendar-legend"><span><i class="period-dot"></i><b data-i18n="period">Етеккір</b></span><span><i class="today-dot"></i><b data-i18n="today">Бүгін</b></span></div>
+          </article>
+
+          <article class="overview-stats" aria-label="Цикл көрсеткіштері">
+            <div class="overview-stat surface"><span class="stat-icon"><svg class="ui-icon"><use href="#icon-cycle"></use></svg></span><div><small data-i18n="cycleLength">Цикл ұзақтығы</small><strong>28 <span data-i18n="days">күн</span></strong></div></div>
+            <div class="overview-stat surface"><span class="stat-icon"><svg class="ui-icon"><use href="#icon-drop"></use></svg></span><div><small data-i18n="periodLength">Етеккір ұзақтығы</small><strong>5 <span data-i18n="days">күн</span></strong></div></div>
+            <div class="overview-stat surface"><span class="stat-icon"><svg class="ui-icon"><use href="#icon-note"></use></svg></span><div><small data-i18n="savedEntries">Белгілер</small><strong id="savedEntriesCount">0</strong></div></div>
           </article>
 
           <article class="daily-card surface">
@@ -234,6 +250,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=7"></script>
+  <script src="./app.js?v=8"></script>
 </body>
 </html>

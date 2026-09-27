@@ -12,6 +12,8 @@ Object.assign(copy.kk, {
   lowEnergy: 'Төмен қуат',
   chartHelpTitle: 'Диаграмманы қалай оқу керек?',
   chartHelpText: 'Сызық күнделікті журналдағы нақты қуат белгілерінен құрылады.',
+  periodLength: 'Етеккір ұзақтығы',
+  savedEntries: 'Белгілер',
   notificationsOn: 'Қосулы',
   notificationsOff: 'Өшірулі',
   notificationsEnabled: 'Хабарламалар қосылды',
@@ -44,6 +46,8 @@ Object.assign(copy.ru, {
   lowEnergy: 'Низкая энергия',
   chartHelpTitle: 'Как читать диаграмму?',
   chartHelpText: 'Линия строится из реальных отметок энергии в ежедневном журнале.',
+  periodLength: 'Длительность менструации',
+  savedEntries: 'Записи',
   notificationsOn: 'Включены',
   notificationsOff: 'Выключены',
   notificationsEnabled: 'Уведомления включены',
@@ -173,6 +177,8 @@ function applyProfileName(name) {
   document.querySelector('#profileName').textContent = safeName;
   document.querySelector('#profileAvatar').textContent = initial;
   document.querySelector('.avatar').textContent = initial;
+  document.querySelector('#sideProfileName').textContent = safeName;
+  document.querySelector('#sideProfileAvatar').textContent = initial;
 }
 
 function applyLanguage(lang) {
@@ -259,6 +265,55 @@ function renderCalendar() {
   document.querySelectorAll('.weekdays span').forEach(function (element, index) {
     element.textContent = week[index];
   });
+  renderHomeCalendar(week);
+}
+
+function renderHomeCalendar(week) {
+  const grid = document.querySelector('#homeCalendarGrid');
+  if (!grid) return;
+
+  document.querySelector('#homeMonthTitle').textContent = months[state.lang][state.shownMonth] + ' ' + state.shownYear;
+  document.querySelectorAll('.home-weekdays span').forEach(function (element, index) {
+    element.textContent = week[index];
+  });
+  grid.innerHTML = '';
+
+  const firstWeekday = (new Date(state.shownYear, state.shownMonth, 1).getDay() + 6) % 7;
+  const days = new Date(state.shownYear, state.shownMonth + 1, 0).getDate();
+  const previousDays = new Date(state.shownYear, state.shownMonth, 0).getDate();
+
+  for (let index = firstWeekday - 1; index >= 0; index -= 1) {
+    addHomeDay(previousDays - index, true);
+  }
+  for (let day = 1; day <= days; day += 1) {
+    addHomeDay(day, false);
+  }
+  while (grid.children.length % 7) {
+    addHomeDay(grid.children.length - days - firstWeekday + 1, true);
+  }
+
+  function addHomeDay(day, muted) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'home-calendar-day';
+    button.textContent = day;
+    if (muted) {
+      button.classList.add('muted');
+      button.disabled = true;
+    } else {
+      const key = dateKey(new Date(state.shownYear, state.shownMonth, day));
+      if (state.logs.has(key)) button.classList.add('logged');
+      if (isPeriodDate(key)) button.classList.add('period');
+      if (key === dateKey(today)) button.classList.add('today');
+      button.addEventListener('click', function () {
+        state.selectedDay = day;
+        updateSelectedDate();
+        renderCalendar();
+        setView('calendar');
+      });
+    }
+    grid.appendChild(button);
+  }
 }
 
 function isPeriodDate(key) {
@@ -406,6 +461,7 @@ async function markPeriod() {
 }
 
 function renderCharts() {
+  document.querySelector('#savedEntriesCount').textContent = state.logs.size;
   renderWeeklyChart();
   renderEnergyChart();
 }

@@ -687,3 +687,6 @@ button, textarea {
     grid-template-columns: repeat(2,1fr);
   }
 }
+#privacyButton {
+  display: none;
+}

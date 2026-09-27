@@ -275,6 +275,9 @@ button, textarea {
 .mini-chart .today i {
   background: linear-gradient(#9d70c6,#3b185f);
 }
+.mini-chart .empty i {
+  background: #eee8f1; opacity: .65;
+}
 .mini-chart small {
   font-size: .62rem; color: var(--muted);
 }
@@ -314,6 +317,13 @@ button, textarea {
 }
 .calendar-day.selected {
   background: var(--plum); color: #fff; box-shadow: none;
+}
+.calendar-day.logged::after {
+  content: ""; position: absolute; width: 6px; height: 6px; border-radius: 50%;
+  left: 50%; bottom: 8px; transform: translateX(-50%); background: #9d70c6;
+}
+.calendar-day.selected.logged::after {
+  background: #fff;
 }
 .legend {
   display: flex; flex-wrap: wrap; gap: 18px; margin-top: 22px; font-size: .72rem; color: var(--muted);
@@ -386,7 +396,6 @@ button, textarea {
 .stat-pair span {
   font-size: .72rem; color: var(--muted);
 }
-```css
 .line-chart {
   position: relative;
   height: 240px;
@@ -399,6 +408,7 @@ button, textarea {
   display: block;
   width: 100%;
   height: 195px;
+  padding-left: 45px;
   overflow: visible;
 }
 
@@ -440,6 +450,37 @@ button, textarea {
     );
   pointer-events: none;
   border-radius: 12px;
+}
+.line-chart .chart-scale {
+  position: absolute; z-index: 2; left: 0; top: 10px; height: 170px; padding: 0;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+}
+.line-chart .chart-days {
+  display: flex; justify-content: space-between; padding: 5px 4px 0 45px;
+}
+.chart-empty {
+  position: absolute; left: 50%; top: 82px; transform: translate(-50%,-50%); z-index: 3;
+  width: min(330px,75%); margin: 0; text-align: center; color: var(--muted); font-size: .8rem;
+}
+.chart-legend {
+  display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; padding-top: 13px;
+  border-top: 1px solid var(--line); color: var(--muted); font-size: .72rem;
+}
+.chart-legend span {
+  display: flex; align-items: center; gap: 6px;
+}
+.chart-legend i {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.energy-high { background: var(--plum); }
+.energy-medium { background: #b98bd7; }
+.energy-low { background: #e3d1ee; }
+.chart-explanation {
+  margin-top: 15px; padding: 15px 17px; border-radius: 15px; background: #f7effb;
+  color: var(--muted); font-size: .78rem; line-height: 1.55;
+}
+.chart-explanation strong {
+  display: block; margin-bottom: 4px; color: var(--plum);
 }
 .insight-note {
   grid-column: 1/-1; display: flex; gap: 20px; align-items: center;
@@ -552,6 +593,64 @@ button, textarea {
 }
 .form-section textarea:focus {
   border-color: var(--plum); box-shadow: 0 0 0 3px rgba(59,24,95,.1);
+}
+.ai-chat {
+  max-width: 900px; margin: 0 auto; padding: 28px;
+}
+.chat-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 18px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--line);
+}
+.chat-head h2 {
+  margin: 4px 0 6px; font: 700 1.6rem Georgia,serif;
+}
+.chat-head p:last-child {
+  margin: 0; color: var(--muted); font-size: .82rem;
+}
+.ollama-status {
+  flex: 0 0 auto; padding: 7px 10px; border-radius: 999px; background: #f1e8f5;
+  color: var(--muted); font-size: .72rem; font-weight: 800;
+}
+.ollama-status.online {
+  background: #e4f3e8; color: #27734a;
+}
+.ollama-settings {
+  display: grid; grid-template-columns: auto minmax(150px,240px); gap: 8px 12px; align-items: center;
+  margin: 18px 0; padding: 14px 16px; border-radius: 14px; background: #f8f3fa;
+}
+.ollama-settings label {
+  font-weight: 800; font-size: .8rem;
+}
+.ollama-settings input {
+  width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px;
+  background: #fff; color: var(--ink); font: inherit;
+}
+.ollama-settings small {
+  grid-column: 1/-1; color: var(--muted); line-height: 1.4;
+}
+.chat-messages {
+  height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+  padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: #fcf9fd;
+}
+.chat-message {
+  max-width: 78%; padding: 11px 14px; border-radius: 15px; white-space: pre-wrap;
+  line-height: 1.5; font-size: .88rem;
+}
+.chat-message.assistant {
+  align-self: flex-start; background: #eee2f5; color: var(--ink); border-bottom-left-radius: 5px;
+}
+.chat-message.user {
+  align-self: flex-end; background: var(--plum); color: #fff; border-bottom-right-radius: 5px;
+}
+.chat-form {
+  display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 14px; align-items: end;
+}
+.chat-form textarea {
+  width: 100%; resize: vertical; min-height: 52px; max-height: 140px; padding: 13px 14px;
+  border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink); font: inherit;
+}
+.chat-form .primary-button {
+  min-height: 52px;
 }
 .bottom-nav {
   display: none;
@@ -683,7 +782,7 @@ button, textarea {
   .surface, .tip-card {
     border-radius: 19px;
   }
-  .cycle-card, .daily-card, .week-card, .calendar-card, .day-summary, .insights-grid > article, .profile-card, .privacy-card, .logger {
+  .cycle-card, .daily-card, .week-card, .calendar-card, .day-summary, .insights-grid > article, .profile-card, .privacy-card, .logger, .ai-chat {
     padding: 19px;
   }
   .cycle-content {
@@ -727,6 +826,27 @@ button, textarea {
   }
   .choice-grid {
     grid-template-columns: repeat(3,1fr);
+  }
+  .chat-head {
+    flex-direction: column;
+  }
+  .ollama-settings {
+    grid-template-columns: 1fr;
+  }
+  .ollama-settings small {
+    grid-column: auto;
+  }
+  .chat-messages {
+    height: 330px; padding: 13px;
+  }
+  .chat-message {
+    max-width: 90%;
+  }
+  .chat-form {
+    grid-template-columns: 1fr;
+  }
+  .chat-form .primary-button {
+    width: 100%;
   }
   .bottom-nav {
     display: flex; position: fixed; z-index: 40; left: 12px; right: 12px; bottom: 10px;
@@ -773,129 +893,4 @@ button, textarea {
   .choice-grid {
     grid-template-columns: repeat(2,1fr);
   }
-}
-#privacyButton {
-  display: none;
-}
-```css
-/* === FIX: диаграмма === */
-.line-chart {
-  position: relative;
-  height: 240px;
-  margin-top: 20px;
-  padding-top: 8px;
-  overflow: hidden;
-}
-
-.line-chart svg {
-  display: block;
-  width: 100%;
-  height: 195px;
-  overflow: visible;
-}
-
-.line-chart .area {
-  fill: url(#area);
-}
-
-.line-chart .line {
-  fill: none;
-  stroke: var(--plum);
-  stroke-width: 5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.line-chart > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 4px 0;
-  color: var(--muted);
-  font-size: .7rem;
-  font-weight: 700;
-}
-
-.line-chart::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 8px;
-  height: 180px;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 44px,
-    rgba(75,38,94,.08) 45px
-  );
-  pointer-events: none;
-  border-radius: 12px;
-}
-```
-/* ===== CLICK FIX ===== */
-
-/* Декоративные элементы не должны перехватывать клики */
-.ambient,
-.ambient-one,
-.ambient-two,
-.tip-orbit {
-  pointer-events: none !important;
-}
-
-/* Интерфейс всегда поверх декоративных слоёв */
-.app-shell {
-  position: relative;
-  z-index: 10;
-}
-
-.side-rail,
-.workspace,
-.topbar,
-.view,
-.surface,
-.bottom-nav,
-.modal-backdrop,
-.auth-modal,
-button,
-a,
-input,
-textarea,
-select {
-  position: relative;
-}
-
-/* Кнопки и ссылки должны принимать клики */
-button,
-a,
-input,
-textarea,
-select {
-  pointer-events: auto !important;
-}
-
-/* Навигация */
-.side-rail,
-.bottom-nav,
-.topbar {
-  z-index: 50;
-}
-
-/* Контент */
-.workspace {
-  z-index: 20;
-}
-
-/* Не даём декоративным слоям перекрывать приложение */
-.ambient {
-  z-index: 0 !important;
-}
-
-/* Модальные окна должны быть выше всего */
-.modal-backdrop {
-  z-index: 9999 !important;
-}
-
-.auth-modal {
-  z-index: 10000 !important;
 }

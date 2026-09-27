@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#3b185f" />
   <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
   <title>Sana — цикл күнделігі</title>
-  <link rel="stylesheet" href="./styles.css?v=3" />
+  <link rel="stylesheet" href="./styles.css?v=6" />
 </head>
 <body>
   <div class="ambient ambient-one"></div>
@@ -22,6 +22,7 @@
         <button class="nav-item active" data-view="home" type="button"><span>⌂</span><b data-i18n="navHome">Басты</b></button>
         <button class="nav-item" data-view="calendar" type="button"><span>□</span><b data-i18n="navCalendar">Күнтізбе</b></button>
         <button class="nav-item" data-view="insights" type="button"><span>⌁</span><b data-i18n="navInsights">Талдау</b></button>
+        <button class="nav-item" data-view="chat" type="button"><span>✦</span><b data-i18n="navChat">AI чат</b></button>
         <button class="nav-item" data-view="profile" type="button"><span>◯</span><b data-i18n="navProfile">Профиль</b></button>
       </nav>
       <div class="privacy-note"><span>⌾</span><p data-i18n="privacyShort">Деректер осы құрылғыда сақталады</p></div>
@@ -77,7 +78,7 @@
             <div class="section-heading compact"><div><p class="eyebrow" data-i18n="dailyCheck">Күнделікті белгі</p><h2 data-i18n="howFeel">Өзіңізді қалай сезінесіз?</h2></div><span class="tiny-lock">⌾</span></div>
             <div class="mood-row" role="group" aria-label="Көңіл-күй">
               <button class="mood" data-mood="happy" type="button"><span>☺</span><b data-i18n="happy">Қуанышты</b></button>
-              <button class="mood selected" data-mood="calm" type="button"><span>◡</span><b data-i18n="calm">Сабырлы</b></button>
+              <button class="mood selected" data-mood="calm" type="button"><span>😌</span><b data-i18n="calm">Сабырлы</b></button>
               <button class="mood" data-mood="sensitive" type="button"><span>♡</span><b data-i18n="sensitive">Сезімтал</b></button>
               <button class="mood" data-mood="sad" type="button"><span>☹</span><b data-i18n="sad">Мұңды</b></button>
             </div>
@@ -90,9 +91,9 @@
           </article>
 
           <article class="week-card surface">
-            <div class="section-heading compact"><div><p class="eyebrow" data-i18n="weekOverview">Апта көрінісі</p><h2 data-i18n="rhythm">Сіздің ырғағыңыз</h2></div><span class="trend">+12%</span></div>
+            <div class="section-heading compact"><div><p class="eyebrow" data-i18n="weekOverview">Апта көрінісі</p><h2 data-i18n="rhythm">Сіздің ырғағыңыз</h2></div><span class="trend" id="weeklyTrend">—</span></div>
             <div class="mini-chart" aria-label="Апталық қуат деңгейі">
-              <div style="--h:36%"><i></i><small>Дс</small></div><div style="--h:48%"><i></i><small>Сс</small></div><div style="--h:61%"><i></i><small>Ср</small></div><div class="today" style="--h:82%"><i></i><small>Бс</small></div><div style="--h:74%"><i></i><small>Жм</small></div><div style="--h:58%"><i></i><small>Сб</small></div><div style="--h:44%"><i></i><small>Жс</small></div>
+              <div><i></i><small>Дс</small></div><div><i></i><small>Сс</small></div><div><i></i><small>Ср</small></div><div><i></i><small>Бс</small></div><div><i></i><small>Жм</small></div><div><i></i><small>Сб</small></div><div><i></i><small>Жс</small></div>
             </div>
           </article>
         </div>
@@ -118,23 +119,42 @@
       <section class="view" id="insightsView" data-view-panel="insights">
         <div class="insights-grid">
           <article class="surface insight-lead"><p class="eyebrow" data-i18n="cycleAnalysis">Цикл талдауы</p><h2 data-i18n="stableCycle">Соңғы 3 цикл тұрақты</h2><p data-i18n="analysisText">Сіздің орташа цикліңіз 28 күн. Ұзақтықтағы ауытқу 2 күннен аспайды.</p><div class="stat-pair"><div><strong>28</strong><span data-i18n="avgDays">орташа күн</span></div><div><strong>5</strong><span data-i18n="avgPeriod">етеккір күні</span></div></div></article>
-          <article class="surface pattern-card"><div class="section-heading compact"><div><p class="eyebrow" data-i18n="wellbeing">Хал-жағдай</p><h2 data-i18n="energyPattern">Қуат үлгісі</h2></div></div><div class="line-chart" aria-label="Цикл бойынша қуат деңгейі"><svg viewBox="0 0 600 180" preserveAspectRatio="none"><defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9d70c6" stop-opacity=".38"/><stop offset="1" stop-color="#9d70c6" stop-opacity="0"/></linearGradient></defs><path class="area" d="M0 140 C65 135 90 115 140 120 S235 160 290 115 S370 38 430 55 S515 100 600 75 L600 180 L0 180Z"/><path class="line" d="M0 140 C65 135 90 115 140 120 S235 160 290 115 S370 38 430 55 S515 100 600 75"/></svg><div><span>1</span><span>7</span><span>14</span><span>21</span><span>28</span></div></div></article>
+          <article class="surface pattern-card">
+            <div class="section-heading compact"><div><p class="eyebrow" data-i18n="wellbeing">Хал-жағдай</p><h2 data-i18n="energyPattern">Қуат үлгісі</h2></div></div>
+            <div class="line-chart" aria-label="Цикл бойынша қуат деңгейі">
+              <div class="chart-scale"><span data-i18n="high">Жоғары</span><span data-i18n="medium">Орташа</span><span data-i18n="low">Төмен</span></div>
+              <svg viewBox="0 0 600 180" preserveAspectRatio="none"><defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9d70c6" stop-opacity=".38"/><stop offset="1" stop-color="#9d70c6" stop-opacity="0"/></linearGradient></defs><path class="area" id="energyArea" d=""/><path class="line" id="energyLine" d=""/></svg>
+              <div class="chart-days"><span>1</span><span>7</span><span>14</span><span>21</span><span>28</span></div>
+              <p class="chart-empty" id="energyChartEmpty" data-i18n="noChartData">Диаграмма үшін жазбалар жеткіліксіз</p>
+            </div>
+            <div class="chart-legend"><span><i class="energy-high"></i><b data-i18n="highEnergy">Жоғары қуат</b></span><span><i class="energy-medium"></i><b data-i18n="mediumEnergy">Орташа қуат</b></span><span><i class="energy-low"></i><b data-i18n="lowEnergy">Төмен қуат</b></span></div>
+            <div class="chart-explanation"><strong data-i18n="chartHelpTitle">Диаграмманы қалай оқу керек?</strong><span data-i18n="chartHelpText">Сызық күнделікті журналдағы қуат белгілерінен құрылады.</span></div>
+          </article>
           <article class="surface insight-note"><span class="note-icon">◎</span><div><p class="eyebrow" data-i18n="observation">Бақылау</p><h2 data-i18n="headachePattern">Бас ауруы цикл соңында жиілейді</h2><p data-i18n="observeText">Келесі екі циклде бақылауды жалғастырыңыз. Қатты немесе әдеттен тыс ауырсыну болса, дәрігерге жүгініңіз.</p></div></article>
         </div>
       </section>
 
       <section class="view" id="profileView" data-view-panel="profile">
         <div class="profile-layout">
-          <article class="surface profile-card"><div class="profile-hero"><div class="profile-avatar" id="profileAvatar">А</div><div><p class="eyebrow" data-i18n="yourProfile">Сіздің профиліңіз</p><h2 id="profileName">Амина</h2><p data-i18n="cycleMode">Циклді бақылау режимі</p></div></div><div class="settings-list"><button data-open-register type="button"><span>＋</span><div><b data-i18n="createAccount">Аккаунт құру</b><small data-i18n="createAccountShort">Деректеріңізді тіркеңіз</small></div><i>›</i></button><button type="button"><span>◎</span><div><b data-i18n="notifications">Хабарламалар</b><small data-i18n="notificationsDesc">Етеккір және цикл болжамдары</small></div><i>›</i></button><button type="button"><span>文</span><div><b data-i18n="language">Тіл</b><small id="languageValue">Қазақша</small></div><i>›</i></button><button type="button"><span>⌾</span><div><b data-i18n="privacy">Құпиялылық</b><small data-i18n="localStorage">Осы құрылғыда сақтау</small></div><i>›</i></button></div></article>
+          <article class="surface profile-card"><div class="profile-hero"><div class="profile-avatar" id="profileAvatar">А</div><div><p class="eyebrow" data-i18n="yourProfile">Сіздің профиліңіз</p><h2 id="profileName">Амина</h2><p data-i18n="cycleMode">Циклді бақылау режимі</p></div></div><div class="settings-list"><button data-open-register type="button"><span>＋</span><div><b data-i18n="createAccount">Аккаунт құру</b><small data-i18n="createAccountShort">Деректеріңізді тіркеңіз</small></div><i>›</i></button><button data-open-login type="button"><span>→</span><div><b data-i18n="loginAccount">Аккаунтқа кіру</b><small data-i18n="loginAccountShort">Email және құпиясөз арқылы</small></div><i>›</i></button><button id="notificationsButton" type="button"><span>◎</span><div><b data-i18n="notifications">Хабарламалар</b><small id="notificationsValue" data-i18n="notificationsOff">Өшірулі</small></div><i>›</i></button><button id="profileLanguageButton" type="button"><span>文</span><div><b data-i18n="language">Тіл</b><small id="languageValue">Қазақша</small></div><i>›</i></button><button id="privacyButton" type="button"><span>⌾</span><div><b data-i18n="privacy">Құпиялылық</b><small data-i18n="privacyAction">Экрандағы деректерді жасыру</small></div><i>›</i></button></div></article>
           <article class="privacy-card"><span>⌾</span><div><h2 data-i18n="privateDiary">Жеке күнделік</h2><p data-i18n="privacyText">Бұл демонстрация енгізілген деректерді браузердің жергілікті жадында сақтайды. Ортақ құрылғыда қолдансаңыз, жазбаларды тазалаңыз.</p><button id="clearData" class="ghost-light" type="button" data-i18n="clearData">Деректерді тазалау</button></div></article>
           <p class="medical-note" data-i18n="medicalNote">Sana медициналық диагноз қоймайды. Денсаулығыңызға қатысты сұрақтар болса, дәрігермен кеңесіңіз.</p>
         </div>
       </section>
 
+      <section class="view" id="chatView" data-view-panel="chat">
+        <article class="surface ai-chat">
+          <div class="chat-head"><div><p class="eyebrow" data-i18n="aiAssistant">AI көмекші</p><h2>Sana AI</h2><p data-i18n="aiDisclaimer">Жалпы ақпарат береді және дәрігерді алмастырмайды.</p></div><span class="ollama-status" id="ollamaStatus" data-i18n="ollamaChecking">Ollama тексерілуде</span></div>
+          <div class="ollama-settings"><label for="ollamaModel" data-i18n="ollamaModel">Ollama моделі</label><input id="ollamaModel" type="text" value="qwen2.5:3b" autocomplete="off" /><small data-i18n="ollamaHint">Жергілікті іске қосу: ollama serve, содан кейін ollama pull qwen2.5:3b</small></div>
+          <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
+          <form class="chat-form" id="chatForm"><textarea id="chatInput" rows="2" maxlength="1000" required data-i18n-placeholder="chatPlaceholder" placeholder="Сұрағыңызды жазыңыз..."></textarea><button class="primary-button" id="chatSend" type="submit" data-i18n="send">Жіберу</button></form>
+        </article>
+      </section>
+
       <section class="view" id="logView" data-view-panel="log">
         <article class="surface logger">
           <div class="logger-head"><button class="icon-button" data-go="home" type="button">×</button><div><p class="eyebrow" data-i18n="dailyLog">Күнделікті журнал</p><h2 data-i18n="howFeelToday">Бүгін өзіңізді қалай сезінесіз?</h2></div><span class="date-chip" id="loggerDate">15 қыркүйек</span></div>
-          <div class="form-section"><h3 data-i18n="mood">Көңіл-күй</h3><div class="choice-grid" id="moodChoices"><button data-value="happy" type="button">☺<b data-i18n="happy">Қуанышты</b></button><button class="selected" data-value="calm" type="button">◡<b data-i18n="calm">Сабырлы</b></button><button data-value="sensitive" type="button">♡<b data-i18n="sensitive">Сезімтал</b></button><button data-value="sad" type="button">☹<b data-i18n="sad">Мұңды</b></button><button data-value="angry" type="button">⌁<b data-i18n="angry">Ашулы</b></button></div></div>
+          <div class="form-section"><h3 data-i18n="mood">Көңіл-күй</h3><div class="choice-grid" id="moodChoices"><button data-value="happy" type="button">☺<b data-i18n="happy">Қуанышты</b></button><button class="selected" data-value="calm" type="button">😌<b data-i18n="calm">Сабырлы</b></button><button data-value="sensitive" type="button">♡<b data-i18n="sensitive">Сезімтал</b></button><button data-value="sad" type="button">☹<b data-i18n="sad">Мұңды</b></button><button data-value="angry" type="button">⌁<b data-i18n="angry">Ашулы</b></button></div></div>
           <div class="form-section"><h3 data-i18n="symptoms">Белгілер</h3><div class="chips" id="symptomChoices"><button data-value="pain" type="button" data-i18n="pain">Ауырсыну</button><button data-value="headache" type="button" data-i18n="headache">Бас ауруы</button><button data-value="bloating" type="button" data-i18n="bloating">Іш кебуі</button><button data-value="skin" type="button" data-i18n="skin">Бөртпе</button><button data-value="back" type="button" data-i18n="backPain">Бел ауруы</button><button class="selected" data-value="none" type="button" data-i18n="none">Ешқандай</button></div></div>
           <div class="form-section"><h3 data-i18n="energy">Күш-қуат</h3><div class="segmented" id="energyChoices"><button data-value="low" type="button" data-i18n="low">Төмен</button><button data-value="medium" type="button" data-i18n="medium">Орташа</button><button class="selected" data-value="high" type="button" data-i18n="high">Жоғары</button></div></div>
           <div class="form-section"><div class="form-label-row"><label for="notes" data-i18n="notes">Жазбалар</label><button class="text-button" id="insertTemplate" type="button" data-i18n="noteTemplate">Үлгі</button></div><textarea id="notes" rows="4" data-i18n-placeholder="notesPlaceholder" placeholder="Өзіңіз үшін қысқа жазба қалдырыңыз..."></textarea></div>
@@ -147,6 +167,7 @@
       <button class="active" data-view="home" type="button"><span>⌂</span><b data-i18n="navHome">Басты</b></button>
       <button data-view="calendar" type="button"><span>□</span><b data-i18n="navCalendar">Күнтізбе</b></button>
       <button data-view="insights" type="button"><span>⌁</span><b data-i18n="navInsights">Талдау</b></button>
+      <button data-view="chat" type="button"><span>✦</span><b data-i18n="navChat">AI чат</b></button>
       <button data-view="profile" type="button"><span>◯</span><b data-i18n="navProfile">Профиль</b></button>
     </nav>
   </div>
@@ -170,320 +191,24 @@
     </section>
   </div>
 
+  <div class="modal-backdrop" id="loginModal" hidden>
+    <section class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <button class="modal-close" id="closeLogin" type="button" aria-label="Закрыть">×</button>
+      <p class="eyebrow" data-i18n="account">Аккаунт</p>
+      <h2 id="loginTitle" data-i18n="loginAccount">Аккаунтқа кіру</h2>
+      <p class="modal-description" data-i18n="loginDescription">Тіркелген email мен құпиясөзді енгізіңіз.</p>
+      <form id="loginForm">
+        <label for="loginEmail" data-i18n="email">Email</label>
+        <input id="loginEmail" name="email" type="email" maxlength="254" autocomplete="email" required placeholder="amina@example.com" />
+        <label for="loginPassword" data-i18n="password">Құпиясөз</label>
+        <input id="loginPassword" name="password" type="password" minlength="8" maxlength="128" autocomplete="current-password" required data-i18n-placeholder="passwordPlaceholder" placeholder="Кемінде 8 таңба" />
+        <p class="form-message" id="loginMessage" role="status" aria-live="polite"></p>
+        <button class="primary-button full large" id="loginSubmit" type="submit" data-i18n="login">Кіру</button>
+      </form>
+    </section>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=3"></script>
-  ```html
-  <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-
-  <script src="./app.js?v=3"></script>
-
-  <style>
-    .pattern-card .line-chart {
-      position: relative;
-      height: auto;
-      min-height: 270px;
-      margin-top: 18px;
-      padding-left: 38px;
-    }
-
-    .pattern-card .line-chart svg {
-      display: block;
-      width: 100%;
-      height: 190px;
-      overflow: visible;
-    }
-
-    .pattern-card .line-chart .area {
-      fill: url(#area);
-      opacity: .9;
-    }
-
-    .pattern-card .line-chart .line {
-      fill: none;
-      stroke: var(--plum);
-      stroke-width: 5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .chart-scale {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 190px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: .62rem;
-      pointer-events: none;
-    }
-
-    .chart-scale span {
-      background: rgba(255,255,255,.85);
-      padding-right: 5px;
-      white-space: nowrap;
-    }
-
-    .pattern-card .line-chart > div:not(.chart-scale) {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: .68rem;
-      margin-top: 7px;
-    }
-
-    .chart-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 16px;
-      margin-top: 17px;
-      padding-top: 13px;
-      border-top: 1px solid var(--line);
-      font-size: .7rem;
-      color: var(--muted);
-    }
-
-    .chart-legend span {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .chart-legend i {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .energy-high {
-      background: var(--plum);
-    }
-
-    .energy-medium {
-      background: #b98bd7;
-    }
-
-    .energy-low {
-      background: #e3d1ee;
-    }
-
-    .chart-explanation {
-      margin-top: 14px;
-      padding: 15px 17px;
-      background: #f7effb;
-      border-radius: 15px;
-      color: var(--muted);
-      font-size: .76rem;
-      line-height: 1.55;
-    }
-
-    .chart-explanation strong {
-      display: block;
-      color: var(--plum);
-      font-size: .84rem;
-      margin-bottom: 5px;
-    }
-
-    @media (max-width: 680px) {
-      .pattern-card .line-chart {
-        padding-left: 34px;
-        min-height: 260px;
-      }
-
-      .pattern-card .line-chart svg {
-        height: 175px;
-      }
-
-      .chart-scale {
-        height: 175px;
-      }
-
-      .chart-legend {
-        flex-direction: column;
-        gap: 8px;
-      }
-    }
-  </style>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const chart = document.querySelector('.pattern-card .line-chart');
-
-      if (!chart || chart.dataset.enhanced === 'true') return;
-
-      chart.dataset.enhanced = 'true';
-
-      const scale = document.createElement('div');
-      scale.className = 'chart-scale';
-
-      scale.innerHTML = `
-        <span>Жоғары</span>
-        <span>Орташа</span>
-        <span>Төмен</span>
-      `;
-
-      chart.prepend(scale);
-
-      const legend = document.createElement('div');
-      legend.className = 'chart-legend';
-
-      legend.innerHTML = `
-        <span>
-          <i class="energy-high"></i>
-          Жоғары қуат
-        </span>
-
-        <span>
-          <i class="energy-medium"></i>
-          Орташа қуат
-        </span>
-
-        <span>
-          <i class="energy-low"></i>
-          Төмен қуат
-        </span>
-      `;
-
-      chart.after(legend);
-
-      const explanation = document.createElement('div');
-      explanation.className = 'chart-explanation';
-
-      explanation.innerHTML = `
-        <strong>Диаграмманы қалай оқу керек?</strong>
-        Сызық цикл бойындағы қуат деңгейінің өзгерісін көрсетеді.
-        Сызық жоғары болған сайын, белгіленген қуат деңгейі жоғары.
-        Бұл график цикл кезінде самочувствиедегі қайталанатын өзгерістерді байқауға көмектеседі.
-      `;
-
-      legend.after(explanation);
-    });
-  </script>
-
-</body>
-</html>
-```
-
-
-
-<style>
-  .chart-explanation {
-    margin-top: 18px;
-    padding: 16px 18px;
-    background: #f7effb;
-    border-radius: 16px;
-    color: var(--muted);
-    font-size: .78rem;
-    line-height: 1.55;
-  }
-
-  .chart-explanation strong {
-    display: block;
-    color: var(--plum);
-    font-size: .85rem;
-    margin-bottom: 4px;
-  }
-
-  .chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 15px;
-    font-size: .72rem;
-    color: var(--muted);
-  }
-
-  .chart-legend span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .chart-legend i {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .energy-high {
-    background: var(--plum);
-  }
-
-  .energy-medium {
-    background: #b98bd7;
-  }
-
-  .energy-low {
-    background: #e3d1ee;
-  }
-
-  .chart-scale {
-    position: absolute;
-    left: -2px;
-    top: 8px;
-    height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    color: var(--muted);
-    font-size: .62rem;
-    pointer-events: none;
-  }
-
-  .chart-scale span {
-    background: rgba(255,255,255,.8);
-    padding-right: 4px;
-  }
-
-  .pattern-card .line-chart {
-    padding-left: 28px;
-  }
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const chart = document.querySelector('.pattern-card .line-chart');
-
-  if (!chart || chart.dataset.enhanced === 'true') return;
-
-  chart.dataset.enhanced = 'true';
-
-  const scale = document.createElement('div');
-  scale.className = 'chart-scale';
-  scale.innerHTML = `
-    <span>Высокий</span>
-    <span>Средний</span>
-    <span>Низкий</span>
-  `;
-
-  chart.prepend(scale);
-
-  const legend = document.createElement('div');
-  legend.className = 'chart-legend';
-  legend.innerHTML = `
-    <span><i class="energy-high"></i> Высокая энергия</span>
-    <span><i class="energy-medium"></i> Средняя энергия</span>
-    <span><i class="energy-low"></i> Низкая энергия</span>
-  `;
-
-  chart.after(legend);
-
-  const explanation = document.createElement('div');
-  explanation.className = 'chart-explanation';
-  explanation.innerHTML = `
-    <strong>Как читать диаграмму?</strong>
-    Линия показывает изменение уровня энергии в течение цикла.
-    Чем выше линия, тем выше отмеченный уровень энергии.
-    Данные помогают замечать повторяющиеся изменения самочувствия.
-  `;
-
-  legend.after(explanation);
-});
-</script>
-```
-
+  <script src="./app.js?v=6"></script>
 </body>
 </html>

@@ -6,6 +6,7 @@ ru:{navHome:'Главная',navCalendar:'Календарь',navInsights:'Ан�
 Object.assign(copy.kk, {
   navChat: 'AI чат',
   notMarked: 'Белгіленбеген',
+  noNotes: 'Бұл күнге жазба жоқ',
   noChartData: 'Диаграмма үшін кемінде екі күнді белгілеңіз',
   highEnergy: 'Жоғары қуат',
   mediumEnergy: 'Орташа қуат',
@@ -40,6 +41,7 @@ Object.assign(copy.kk, {
 Object.assign(copy.ru, {
   navChat: 'AI-чат',
   notMarked: 'Не отмечено',
+  noNotes: 'На этот день заметки нет',
   noChartData: 'Отметьте минимум два дня, чтобы построить диаграмму',
   highEnergy: 'Высокая энергия',
   mediumEnergy: 'Средняя энергия',
@@ -214,6 +216,9 @@ function updateSelectedDate() {
   const log = state.logs.get(selectedDateKey());
   document.querySelector('#calendarMood').textContent = log ? t(log.mood) : t('notMarked');
   document.querySelector('#calendarEnergy').textContent = log ? t(log.energy) : t('notMarked');
+  const note = log && log.notes ? log.notes.trim() : '';
+  document.querySelector('#calendarNoteText').textContent = note || t('noNotes');
+  document.querySelector('#calendarNotePanel').classList.toggle('empty', !note);
 }
 
 function renderCalendar() {
@@ -433,6 +438,11 @@ async function saveLog() {
   }
 
   state.logs.set(saved.entry_date, saved);
+  const savedDate = dateFromKey(saved.entry_date);
+  state.shownYear = savedDate.getFullYear();
+  state.shownMonth = savedDate.getMonth();
+  state.selectedDay = savedDate.getDate();
+  state.logDate = saved.entry_date;
   cacheLogs();
   updateSelectedDate();
   renderCalendar();

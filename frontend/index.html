@@ -7,7 +7,7 @@
   <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
   <title>Sana — цикл күнделігі</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./styles.css?v=8" />
+  <link rel="stylesheet" href="./styles.css?v=9" />
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true">
@@ -152,6 +152,10 @@
             <p class="eyebrow" data-i18n="selectedDay">Таңдалған күн</p><h2 id="selectedDate">Күнді таңдаңыз</h2>
             <div class="summary-status"><svg class="ui-icon"><use href="#icon-spark"></use></svg><div><b data-i18n="ovulationPhase">Овуляция кезеңі</b><small data-i18n="highChance">Ықтималдық жоғары</small></div></div>
             <div class="data-list"><div><span data-i18n="prediction">Болжам</span><b data-i18n="nextPeriodDate">29 қыркүйек</b></div><div><span data-i18n="loggedMood">Көңіл-күй</span><b id="calendarMood">Сабырлы</b></div><div><span data-i18n="energy">Күш-қуат</span><b id="calendarEnergy">Жоғары</b></div></div>
+            <div class="day-note empty" id="calendarNotePanel">
+              <div class="day-note-title"><svg class="ui-icon"><use href="#icon-note"></use></svg><b data-i18n="notes">Жазбалар</b></div>
+              <p id="calendarNoteText">Бұл күнге жазба жоқ</p>
+            </div>
             <button class="primary-button full" data-go="log" type="button" data-i18n="logThisDay">Осы күнді белгілеу</button>
           </aside>
         </div>
@@ -250,6 +254,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=8"></script>
+  <script src="./app.js?v=9"></script>
 </body>
 </html>

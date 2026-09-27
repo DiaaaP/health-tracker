@@ -484,6 +484,35 @@ button, textarea {
 .data-list span {
   color: var(--muted);
 }
+.day-note {
+  margin: -4px 0 18px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--wash);
+}
+.day-note-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--plum);
+  font-size: .82rem;
+}
+.day-note-title .ui-icon {
+  width: 18px;
+  height: 18px;
+}
+.day-note p {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: .8rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.day-note.empty p {
+  color: var(--muted);
+  font-style: italic;
+}
 .insights-grid {
   display: grid; grid-template-columns: .8fr 1.4fr; gap: 18px;
 }

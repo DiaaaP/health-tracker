@@ -25,7 +25,7 @@ Object.assign(copy.kk, {
   aiAssistant: 'AI көмекші',
   aiDisclaimer: 'Жалпы ақпарат береді және дәрігерді алмастырмайды.',
   ollamaModel: 'Ollama моделі',
-  ollamaHint: 'Жергілікті іске қосу: ollama serve, содан кейін ollama pull qwen2.5:3b',
+  ollamaHint: 'Ollama FastAPI-мен бірге іске қосылады. Орнатылған модель автоматты түрде таңдалады.',
   ollamaChecking: 'Ollama тексерілуде',
   ollamaOnline: 'Ollama қосылды',
   ollamaOffline: 'Ollama өшірулі',
@@ -60,7 +60,7 @@ Object.assign(copy.ru, {
   aiAssistant: 'AI-помощник',
   aiDisclaimer: 'Даёт общую информацию и не заменяет врача.',
   ollamaModel: 'Модель Ollama',
-  ollamaHint: 'Локальный запуск: ollama serve, затем ollama pull qwen2.5:3b',
+  ollamaHint: 'Ollama запускается вместе с FastAPI. Установленная модель выбирается автоматически.',
   ollamaChecking: 'Проверяем Ollama',
   ollamaOnline: 'Ollama подключена',
   ollamaOffline: 'Ollama выключена',
@@ -676,7 +676,17 @@ function setOllamaStatus(online) {
 async function checkOllama() {
   try {
     const response = await fetch(ollamaBaseUrl + '/api/tags');
-    setOllamaStatus(response.ok);
+    if (!response.ok) throw new Error('Ollama error: ' + response.status);
+    const data = await response.json();
+    const models = Array.isArray(data.models) ? data.models.map(function (model) {
+      return model.name || model.model;
+    }).filter(Boolean) : [];
+    const input = document.querySelector('#ollamaModel');
+    if (models.length && !models.includes(input.value.trim())) {
+      input.value = models[0];
+      localStorage.setItem('sana-ollama-model', models[0]);
+    }
+    setOllamaStatus(true);
   } catch (error) {
     setOllamaStatus(false);
   }

@@ -1,5 +1,11 @@
+import asyncio
 import json
+import logging
+import os
+import shutil
 import sqlite3
+import subprocess
+import urllib.request
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -34,12 +40,68 @@ except ImportError:
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = PROJECT_ROOT / "frontend"
+OLLAMA_URL = "http://127.0.0.1:11434/api/tags"
+OLLAMA_ORIGINS = (
+    "https://diaaap.github.io,http://127.0.0.1:8000,http://localhost:8000"
+)
+logger = logging.getLogger("uvicorn.error")
+
+
+def ollama_is_running() -> bool:
+    try:
+        with urllib.request.urlopen(OLLAMA_URL, timeout=1) as response:
+            return response.status == 200
+    except OSError:
+        return False
+
+
+def start_ollama() -> subprocess.Popen | None:
+    if ollama_is_running():
+        logger.info("Ollama is already running; Sana will use the existing process")
+        return None
+
+    executable = shutil.which("ollama")
+    if executable is None:
+        logger.warning("Ollama was not found; AI chat will stay offline")
+        return None
+
+    environment = os.environ.copy()
+    environment.setdefault("OLLAMA_ORIGINS", OLLAMA_ORIGINS)
+    creation_flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+    logger.info("Starting Ollama together with Sana")
+    return subprocess.Popen(
+        [executable, "serve"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        env=environment,
+        creationflags=creation_flags,
+    )
+
+
+def stop_ollama(process: subprocess.Popen | None) -> None:
+    if process is None or process.poll() is not None:
+        return
+    logger.info("Stopping the Ollama process started by Sana")
+    process.terminate()
+    try:
+        process.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        process.kill()
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     init_db()
-    yield
+    ollama_process = start_ollama()
+    if ollama_process is not None:
+        for _ in range(40):
+            if ollama_is_running() or ollama_process.poll() is not None:
+                break
+            await asyncio.sleep(0.25)
+    try:
+        yield
+    finally:
+        stop_ollama(ollama_process)
 
 
 app = FastAPI(
@@ -48,6 +110,14 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+
+@app.middleware("http")
+async def disable_frontend_cache(request, call_next):
+    response = await call_next(request)
+    if not request.url.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 @app.get("/api/health")

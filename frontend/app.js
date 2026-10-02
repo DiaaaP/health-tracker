@@ -7,6 +7,23 @@ Object.assign(copy.kk, {
   navChat: 'AI чат',
   notMarked: 'Белгіленбеген',
   noNotes: 'Бұл күнге жазба жоқ',
+  notEnoughData: 'Дерек жеткіліксіз',
+  markFirstPeriod: 'Алғашқы етеккір күнін белгілеңіз',
+  markPeriodStart: 'Етеккірдің басталуын белгілеу',
+  predictedPeriod: 'Болжамды етеккір',
+  removePeriod: 'Етеккір белгісін жою',
+  periodRemoved: 'Етеккір белгісі жойылды',
+  phasePeriod: 'Етеккір кезеңі',
+  phaseFertile: 'Қолайлы кезең',
+  phaseOvulation: 'Овуляция күні',
+  phaseFollicular: 'Фолликулярлық кезең',
+  phaseLuteal: 'Лютеиндік кезең',
+  ordinaryDay: 'Кәдімгі күн',
+  recordedDay: 'Сіз белгілеген күн',
+  predictedDay: 'Есептелген болжам',
+  noPredictionForDay: 'Бұл күнге арнайы болжам жоқ',
+  daysUntilPeriod: 'Келесі етеккірге {days} күн',
+  cycleCalculated: 'Сақталған күндер бойынша есептелді',
   noChartData: 'Диаграмма үшін кемінде екі күнді белгілеңіз',
   highEnergy: 'Жоғары қуат',
   mediumEnergy: 'Орташа қуат',
@@ -42,6 +59,23 @@ Object.assign(copy.ru, {
   navChat: 'AI-чат',
   notMarked: 'Не отмечено',
   noNotes: 'На этот день заметки нет',
+  notEnoughData: 'Недостаточно данных',
+  markFirstPeriod: 'Отметьте первый день менструации',
+  markPeriodStart: 'Отметить начало менструации',
+  predictedPeriod: 'Прогноз менструации',
+  removePeriod: 'Удалить отметку менструации',
+  periodRemoved: 'Отметка менструации удалена',
+  phasePeriod: 'Менструация',
+  phaseFertile: 'Фертильное окно',
+  phaseOvulation: 'День овуляции',
+  phaseFollicular: 'Фолликулярная фаза',
+  phaseLuteal: 'Лютеиновая фаза',
+  ordinaryDay: 'Обычный день',
+  recordedDay: 'Отмечено вами',
+  predictedDay: 'Расчётный прогноз',
+  noPredictionForDay: 'На этот день нет особого прогноза',
+  daysUntilPeriod: 'До следующей менструации: {days} дн.',
+  cycleCalculated: 'Рассчитано по сохранённым датам',
   noChartData: 'Отметьте минимум два дня, чтобы построить диаграмму',
   highEnergy: 'Высокая энергия',
   mediumEnergy: 'Средняя энергия',
@@ -77,6 +111,7 @@ const dataVersion = 'sana-clean-2026-09-27';
 if (localStorage.getItem('sana-data-version') !== dataVersion) {
   [
     'sana-logs',
+    'sana-periods',
     'sana-mood',
     'sana-energy',
     'sana-symptoms',
@@ -109,6 +144,7 @@ const state = {
   symptoms: ['none'],
   logs: new Map(),
   periods: [],
+  calendar: null,
   chatMessages: []
 };
 
@@ -135,6 +171,137 @@ function selectedDateKey() {
 function dateFromKey(key) {
   const parts = key.split('-').map(Number);
   return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+function addDays(date, amount) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + amount);
+  return result;
+}
+
+function daysBetween(first, second) {
+  return Math.round((dateFromKey(second) - dateFromKey(first)) / 86400000);
+}
+
+function keysBetween(start, end) {
+  const keys = [];
+  for (let current = new Date(start); current <= end; current = addDays(current, 1)) {
+    keys.push(dateKey(current));
+  }
+  return keys;
+}
+
+function buildLocalCalendarForecast(year, month) {
+  const monthStart = new Date(year, month, 1);
+  const monthEnd = new Date(year, month + 1, 0);
+  const periods = state.periods.map(function (period) {
+    const start = dateFromKey(period.start_date);
+    const end = dateFromKey(period.end_date || period.start_date);
+    return { start: start, end: end < start ? start : end, complete: Boolean(period.end_date) };
+  }).sort(function (first, second) {
+    return first.start - second.start;
+  });
+  const starts = Array.from(new Set(periods.map(function (period) {
+    return dateKey(period.start);
+  }))).map(dateFromKey);
+  const gaps = [];
+  for (let index = 1; index < starts.length; index += 1) {
+    const gap = Math.round((starts[index] - starts[index - 1]) / 86400000);
+    if (gap >= 21 && gap <= 45) gaps.push(gap);
+  }
+  const lengths = periods.filter(function (period) {
+    return period.complete;
+  }).map(function (period) {
+    return Math.round((period.end - period.start) / 86400000) + 1;
+  }).filter(function (length) {
+    return length >= 1 && length <= 10;
+  });
+  const average = function (values, fallback) {
+    return values.length ? Math.round(values.reduce(function (sum, value) {
+      return sum + value;
+    }, 0) / values.length) : fallback;
+  };
+  const cycleLength = average(gaps, 28);
+  const periodLength = average(lengths, 5);
+  const recorded = new Set();
+  periods.forEach(function (period) {
+    keysBetween(period.start, period.end).forEach(function (key) {
+      const day = dateFromKey(key);
+      if (day >= monthStart && day <= monthEnd) recorded.add(key);
+    });
+  });
+  const result = {
+    year: year,
+    month: month + 1,
+    has_data: Boolean(starts.length),
+    cycle_length: cycleLength,
+    period_length: periodLength,
+    current_cycle_day: null,
+    current_phase: 'unknown',
+    next_period_start: null,
+    next_fertile_start: null,
+    next_fertile_end: null,
+    recorded_period_dates: Array.from(recorded).sort(),
+    predicted_period_dates: [],
+    fertile_dates: [],
+    ovulation_dates: []
+  };
+  if (!starts.length) return result;
+
+  const anchor = starts[starts.length - 1];
+  let nextPeriod = new Date(anchor);
+  while (nextPeriod <= today) nextPeriod = addDays(nextPeriod, cycleLength);
+  const elapsed = Math.floor((today - anchor) / 86400000);
+  if (elapsed >= 0) {
+    const currentDay = elapsed % cycleLength + 1;
+    const currentStart = addDays(today, -(currentDay - 1));
+    const ovulation = addDays(currentStart, Math.max(0, cycleLength - 14));
+    const fertileStart = addDays(ovulation, -5);
+    const fertileEnd = addDays(ovulation, 1);
+    result.current_cycle_day = currentDay;
+    if (currentDay <= periodLength) result.current_phase = 'period';
+    else if (today >= fertileStart && today <= fertileEnd) result.current_phase = dateKey(today) === dateKey(ovulation) ? 'ovulation' : 'fertile';
+    else result.current_phase = today < fertileStart ? 'follicular' : 'luteal';
+  }
+
+  let fertileCycleStart = new Date(nextPeriod);
+  let nextOvulation = addDays(fertileCycleStart, -14);
+  let nextFertileStart = addDays(nextOvulation, -5);
+  let nextFertileEnd = addDays(nextOvulation, 1);
+  if (nextFertileEnd < today) {
+    fertileCycleStart = addDays(fertileCycleStart, cycleLength);
+    nextOvulation = addDays(fertileCycleStart, -14);
+    nextFertileStart = addDays(nextOvulation, -5);
+    nextFertileEnd = addDays(nextOvulation, 1);
+  }
+  result.next_period_start = dateKey(nextPeriod);
+  result.next_fertile_start = dateKey(nextFertileStart);
+  result.next_fertile_end = dateKey(nextFertileEnd);
+
+  const predicted = new Set();
+  const fertile = new Set();
+  const ovulations = new Set();
+  let cycleStart = new Date(anchor);
+  const searchEnd = addDays(monthEnd, cycleLength);
+  while (cycleStart <= searchEnd) {
+    if (cycleStart > anchor) {
+      keysBetween(cycleStart, addDays(cycleStart, periodLength - 1)).forEach(function (key) {
+        const day = dateFromKey(key);
+        if (day >= monthStart && day <= monthEnd && !recorded.has(key)) predicted.add(key);
+      });
+    }
+    const ovulation = addDays(cycleStart, Math.max(0, cycleLength - 14));
+    keysBetween(addDays(ovulation, -5), addDays(ovulation, 1)).forEach(function (key) {
+      const day = dateFromKey(key);
+      if (day >= monthStart && day <= monthEnd) fertile.add(key);
+    });
+    if (ovulation >= monthStart && ovulation <= monthEnd) ovulations.add(dateKey(ovulation));
+    cycleStart = addDays(cycleStart, cycleLength);
+  }
+  result.predicted_period_dates = Array.from(predicted).sort();
+  result.fertile_dates = Array.from(fertile).sort();
+  result.ovulation_dates = Array.from(ovulations).sort();
+  return result;
 }
 
 function formatDate(key) {
@@ -203,6 +370,7 @@ function applyLanguage(lang) {
   const todayText = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(today);
   document.querySelector('#todayLabel').textContent = (lang === 'kk' ? 'Бүгін • ' : 'Сегодня • ') + todayText;
   updateNotificationsText();
+  renderForecastSummary();
   updateSelectedDate();
   updateLoggerDate();
   renderCalendar();
@@ -212,13 +380,65 @@ function applyLanguage(lang) {
 }
 
 function updateSelectedDate() {
-  document.querySelector('#selectedDate').textContent = formatDate(selectedDateKey());
-  const log = state.logs.get(selectedDateKey());
+  const key = selectedDateKey();
+  document.querySelector('#selectedDate').textContent = formatDate(key);
+  const log = state.logs.get(key);
   document.querySelector('#calendarMood').textContent = log ? t(log.mood) : t('notMarked');
   document.querySelector('#calendarEnergy').textContent = log ? t(log.energy) : t('notMarked');
   const note = log && log.notes ? log.notes.trim() : '';
   document.querySelector('#calendarNoteText').textContent = note || t('noNotes');
   document.querySelector('#calendarNotePanel').classList.toggle('empty', !note);
+  const phase = phaseForDate(key);
+  document.querySelector('#calendarPhaseTitle').textContent = t(phase.title);
+  document.querySelector('#calendarPhaseDetail').textContent = t(phase.detail);
+  document.querySelector('#calendarNextPeriod').textContent = state.calendar && state.calendar.next_period_start
+    ? formatDate(state.calendar.next_period_start)
+    : '—';
+  const existingPeriod = getPeriodForDate(key);
+  document.querySelector('#markSelectedPeriodText').textContent = t(existingPeriod ? 'removePeriod' : 'markPeriodStart');
+}
+
+function phaseForDate(key) {
+  if (isPeriodDate(key)) return { title: 'phasePeriod', detail: 'recordedDay' };
+  if (isPredictedPeriodDate(key)) return { title: 'phasePeriod', detail: 'predictedDay' };
+  if (state.calendar && state.calendar.ovulation_dates.includes(key)) return { title: 'phaseOvulation', detail: 'predictedDay' };
+  if (isFertileDate(key)) return { title: 'phaseFertile', detail: 'predictedDay' };
+  return { title: 'ordinaryDay', detail: state.calendar && state.calendar.has_data ? 'noPredictionForDay' : 'notEnoughData' };
+}
+
+function phaseTranslation(phase) {
+  const phases = {
+    period: 'phasePeriod',
+    fertile: 'phaseFertile',
+    ovulation: 'phaseOvulation',
+    follicular: 'phaseFollicular',
+    luteal: 'phaseLuteal'
+  };
+  return t(phases[phase] || 'notEnoughData');
+}
+
+function renderForecastSummary() {
+  const calendar = state.calendar;
+  const hasData = calendar && calendar.has_data;
+  document.querySelector('#cyclePhase').textContent = hasData ? phaseTranslation(calendar.current_phase) : t('notEnoughData');
+  document.querySelector('#cycleDayValue').textContent = hasData && calendar.current_cycle_day ? calendar.current_cycle_day : '—';
+  document.querySelector('#cycleLengthValue').textContent = hasData ? calendar.cycle_length : '—';
+  document.querySelector('#overviewCycleLength').textContent = hasData ? calendar.cycle_length : '—';
+  document.querySelector('#overviewPeriodLength').textContent = hasData ? calendar.period_length : '—';
+  document.querySelector('#cycleDataStatus').textContent = hasData ? t('cycleCalculated') : t('markFirstPeriod');
+  document.querySelector('#fertileRange').textContent = hasData && calendar.next_fertile_start
+    ? formatDate(calendar.next_fertile_start) + ' — ' + formatDate(calendar.next_fertile_end)
+    : t('notEnoughData');
+  if (hasData && calendar.next_period_start) {
+    const days = Math.max(0, daysBetween(dateKey(today), calendar.next_period_start));
+    document.querySelector('#nextPeriodText').textContent = t('daysUntilPeriod').replace('{days}', days);
+  } else {
+    document.querySelector('#nextPeriodText').textContent = t('markFirstPeriod');
+  }
+  const progress = hasData && calendar.current_cycle_day
+    ? Math.min(1, calendar.current_cycle_day / calendar.cycle_length)
+    : 0;
+  document.querySelector('.ring-progress').style.strokeDashoffset = String(616 * (1 - progress));
 }
 
 function renderCalendar() {
@@ -253,6 +473,8 @@ function renderCalendar() {
       const log = state.logs.get(key);
       if (log) button.classList.add('logged');
       if (isPeriodDate(key)) button.classList.add('period');
+      else if (isPredictedPeriodDate(key)) button.classList.add('predicted-period');
+      if (isFertileDate(key)) button.classList.add('fertile');
       if (key === dateKey(today)) button.classList.add('today');
       if (day === state.selectedDay) button.classList.add('selected');
       button.addEventListener('click', function () {
@@ -309,6 +531,8 @@ function renderHomeCalendar(week) {
       const key = dateKey(new Date(state.shownYear, state.shownMonth, day));
       if (state.logs.has(key)) button.classList.add('logged');
       if (isPeriodDate(key)) button.classList.add('period');
+      else if (isPredictedPeriodDate(key)) button.classList.add('predicted-period');
+      if (isFertileDate(key)) button.classList.add('fertile');
       if (key === dateKey(today)) button.classList.add('today');
       button.addEventListener('click', function () {
         state.selectedDay = day;
@@ -328,6 +552,23 @@ function isPeriodDate(key) {
     const end = period.end_date ? dateFromKey(period.end_date).getTime() : start;
     return target >= start && target <= end;
   });
+}
+
+function getPeriodForDate(key) {
+  const target = dateFromKey(key).getTime();
+  return state.periods.find(function (period) {
+    const start = dateFromKey(period.start_date).getTime();
+    const end = dateFromKey(period.end_date || period.start_date).getTime();
+    return target >= start && target <= end;
+  });
+}
+
+function isPredictedPeriodDate(key) {
+  return Boolean(state.calendar && state.calendar.predicted_period_dates.includes(key));
+}
+
+function isFertileDate(key) {
+  return Boolean(state.calendar && state.calendar.fertile_dates.includes(key));
 }
 
 function updateLoggerDate() {
@@ -379,6 +620,19 @@ function cacheLogs() {
   localStorage.setItem('sana-logs', JSON.stringify(Array.from(state.logs.values())));
 }
 
+function readLocalPeriods() {
+  try {
+    const periods = JSON.parse(localStorage.getItem('sana-periods') || '[]');
+    return Array.isArray(periods) ? periods : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function cachePeriods() {
+  localStorage.setItem('sana-periods', JSON.stringify(state.periods));
+}
+
 function setLogs(logs) {
   state.logs.clear();
   logs.forEach(function (log) {
@@ -408,13 +662,26 @@ async function loadTrackerData() {
     setLogs(responses[0]);
     state.periods = responses[1];
     cacheLogs();
+    cachePeriods();
   } catch (error) {
     setLogs(readLocalLogs());
-    state.periods = [];
+    state.periods = readLocalPeriods();
   }
+  await loadCalendarForecast();
+  renderForecastSummary();
   updateSelectedDate();
   renderCalendar();
   renderCharts();
+}
+
+async function loadCalendarForecast() {
+  try {
+    state.calendar = await apiRequest(
+      '/api/calendar?year=' + state.shownYear + '&month=' + (state.shownMonth + 1)
+    );
+  } catch (error) {
+    state.calendar = buildLocalCalendarForecast(state.shownYear, state.shownMonth);
+  }
 }
 
 async function saveLog() {
@@ -453,21 +720,38 @@ async function saveLog() {
   }, 400);
 }
 
-async function markPeriod() {
-  const payload = { start_date: dateKey(today), end_date: null };
-  let saved = payload;
-  try {
-    saved = await apiRequest('/api/periods', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+async function markPeriod(key) {
+  const existing = getPeriodForDate(key);
+  if (existing) {
+    try {
+      await apiRequest('/api/periods/' + existing.id, { method: 'DELETE' });
+    } catch (error) {
+      // GitHub Pages uses the local fallback below.
+    }
+    state.periods = state.periods.filter(function (period) {
+      return period.id !== existing.id;
     });
-  } catch (error) {
-    saved = Object.assign({ id: Date.now() }, payload);
+    showToast(t('periodRemoved'));
+  } else {
+    const payload = { start_date: key, end_date: null };
+    let saved = payload;
+    try {
+      saved = await apiRequest('/api/periods', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (error) {
+      saved = Object.assign({ id: Date.now() }, payload);
+    }
+    state.periods.unshift(saved);
+    showToast(t('periodSaved'));
   }
-  state.periods.unshift(saved);
+  cachePeriods();
+  await loadCalendarForecast();
+  renderForecastSummary();
+  updateSelectedDate();
   renderCalendar();
-  showToast(t('periodSaved'));
 }
 
 function renderCharts() {
@@ -638,11 +922,14 @@ function togglePrivacy() {
   showToast(t(enabled ? 'privacyEnabled' : 'privacyDisabled'));
 }
 
-function clearLocalData() {
-  ['sana-logs', 'sana-notifications'].forEach(function (key) {
+async function clearLocalData() {
+  ['sana-logs', 'sana-periods', 'sana-notifications'].forEach(function (key) {
     localStorage.removeItem(key);
   });
   state.logs.clear();
+  state.periods = [];
+  await loadCalendarForecast();
+  renderForecastSummary();
   renderCalendar();
   renderCharts();
   updateSelectedDate();
@@ -799,7 +1086,12 @@ function bindEvents() {
   document.querySelector('#registerForm').addEventListener('submit', register);
   document.querySelector('#loginForm').addEventListener('submit', login);
   document.querySelector('#saveLog').addEventListener('click', saveLog);
-  document.querySelector('#logPeriodButton').addEventListener('click', markPeriod);
+  document.querySelector('#logPeriodButton').addEventListener('click', function () {
+    markPeriod(dateKey(today));
+  });
+  document.querySelector('#markSelectedPeriodButton').addEventListener('click', function () {
+    markPeriod(selectedDateKey());
+  });
 
   document.querySelectorAll('.mood').forEach(function (button) {
     button.addEventListener('click', function () {
@@ -841,23 +1133,27 @@ function bindEvents() {
     });
   });
 
-  document.querySelector('#prevMonth').addEventListener('click', function () {
+  document.querySelector('#prevMonth').addEventListener('click', async function () {
     state.shownMonth -= 1;
     if (state.shownMonth < 0) {
       state.shownMonth = 11;
       state.shownYear -= 1;
     }
     state.selectedDay = 1;
+    await loadCalendarForecast();
+    renderForecastSummary();
     updateSelectedDate();
     renderCalendar();
   });
-  document.querySelector('#nextMonth').addEventListener('click', function () {
+  document.querySelector('#nextMonth').addEventListener('click', async function () {
     state.shownMonth += 1;
     if (state.shownMonth > 11) {
       state.shownMonth = 0;
       state.shownYear += 1;
     }
     state.selectedDay = 1;
+    await loadCalendarForecast();
+    renderForecastSummary();
     updateSelectedDate();
     renderCalendar();
   });

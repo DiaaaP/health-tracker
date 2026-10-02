@@ -7,7 +7,7 @@
   <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
   <title>Sana — цикл күнделігі</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./styles.css?v=10" />
+  <link rel="stylesheet" href="./styles.css?v=13" />
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true">
@@ -85,16 +85,16 @@
                   <circle class="ring-progress" cx="120" cy="120" r="98"></circle>
                 </svg>
                 <div class="ring-copy">
-                  <span class="phase-pill" data-i18n="ovulationPhase">Овуляция кезеңі</span>
-                  <strong>14</strong>
+                  <span class="phase-pill" id="cyclePhase" data-i18n="notEnoughData">Дерек жеткіліксіз</span>
+                  <strong id="cycleDayValue">—</strong>
                   <b data-i18n="dayOfCycle">цикл күні</b>
-                  <small data-i18n="nextPeriod">Келесі етеккірге 14 күн</small>
+                  <small id="nextPeriodText" data-i18n="markFirstPeriod">Алғашқы етеккір күнін белгілеңіз</small>
                 </div>
               </div>
               <div class="cycle-side">
-                <div class="forecast-item"><span class="forecast-icon fertile"><svg class="ui-icon"><use href="#icon-spark"></use></svg></span><div><small data-i18n="fertility">Құнарлылық</small><strong data-i18n="highPhase">Жоғары фаза</strong><p data-i18n="fertileDates">13–18 қыркүйек</p></div></div>
-                <div class="forecast-item"><span class="forecast-icon"><svg class="ui-icon"><use href="#icon-cycle"></use></svg></span><div><small data-i18n="cycleLength">Цикл ұзақтығы</small><strong>28 <span data-i18n="days">күн</span></strong><p data-i18n="regularRhythm">Тұрақты ырғақ</p></div></div>
-                <button class="primary-button" id="logPeriodButton" type="button"><svg class="ui-icon"><use href="#icon-drop"></use></svg><span data-i18n="markPeriod">Етеккірді белгілеу</span></button>
+                <div class="forecast-item"><span class="forecast-icon fertile"><svg class="ui-icon"><use href="#icon-spark"></use></svg></span><div><small data-i18n="fertility">Құнарлылық</small><strong data-i18n="fertileWindow">Қолайлы кезең</strong><p id="fertileRange" data-i18n="notEnoughData">Дерек жеткіліксіз</p></div></div>
+                <div class="forecast-item"><span class="forecast-icon"><svg class="ui-icon"><use href="#icon-cycle"></use></svg></span><div><small data-i18n="cycleLength">Цикл ұзақтығы</small><strong><span id="cycleLengthValue">—</span> <span data-i18n="days">күн</span></strong><p id="cycleDataStatus" data-i18n="markFirstPeriod">Алғашқы етеккір күнін белгілеңіз</p></div></div>
+                <button class="primary-button" id="logPeriodButton" type="button"><svg class="ui-icon"><use href="#icon-drop"></use></svg><span data-i18n="markPeriodStart">Етеккірдің басталуын белгілеу</span></button>
               </div>
             </div>
           </article>
@@ -110,8 +110,8 @@
           </article>
 
           <article class="overview-stats" aria-label="Цикл көрсеткіштері">
-            <div class="overview-stat surface"><span class="stat-icon"><svg class="ui-icon"><use href="#icon-cycle"></use></svg></span><div><small data-i18n="cycleLength">Цикл ұзақтығы</small><strong>28 <span data-i18n="days">күн</span></strong></div></div>
-            <div class="overview-stat surface"><span class="stat-icon"><svg class="ui-icon"><use href="#icon-drop"></use></svg></span><div><small data-i18n="periodLength">Етеккір ұзақтығы</small><strong>5 <span data-i18n="days">күн</span></strong></div></div>
+            <div class="overview-stat surface"><span class="stat-icon"><svg class="ui-icon"><use href="#icon-cycle"></use></svg></span><div><small data-i18n="cycleLength">Цикл ұзақтығы</small><strong><span id="overviewCycleLength">—</span> <span data-i18n="days">күн</span></strong></div></div>
+            <div class="overview-stat surface"><span class="stat-icon"><svg class="ui-icon"><use href="#icon-drop"></use></svg></span><div><small data-i18n="periodLength">Етеккір ұзақтығы</small><strong><span id="overviewPeriodLength">—</span> <span data-i18n="days">күн</span></strong></div></div>
             <div class="overview-stat surface"><span class="stat-icon"><svg class="ui-icon"><use href="#icon-note"></use></svg></span><div><small data-i18n="savedEntries">Белгілер</small><strong id="savedEntriesCount">0</strong></div></div>
           </article>
 
@@ -146,17 +146,17 @@
             <div class="calendar-head"><button id="prevMonth" class="icon-button" type="button" aria-label="Алдыңғы ай"><svg class="ui-icon icon-back"><use href="#icon-chevron"></use></svg></button><div><p class="eyebrow" data-i18n="cycleCalendar">Цикл күнтізбесі</p><h2 id="monthTitle">Қыркүйек 2026</h2></div><button id="nextMonth" class="icon-button" type="button" aria-label="Келесі ай"><svg class="ui-icon"><use href="#icon-chevron"></use></svg></button></div>
             <div class="weekdays"><span>Дс</span><span>Сс</span><span>Ср</span><span>Бс</span><span>Жм</span><span>Сб</span><span>Жс</span></div>
             <div class="calendar-grid" id="calendarGrid"></div>
-            <div class="legend"><span><i class="period-dot"></i><b data-i18n="period">Етеккір</b></span><span><i class="fertile-dot"></i><b data-i18n="fertileWindow">Қолайлы кезең</b></span><span><i class="today-dot"></i><b data-i18n="today">Бүгін</b></span></div>
+            <div class="legend"><span><i class="period-dot"></i><b data-i18n="period">Етеккір</b></span><span><i class="predicted-period-dot"></i><b data-i18n="predictedPeriod">Болжам</b></span><span><i class="fertile-dot"></i><b data-i18n="fertileWindow">Қолайлы кезең</b></span><span><i class="today-dot"></i><b data-i18n="today">Бүгін</b></span></div>
           </article>
           <aside class="surface day-summary">
             <p class="eyebrow" data-i18n="selectedDay">Таңдалған күн</p><h2 id="selectedDate">Күнді таңдаңыз</h2>
-            <div class="summary-status"><svg class="ui-icon"><use href="#icon-spark"></use></svg><div><b data-i18n="ovulationPhase">Овуляция кезеңі</b><small data-i18n="highChance">Ықтималдық жоғары</small></div></div>
-            <div class="data-list"><div><span data-i18n="prediction">Болжам</span><b data-i18n="nextPeriodDate">29 қыркүйек</b></div><div><span data-i18n="loggedMood">Көңіл-күй</span><b id="calendarMood">Сабырлы</b></div><div><span data-i18n="energy">Күш-қуат</span><b id="calendarEnergy">Жоғары</b></div></div>
+            <div class="summary-status" id="calendarPhaseBox"><svg class="ui-icon"><use href="#icon-spark"></use></svg><div><b id="calendarPhaseTitle">—</b><small id="calendarPhaseDetail">—</small></div></div>
+            <div class="data-list"><div><span data-i18n="prediction">Болжам</span><b id="calendarNextPeriod">—</b></div><div><span data-i18n="loggedMood">Көңіл-күй</span><b id="calendarMood">Сабырлы</b></div><div><span data-i18n="energy">Күш-қуат</span><b id="calendarEnergy">Жоғары</b></div></div>
             <div class="day-note empty" id="calendarNotePanel">
               <div class="day-note-title"><svg class="ui-icon"><use href="#icon-note"></use></svg><b data-i18n="notes">Жазбалар</b></div>
               <p id="calendarNoteText">Бұл күнге жазба жоқ</p>
             </div>
-            <button class="primary-button full" data-go="log" type="button" data-i18n="logThisDay">Осы күнді белгілеу</button>
+            <div class="day-actions"><button class="primary-button full" data-go="log" type="button" data-i18n="logThisDay">Осы күнді белгілеу</button><button class="secondary-button full" id="markSelectedPeriodButton" type="button"><svg class="ui-icon"><use href="#icon-drop"></use></svg><span id="markSelectedPeriodText" data-i18n="markPeriodStart">Етеккірдің басталуын белгілеу</span></button></div>
           </aside>
         </div>
       </section>
@@ -254,6 +254,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=12"></script>
+  <script src="./app.js?v=13"></script>
 </body>
 </html>

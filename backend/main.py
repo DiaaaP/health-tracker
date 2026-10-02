@@ -7,13 +7,15 @@ import sqlite3
 import subprocess
 import urllib.request
 from contextlib import asynccontextmanager
+from datetime import date
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query, status
+from fastapi import FastAPI, HTTPException, Query, Response, status
 from fastapi.staticfiles import StaticFiles
 
 try:
     from .auth import hash_password, verify_password
+    from .cycle import build_calendar
     from .database import get_connection, init_db, row_to_log, row_to_user
     from .schemas import (
         AuthResponse,
@@ -26,6 +28,7 @@ try:
     )
 except ImportError:
     from auth import hash_password, verify_password
+    from cycle import build_calendar
     from database import get_connection, init_db, row_to_log, row_to_user
     from schemas import (
         AuthResponse,
@@ -185,21 +188,37 @@ def list_logs(limit: int = Query(default=30, ge=1, le=100)):
 @app.post("/api/logs", response_model=DailyLog, status_code=status.HTTP_201_CREATED)
 def create_log(payload: DailyLogCreate):
     with get_connection() as connection:
-        cursor = connection.execute(
-            """
-            INSERT INTO daily_logs (entry_date, mood, energy, symptoms, notes)
-            VALUES (?, ?, ?, ?, ?)
-            """,
-            (
-                payload.entry_date.isoformat(),
-                payload.mood,
-                payload.energy,
-                json.dumps(payload.symptoms, ensure_ascii=False),
-                payload.notes,
-            ),
+        existing = connection.execute(
+            "SELECT id FROM daily_logs WHERE entry_date = ? ORDER BY id DESC LIMIT 1",
+            (payload.entry_date.isoformat(),),
+        ).fetchone()
+        values = (
+            payload.mood,
+            payload.energy,
+            json.dumps(payload.symptoms, ensure_ascii=False),
+            payload.notes,
         )
+        if existing:
+            connection.execute(
+                """
+                UPDATE daily_logs
+                SET mood = ?, energy = ?, symptoms = ?, notes = ?
+                WHERE id = ?
+                """,
+                values + (existing["id"],),
+            )
+            log_id = existing["id"]
+        else:
+            cursor = connection.execute(
+                """
+                INSERT INTO daily_logs (entry_date, mood, energy, symptoms, notes)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (payload.entry_date.isoformat(),) + values,
+            )
+            log_id = cursor.lastrowid
         row = connection.execute(
-            "SELECT * FROM daily_logs WHERE id = ?", (cursor.lastrowid,)
+            "SELECT * FROM daily_logs WHERE id = ?", (log_id,)
         ).fetchone()
     if row is None:
         raise HTTPException(status_code=500, detail="Log was not saved")
@@ -218,19 +237,52 @@ def list_periods():
 @app.post("/api/periods", response_model=Period, status_code=status.HTTP_201_CREATED)
 def create_period(payload: PeriodCreate):
     with get_connection() as connection:
-        cursor = connection.execute(
-            "INSERT INTO periods (start_date, end_date) VALUES (?, ?)",
-            (
-                payload.start_date.isoformat(),
-                payload.end_date.isoformat() if payload.end_date else None,
-            ),
-        )
+        start_date = payload.start_date.isoformat()
+        end_date = payload.end_date.isoformat() if payload.end_date else None
+        existing = connection.execute(
+            "SELECT id FROM periods WHERE start_date = ? ORDER BY id DESC LIMIT 1",
+            (start_date,),
+        ).fetchone()
+        if existing:
+            connection.execute(
+                "UPDATE periods SET end_date = ? WHERE id = ?",
+                (end_date, existing["id"]),
+            )
+            period_id = existing["id"]
+        else:
+            cursor = connection.execute(
+                "INSERT INTO periods (start_date, end_date) VALUES (?, ?)",
+                (start_date, end_date),
+            )
+            period_id = cursor.lastrowid
         row = connection.execute(
-            "SELECT * FROM periods WHERE id = ?", (cursor.lastrowid,)
+            "SELECT * FROM periods WHERE id = ?", (period_id,)
         ).fetchone()
     if row is None:
         raise HTTPException(status_code=500, detail="Period was not saved")
     return dict(row)
+
+
+@app.delete("/api/periods/{period_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_period(period_id: int) -> Response:
+    with get_connection() as connection:
+        cursor = connection.execute("DELETE FROM periods WHERE id = ?", (period_id,))
+    if cursor.rowcount == 0:
+        raise HTTPException(status_code=404, detail="Period was not found")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.get("/api/calendar")
+def get_calendar(
+    year: int | None = Query(default=None, ge=2000, le=2100),
+    month: int | None = Query(default=None, ge=1, le=12),
+):
+    current_date = date.today()
+    with get_connection() as connection:
+        rows = connection.execute(
+            "SELECT * FROM periods ORDER BY start_date, id"
+        ).fetchall()
+    return build_calendar(rows, year or current_date.year, month or current_date.month)
 
 
 @app.get("/api/summary")

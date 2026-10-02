@@ -25,6 +25,13 @@ class PeriodCreate(BaseModel):
     start_date: date = Field(default_factory=date.today)
     end_date: date | None = None
 
+    @field_validator("end_date")
+    @classmethod
+    def end_cannot_precede_start(cls, value: date | None, info):
+        if value is not None and value < info.data.get("start_date", value):
+            raise ValueError("end_date cannot be earlier than start_date")
+        return value
+
 
 class Period(PeriodCreate):
     id: int

@@ -378,6 +378,12 @@ button, textarea {
 .home-calendar-day.period {
   color: #fff; background: var(--plum);
 }
+.home-calendar-day.predicted-period {
+  color: #8b4169; background: #fff0f7; box-shadow: inset 0 0 0 1px #dda7c2;
+}
+.home-calendar-day.fertile:not(.period):not(.predicted-period) {
+  box-shadow: inset 0 -3px 0 #b98bd7;
+}
 .home-calendar-day.logged:not(.period) {
   color: var(--plum); background: #eadcf3;
 }
@@ -421,6 +427,9 @@ button, textarea {
 .calendar-day.period {
   background: #f1dce9; color: #7d235a;
 }
+.calendar-day.predicted-period {
+  background: #fff5fa; color: #9a4f77; box-shadow: inset 0 0 0 2px #e4b5cc;
+}
 .calendar-day.fertile {
   box-shadow: inset 0 -4px 0 #b98bd7;
 }
@@ -448,6 +457,9 @@ button, textarea {
 }
 .period-dot {
   background: #d78aaf;
+}
+.predicted-period-dot {
+  background: #fff5fa; border: 2px solid #d99fbc;
 }
 .fertile-dot {
   background: #b98bd7;
@@ -512,6 +524,10 @@ button, textarea {
 .day-note.empty p {
   color: var(--muted);
   font-style: italic;
+}
+.day-actions {
+  display: grid;
+  gap: 10px;
 }
 .insights-grid {
   display: grid; grid-template-columns: .8fr 1.4fr; gap: 18px;

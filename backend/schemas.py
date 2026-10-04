@@ -38,6 +38,10 @@ class Period(PeriodCreate):
     created_at: str
 
 
+class PeriodUpdate(BaseModel):
+    end_date: date | None = None
+
+
 class UserRegister(BaseModel):
     name: str = Field(min_length=2, max_length=60)
     email: EmailStr
@@ -67,3 +71,5 @@ class UserPublic(BaseModel):
 class AuthResponse(BaseModel):
     message: str
     user: UserPublic
+    token: str
+    expires_at: str

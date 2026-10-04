@@ -6,15 +6,22 @@ import shutil
 import sqlite3
 import subprocess
 import urllib.request
+from collections import Counter
 from contextlib import asynccontextmanager
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query, Response, status
+from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 
 try:
-    from .auth import hash_password, verify_password
+    from .auth import (
+        create_session,
+        hash_password,
+        hash_session_token,
+        verify_password,
+    )
     from .cycle import build_calendar
     from .database import get_connection, init_db, row_to_log, row_to_user
     from .schemas import (
@@ -23,11 +30,12 @@ try:
         DailyLogCreate,
         Period,
         PeriodCreate,
+        PeriodUpdate,
         UserLogin,
         UserRegister,
     )
 except ImportError:
-    from auth import hash_password, verify_password
+    from auth import create_session, hash_password, hash_session_token, verify_password
     from cycle import build_calendar
     from database import get_connection, init_db, row_to_log, row_to_user
     from schemas import (
@@ -36,6 +44,7 @@ except ImportError:
         DailyLogCreate,
         Period,
         PeriodCreate,
+        PeriodUpdate,
         UserLogin,
         UserRegister,
     )
@@ -48,6 +57,7 @@ OLLAMA_ORIGINS = (
     "https://diaaap.github.io,http://127.0.0.1:8000,http://localhost:8000"
 )
 logger = logging.getLogger("uvicorn.error")
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def ollama_is_running() -> bool:
@@ -59,6 +69,9 @@ def ollama_is_running() -> bool:
 
 
 def start_ollama() -> subprocess.Popen | None:
+    if os.getenv("SANA_START_OLLAMA", "1") == "0":
+        logger.info("Automatic Ollama startup is disabled")
+        return None
     if ollama_is_running():
         logger.info("Ollama is already running; Sana will use the existing process")
         return None
@@ -109,8 +122,8 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="Sana Health Tracker API",
-    description="Minimal API for daily wellbeing and cycle records.",
-    version="0.1.0",
+    description="API for accounts, daily wellbeing and personal cycle records.",
+    version="0.2.0",
     lifespan=lifespan,
 )
 
@@ -121,6 +134,55 @@ async def disable_frontend_cache(request, call_next):
     if not request.url.path.startswith("/api/"):
         response.headers["Cache-Control"] = "no-store"
     return response
+
+
+def get_optional_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+) -> dict | None:
+    if credentials is None:
+        return None
+    if credentials.scheme.lower() != "bearer":
+        raise HTTPException(status_code=401, detail="Invalid authentication scheme")
+
+    token_hash = hash_session_token(credentials.credentials)
+    now = datetime.now(timezone.utc).isoformat()
+    with get_connection() as connection:
+        row = connection.execute(
+            """
+            SELECT users.*
+            FROM sessions
+            JOIN users ON users.id = sessions.user_id
+            WHERE sessions.token_hash = ? AND sessions.expires_at > ?
+            """,
+            (token_hash, now),
+        ).fetchone()
+        if row is None:
+            connection.execute(
+                "DELETE FROM sessions WHERE token_hash = ?", (token_hash,)
+            )
+            raise HTTPException(status_code=401, detail="Session is invalid or expired")
+    return row_to_user(row)
+
+
+def require_user(user: dict | None = Depends(get_optional_user)) -> dict:
+    if user is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return user
+
+
+def owner_filter(user: dict | None) -> tuple[str, tuple]:
+    if user is None:
+        return "user_id IS NULL", ()
+    return "user_id = ?", (user["id"],)
+
+
+def issue_session(connection: sqlite3.Connection, user_id: int) -> tuple[str, str]:
+    token, token_hash, expires_at = create_session()
+    connection.execute(
+        "INSERT INTO sessions (user_id, token_hash, expires_at) VALUES (?, ?, ?)",
+        (user_id, token_hash, expires_at),
+    )
+    return token, expires_at
 
 
 @app.get("/api/health")
@@ -146,6 +208,7 @@ def register_user(payload: UserRegister):
             row = connection.execute(
                 "SELECT * FROM users WHERE id = ?", (cursor.lastrowid,)
             ).fetchone()
+            token, expires_at = issue_session(connection, cursor.lastrowid)
     except sqlite3.IntegrityError as error:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -154,7 +217,12 @@ def register_user(payload: UserRegister):
 
     if row is None:
         raise HTTPException(status_code=500, detail="User was not created")
-    return {"message": "Registration successful", "user": row_to_user(row)}
+    return {
+        "message": "Registration successful",
+        "user": row_to_user(row),
+        "token": token,
+        "expires_at": expires_at,
+    }
 
 
 @app.post("/api/auth/login", response_model=AuthResponse)
@@ -172,25 +240,67 @@ def login_user(payload: UserLogin):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
         )
-    return {"message": "Login successful", "user": row_to_user(row)}
+    with get_connection() as connection:
+        connection.execute(
+            "DELETE FROM sessions WHERE user_id = ? AND expires_at <= ?",
+            (row["id"], datetime.now(timezone.utc).isoformat()),
+        )
+        token, expires_at = issue_session(connection, row["id"])
+    return {
+        "message": "Login successful",
+        "user": row_to_user(row),
+        "token": token,
+        "expires_at": expires_at,
+    }
+
+
+@app.get("/api/auth/me")
+def current_user(user: dict = Depends(require_user)) -> dict:
+    return user
+
+
+@app.post("/api/auth/logout", status_code=status.HTTP_204_NO_CONTENT)
+def logout_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    _: dict = Depends(require_user),
+) -> Response:
+    if credentials is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    with get_connection() as connection:
+        connection.execute(
+            "DELETE FROM sessions WHERE token_hash = ?",
+            (hash_session_token(credentials.credentials),),
+        )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.get("/api/logs", response_model=list[DailyLog])
-def list_logs(limit: int = Query(default=30, ge=1, le=100)):
+def list_logs(
+    limit: int = Query(default=30, ge=1, le=100),
+    user: dict | None = Depends(get_optional_user),
+):
+    where, params = owner_filter(user)
     with get_connection() as connection:
         rows = connection.execute(
-            "SELECT * FROM daily_logs ORDER BY entry_date DESC, id DESC LIMIT ?",
-            (limit,),
+            f"SELECT * FROM daily_logs WHERE {where} "
+            "ORDER BY entry_date DESC, id DESC LIMIT ?",
+            params + (limit,),
         ).fetchall()
     return [row_to_log(row) for row in rows]
 
 
 @app.post("/api/logs", response_model=DailyLog, status_code=status.HTTP_201_CREATED)
-def create_log(payload: DailyLogCreate):
+def create_log(
+    payload: DailyLogCreate,
+    user: dict | None = Depends(get_optional_user),
+):
+    where, owner_params = owner_filter(user)
+    user_id = user["id"] if user else None
     with get_connection() as connection:
         existing = connection.execute(
-            "SELECT id FROM daily_logs WHERE entry_date = ? ORDER BY id DESC LIMIT 1",
-            (payload.entry_date.isoformat(),),
+            f"SELECT id FROM daily_logs WHERE entry_date = ? AND {where} "
+            "ORDER BY id DESC LIMIT 1",
+            (payload.entry_date.isoformat(),) + owner_params,
         ).fetchone()
         values = (
             payload.mood,
@@ -211,10 +321,11 @@ def create_log(payload: DailyLogCreate):
         else:
             cursor = connection.execute(
                 """
-                INSERT INTO daily_logs (entry_date, mood, energy, symptoms, notes)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO daily_logs
+                    (entry_date, mood, energy, symptoms, notes, user_id)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                (payload.entry_date.isoformat(),) + values,
+                (payload.entry_date.isoformat(),) + values + (user_id,),
             )
             log_id = cursor.lastrowid
         row = connection.execute(
@@ -225,23 +336,47 @@ def create_log(payload: DailyLogCreate):
     return row_to_log(row)
 
 
+@app.delete("/api/logs/{log_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_log(
+    log_id: int,
+    user: dict | None = Depends(get_optional_user),
+) -> Response:
+    where, params = owner_filter(user)
+    with get_connection() as connection:
+        cursor = connection.execute(
+            f"DELETE FROM daily_logs WHERE id = ? AND {where}", (log_id,) + params
+        )
+    if cursor.rowcount == 0:
+        raise HTTPException(status_code=404, detail="Log was not found")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
 @app.get("/api/periods", response_model=list[Period])
-def list_periods():
+def list_periods(user: dict | None = Depends(get_optional_user)):
+    where, params = owner_filter(user)
     with get_connection() as connection:
         rows = connection.execute(
-            "SELECT * FROM periods ORDER BY start_date DESC, id DESC"
+            f"SELECT * FROM periods WHERE {where} "
+            "ORDER BY start_date DESC, id DESC",
+            params,
         ).fetchall()
     return [dict(row) for row in rows]
 
 
 @app.post("/api/periods", response_model=Period, status_code=status.HTTP_201_CREATED)
-def create_period(payload: PeriodCreate):
+def create_period(
+    payload: PeriodCreate,
+    user: dict | None = Depends(get_optional_user),
+):
+    where, owner_params = owner_filter(user)
+    user_id = user["id"] if user else None
     with get_connection() as connection:
         start_date = payload.start_date.isoformat()
         end_date = payload.end_date.isoformat() if payload.end_date else None
         existing = connection.execute(
-            "SELECT id FROM periods WHERE start_date = ? ORDER BY id DESC LIMIT 1",
-            (start_date,),
+            f"SELECT id FROM periods WHERE start_date = ? AND {where} "
+            "ORDER BY id DESC LIMIT 1",
+            (start_date,) + owner_params,
         ).fetchone()
         if existing:
             connection.execute(
@@ -251,8 +386,8 @@ def create_period(payload: PeriodCreate):
             period_id = existing["id"]
         else:
             cursor = connection.execute(
-                "INSERT INTO periods (start_date, end_date) VALUES (?, ?)",
-                (start_date, end_date),
+                "INSERT INTO periods (start_date, end_date, user_id) VALUES (?, ?, ?)",
+                (start_date, end_date, user_id),
             )
             period_id = cursor.lastrowid
         row = connection.execute(
@@ -263,10 +398,47 @@ def create_period(payload: PeriodCreate):
     return dict(row)
 
 
-@app.delete("/api/periods/{period_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_period(period_id: int) -> Response:
+@app.patch("/api/periods/{period_id}", response_model=Period)
+def update_period(
+    period_id: int,
+    payload: PeriodUpdate,
+    user: dict | None = Depends(get_optional_user),
+):
+    where, params = owner_filter(user)
     with get_connection() as connection:
-        cursor = connection.execute("DELETE FROM periods WHERE id = ?", (period_id,))
+        current = connection.execute(
+            f"SELECT * FROM periods WHERE id = ? AND {where}",
+            (period_id,) + params,
+        ).fetchone()
+        if current is None:
+            raise HTTPException(status_code=404, detail="Period was not found")
+        if payload.end_date and payload.end_date < date.fromisoformat(
+            current["start_date"]
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail="end_date cannot be earlier than start_date",
+            )
+        connection.execute(
+            "UPDATE periods SET end_date = ? WHERE id = ?",
+            (payload.end_date.isoformat() if payload.end_date else None, period_id),
+        )
+        row = connection.execute(
+            "SELECT * FROM periods WHERE id = ?", (period_id,)
+        ).fetchone()
+    return dict(row)
+
+
+@app.delete("/api/periods/{period_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_period(
+    period_id: int,
+    user: dict | None = Depends(get_optional_user),
+) -> Response:
+    where, params = owner_filter(user)
+    with get_connection() as connection:
+        cursor = connection.execute(
+            f"DELETE FROM periods WHERE id = ? AND {where}", (period_id,) + params
+        )
     if cursor.rowcount == 0:
         raise HTTPException(status_code=404, detail="Period was not found")
     return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -276,30 +448,62 @@ def delete_period(period_id: int) -> Response:
 def get_calendar(
     year: int | None = Query(default=None, ge=2000, le=2100),
     month: int | None = Query(default=None, ge=1, le=12),
+    user: dict | None = Depends(get_optional_user),
 ):
     current_date = date.today()
+    where, params = owner_filter(user)
     with get_connection() as connection:
         rows = connection.execute(
-            "SELECT * FROM periods ORDER BY start_date, id"
+            f"SELECT * FROM periods WHERE {where} ORDER BY start_date, id", params
         ).fetchall()
     return build_calendar(rows, year or current_date.year, month or current_date.month)
 
 
 @app.get("/api/summary")
-def get_summary() -> dict[str, int | str]:
-    """Basic summary; the team can extend it with real cycle calculations."""
+def get_summary(user: dict | None = Depends(get_optional_user)) -> dict:
+    where, params = owner_filter(user)
     with get_connection() as connection:
-        logs_count = connection.execute(
-            "SELECT COUNT(*) FROM daily_logs"
-        ).fetchone()[0]
-        periods_count = connection.execute(
-            "SELECT COUNT(*) FROM periods"
-        ).fetchone()[0]
+        log_rows = connection.execute(
+            f"SELECT * FROM daily_logs WHERE {where} ORDER BY entry_date", params
+        ).fetchall()
+        period_rows = connection.execute(
+            f"SELECT * FROM periods WHERE {where} ORDER BY start_date", params
+        ).fetchall()
+
+    logs = [row_to_log(row) for row in log_rows]
+    mood_counts = Counter(log["mood"] for log in logs)
+    energy_counts = Counter(log["energy"] for log in logs)
+    symptom_counts = Counter(
+        symptom
+        for log in logs
+        for symptom in log["symptoms"]
+        if symptom != "none"
+    )
+    calendar = build_calendar(period_rows, date.today().year, date.today().month)
     return {
-        "logs_count": logs_count,
-        "periods_count": periods_count,
-        "status": "basic",
+        "logs_count": len(logs),
+        "periods_count": len(period_rows),
+        "first_log_date": logs[0]["entry_date"] if logs else None,
+        "latest_log_date": logs[-1]["entry_date"] if logs else None,
+        "mood_counts": dict(mood_counts),
+        "energy_counts": dict(energy_counts),
+        "symptom_counts": dict(symptom_counts.most_common()),
+        "cycle_length": calendar["cycle_length"] if calendar["has_data"] else None,
+        "period_length": calendar["period_length"] if calendar["has_data"] else None,
+        "current_phase": calendar["current_phase"],
+        "status": "ready" if logs and period_rows else "needs_more_data",
     }
+
+
+@app.delete("/api/data", status_code=status.HTTP_204_NO_CONTENT)
+def clear_tracker_data(
+    user: dict | None = Depends(get_optional_user),
+) -> Response:
+    where, params = owner_filter(user)
+    with get_connection() as connection:
+        connection.execute(f"DELETE FROM daily_logs WHERE {where}", params)
+        connection.execute(f"DELETE FROM periods WHERE {where}", params)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")

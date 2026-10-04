@@ -1,10 +1,12 @@
 import hashlib
 import hmac
 import secrets
+from datetime import datetime, timedelta, timezone
 
 
 ALGORITHM = "pbkdf2_sha256"
 ITERATIONS = 600_000
+SESSION_DAYS = 30
 
 
 def hash_password(password: str) -> str:
@@ -34,3 +36,14 @@ def verify_password(password: str, stored_hash: str) -> bool:
     except (TypeError, ValueError):
         return False
     return hmac.compare_digest(actual_digest, expected_digest)
+
+
+def create_session() -> tuple[str, str, str]:
+    token = secrets.token_urlsafe(32)
+    token_hash = hash_session_token(token)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=SESSION_DAYS)
+    return token, token_hash, expires_at.isoformat()
+
+
+def hash_session_token(token: str) -> str:
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()

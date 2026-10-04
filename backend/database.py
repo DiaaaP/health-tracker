@@ -11,7 +11,18 @@ DATABASE_PATH = Path(os.getenv("SANA_DB_PATH", DEFAULT_DATABASE_PATH))
 def get_connection() -> sqlite3.Connection:
     connection = sqlite3.connect(DATABASE_PATH)
     connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA foreign_keys = ON")
     return connection
+
+
+def _add_column_if_missing(
+    connection: sqlite3.Connection, table: str, column: str, declaration: str
+) -> None:
+    columns = {
+        row["name"] for row in connection.execute(f"PRAGMA table_info({table})")
+    }
+    if column not in columns:
+        connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {declaration}")
 
 
 def init_db() -> None:
@@ -43,6 +54,29 @@ def init_db() -> None:
                 password_hash TEXT NOT NULL,
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE TABLE IF NOT EXISTS sessions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                token_hash TEXT NOT NULL UNIQUE,
+                expires_at TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
+            """
+        )
+        _add_column_if_missing(
+            connection, "daily_logs", "user_id", "INTEGER REFERENCES users(id)"
+        )
+        _add_column_if_missing(
+            connection, "periods", "user_id", "INTEGER REFERENCES users(id)"
+        )
+        connection.executescript(
+            """
+            CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token_hash);
+            CREATE INDEX IF NOT EXISTS idx_daily_logs_owner_date
+                ON daily_logs(user_id, entry_date);
+            CREATE INDEX IF NOT EXISTS idx_periods_owner_start
+                ON periods(user_id, start_date);
             """
         )
 

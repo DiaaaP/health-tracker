@@ -73,3 +73,15 @@ class AuthResponse(BaseModel):
     user: UserPublic
     token: str
     expires_at: str
+
+
+class ChatTurnCreate(BaseModel):
+    question: str = Field(min_length=1, max_length=1000)
+    answer: str = Field(min_length=1, max_length=50000)
+
+    @field_validator('question', 'answer')
+    @classmethod
+    def nonempty_content(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError('Message must not be blank')
+        return value

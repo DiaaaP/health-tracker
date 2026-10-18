@@ -1,4 +1,6 @@
 import os
+import csv
+import io
 
 import pytest
 from fastapi.testclient import TestClient
@@ -129,3 +131,43 @@ def test_period_update_and_calendar_forecast(client: TestClient):
     assert calendar["cycle_length"] == 28
     assert calendar["period_length"] == 5
     assert calendar["next_period_start"] is not None
+
+
+def test_chat_history_persists_and_is_private(client):
+    first = auth_headers(register(client, 'chat-first@example.com'))
+    second = auth_headers(register(client, 'chat-second@example.com'))
+    payload = {'question': 'Как дела?', 'answer': 'Жақсы. Чем помочь?'}
+    assert client.post('/api/chat/turns', json=payload).status_code == 401
+    assert client.post('/api/chat/turns', headers=first, json=payload).status_code == 201
+    messages = client.get('/api/chat/messages', headers=first).json()
+    assert [(m['role'], m['content']) for m in messages] == [
+        ('user', payload['question']), ('assistant', payload['answer'])]
+    assert client.get('/api/chat/messages', headers=second).json() == []
+    assert client.post('/api/chat/turns', headers=first,
+                       json={'question': ' ', 'answer': 'ok'}).status_code == 422
+    assert client.delete('/api/chat/messages', headers=second).status_code == 204
+    assert len(client.get('/api/chat/messages', headers=first).json()) == 2
+    assert client.delete('/api/chat/messages', headers=first).status_code == 204
+    assert client.get('/api/chat/messages', headers=first).json() == []
+
+
+def test_csv_export_all_records_and_escaping(client):
+    first = auth_headers(register(client, 'export-first@example.com'))
+    second = auth_headers(register(client, 'export-second@example.com'))
+    note = 'Заметка, "тест"\nЕкінші жол'
+    payload = {'entry_date': '2026-10-18', 'mood': 'calm', 'energy': 'high',
+               'symptoms': ['headache'], 'notes': note}
+    client.post('/api/logs', headers=first, json=payload)
+    response = client.get('/api/logs/export', headers=first)
+    assert response.status_code == 200
+    assert response.content.startswith(b'\xef\xbb\xbf')
+    rows = list(csv.DictReader(io.StringIO(response.content.decode('utf-8-sig'))))
+    assert len(rows) == 1 and rows[0]['notes'] == note
+    assert len(list(csv.DictReader(io.StringIO(
+        client.get('/api/logs/export', headers=second).text.lstrip('\ufeff'))))) == 0
+    assert client.get('/api/logs/export', headers={'Authorization': 'Bearer invalid'}).status_code == 401
+    payload['notes'] = '=HYPERLINK("example")'
+    client.post('/api/logs', headers=first, json=payload)
+    rows = list(csv.DictReader(io.StringIO(
+        client.get('/api/logs/export', headers=first).text.lstrip('\ufeff'))))
+    assert rows[0]['notes'].startswith("'=HYPERLINK")

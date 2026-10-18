@@ -153,6 +153,76 @@ const registerModal = document.querySelector('#registerModal');
 const loginModal = document.querySelector('#loginModal');
 const ollamaBaseUrl = 'http://127.0.0.1:11434';
 
+Object.assign(copy.ru, {
+  exportDiary: 'Скачать дневник CSV', clearChatHistory: 'Очистить историю чата',
+  historyGuest: 'Войдите в аккаунт, чтобы сохранять переписку.',
+  historySaved: 'История сохраняется в вашем аккаунте.',
+  historyError: 'Не удалось загрузить историю. Обновите страницу перед отправкой.',
+  historySaveError: 'Ответ получен, но переписка не сохранена на сервере.',
+  exportError: 'Не удалось скачать дневник. Проверьте сервер и вход в аккаунт.'
+});
+Object.assign(copy.kk, {
+  exportDiary: 'Күнделікті CSV жүктеу', clearChatHistory: 'Чат тарихын тазалау',
+  historyGuest: 'Хат алмасуды сақтау үшін аккаунтқа кіріңіз.',
+  historySaved: 'Чат тарихы аккаунтыңызда сақталады.',
+  historyError: 'Тарих жүктелмеді. Хабар жібермес бұрын бетті жаңартыңыз.',
+  historySaveError: 'Жауап алынды, бірақ чат серверде сақталмады.',
+  exportError: 'Күнделік жүктелмеді. Сервер мен аккаунтты тексеріңіз.'
+});
+
+async function loadChatHistory() {
+  const token = state.authToken;
+  state.chatMessages = [];
+  document.querySelector('#chatHistoryStatus').textContent = t('historyGuest');
+  if (token) {
+    try {
+      const messages = await apiRequest('/api/chat/messages');
+      if (token !== state.authToken) return;
+      state.chatMessages = messages;
+      document.querySelector('#chatHistoryStatus').textContent = t('historySaved');
+    } catch (error) {
+      if (token !== state.authToken) return;
+      document.querySelector('#chatHistoryStatus').textContent = t('historyError');
+    }
+  }
+  renderChat();
+}
+
+async function clearChatHistory() {
+  if (document.querySelector('#chatSend').disabled) return;
+  if (state.authToken) {
+    try {
+      await apiRequest('/api/chat/messages', { method: 'DELETE' });
+    } catch (error) {
+      document.querySelector('#chatHistoryStatus').textContent = t('historySaveError');
+      return;
+    }
+  }
+  state.chatMessages = [];
+  renderChat();
+}
+
+async function exportDiary() {
+  try {
+    const headers = {};
+    if (state.authToken) headers.Authorization = 'Bearer ' + state.authToken;
+    const response = await fetch('/api/logs/export', { headers: headers });
+    if (!response.ok || !response.headers.get('Content-Type').includes('text/csv')) {
+      throw new Error('Export failed');
+    }
+    const url = URL.createObjectURL(await response.blob());
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'sana-diary.csv';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  } catch (error) {
+    showToast(t('exportError'));
+  }
+}
+
 function t(key) {
   return copy[state.lang][key] || key;
 }
@@ -858,6 +928,7 @@ async function handleAuthSuccess(result, message, modal, form) {
   updateAuthUI();
   await loadTrackerData();
   message.classList.add('success');
+  await loadChatHistory();
   form.reset();
   setTimeout(function () {
     setModal(modal, false);
@@ -935,6 +1006,7 @@ async function logout() {
   });
   applyProfileName('Амина');
   updateAuthUI();
+  await loadChatHistory();
   await loadTrackerData();
   showToast(state.lang === 'kk' ? 'Аккаунттан шықтыңыз' : 'Вы вышли из аккаунта');
 }
@@ -1025,11 +1097,14 @@ async function sendChatMessage(event) {
   const button = document.querySelector('#chatSend');
   const question = input.value.trim();
   if (!question) return;
+  if (button.disabled) return;
+  const chatToken = state.authToken;
 
   state.chatMessages.push({ role: 'user', content: question });
   input.value = '';
   renderChat();
   button.disabled = true;
+  document.querySelector('#clearChatHistory').disabled = true;
   button.textContent = t('sending');
 
   const model = document.querySelector('#ollamaModel').value.trim() || 'qwen2.5:3b';
@@ -1053,13 +1128,28 @@ async function sendChatMessage(event) {
     });
     if (!response.ok) throw new Error('Ollama error: ' + response.status);
     const data = await response.json();
+    if (chatToken !== state.authToken) return;
+    if (!data.message || !data.message.content) throw new Error('Empty answer');
     state.chatMessages.push({ role: 'assistant', content: data.message.content });
+    if (chatToken) {
+      try {
+        await apiRequest('/api/chat/turns', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: question, answer: data.message.content })
+        });
+        if (chatToken === state.authToken) document.querySelector('#chatHistoryStatus').textContent = t('historySaved');
+      } catch (error) {
+        if (chatToken === state.authToken) document.querySelector('#chatHistoryStatus').textContent = t('historySaveError');
+      }
+    }
     setOllamaStatus(true);
   } catch (error) {
+    if (chatToken !== state.authToken) return;
     state.chatMessages.push({ role: 'assistant', content: t('chatOffline') });
     setOllamaStatus(false);
   } finally {
     button.disabled = false;
+    document.querySelector('#clearChatHistory').disabled = false;
     button.textContent = t('send');
     renderChat();
   }
@@ -1205,6 +1295,8 @@ function bindEvents() {
     notes.focus();
   });
   document.querySelector('#chatForm').addEventListener('submit', sendChatMessage);
+  document.querySelector('#exportDiary').addEventListener('click', exportDiary);
+  document.querySelector('#clearChatHistory').addEventListener('click', clearChatHistory);
 }
 
 async function init() {
@@ -1216,6 +1308,7 @@ async function init() {
   fillLogForm(dateKey(today));
   applyLanguage(state.lang);
   await loadTrackerData();
+  await loadChatHistory();
   checkOllama();
 }
 

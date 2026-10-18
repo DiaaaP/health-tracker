@@ -1,4 +1,6 @@
 import asyncio
+import csv
+import io
 import json
 import logging
 import os
@@ -26,6 +28,7 @@ try:
     from .database import get_connection, init_db, row_to_log, row_to_user
     from .schemas import (
         AuthResponse,
+        ChatTurnCreate,
         DailyLog,
         DailyLogCreate,
         Period,
@@ -40,6 +43,7 @@ except ImportError:
     from database import get_connection, init_db, row_to_log, row_to_user
     from schemas import (
         AuthResponse,
+        ChatTurnCreate,
         DailyLog,
         DailyLogCreate,
         Period,
@@ -272,6 +276,61 @@ def logout_user(
             (hash_session_token(credentials.credentials),),
         )
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.get('/api/chat/messages')
+def list_chat_messages(user: dict = Depends(require_user)):
+    with get_connection() as connection:
+        rows = connection.execute(
+            'SELECT id, role, content, created_at FROM chat_messages '
+            'WHERE user_id = ? ORDER BY id', (user['id'],)
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+@app.post('/api/chat/turns', status_code=201)
+def save_chat_turn(payload: ChatTurnCreate, user: dict = Depends(require_user)):
+    with get_connection() as connection:
+        connection.executemany(
+            'INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)',
+            [(user['id'], 'user', payload.question),
+             (user['id'], 'assistant', payload.answer)],
+        )
+    return {'status': 'saved'}
+
+
+@app.delete('/api/chat/messages', status_code=204)
+def clear_chat_messages(user: dict = Depends(require_user)):
+    with get_connection() as connection:
+        connection.execute('DELETE FROM chat_messages WHERE user_id = ?', (user['id'],))
+    return Response(status_code=204)
+
+
+@app.get('/api/logs/export')
+def export_logs(user: dict | None = Depends(get_optional_user)):
+    where, params = owner_filter(user)
+    with get_connection() as connection:
+        rows = connection.execute(
+            f'SELECT * FROM daily_logs WHERE {where} ORDER BY entry_date, id', params
+        ).fetchall()
+    output = io.StringIO(newline='')
+    writer = csv.writer(output)
+    writer.writerow(['date', 'mood', 'energy', 'symptoms', 'notes'])
+    for row in rows:
+        log = row_to_log(row)
+        values = [log['entry_date'], log['mood'], log['energy'],
+                  ', '.join(log['symptoms']), log['notes']]
+        # Prevent spreadsheet apps from treating user text as formulas.
+        writer.writerow([
+            "'" + value if value.lstrip().startswith(('=', '+', '-', '@')) else value
+            for value in values
+        ])
+    return Response(
+        content=('\ufeff' + output.getvalue()).encode('utf-8'),
+        media_type='text/csv; charset=utf-8',
+        headers={'Content-Disposition': 'attachment; filename="sana-diary.csv"',
+                 'Cache-Control': 'no-store'},
+    )
 
 
 @app.get("/api/logs", response_model=list[DailyLog])

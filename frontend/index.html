@@ -259,6 +259,526 @@
   <script src="./app.js?v=15"></script>
 
 </body>
+  <!-- ===== SANA: ОКНО БЕРЕМЕННОСТИ ===== -->
+<style>
+#sana-pregnancy-popup-v2 {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(35, 20, 48, .55);
+  backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-family: 'Plus Jakarta Sans', 'Nunito', Arial, sans-serif;
+  color: #30243a;
+}
+
+#sana-pregnancy-popup-v2.is-open {
+  display: flex;
+}
+
+#sana-pregnancy-popup-v2 * {
+  box-sizing: border-box;
+}
+
+.sana-pregnancy-window {
+  width: 100%;
+  max-width: 460px;
+  height: min(850px, 94vh);
+  background: #fbf9fe;
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 80px rgba(30, 10, 50, .25);
+  animation: sanaPregnancyAppear .25s ease;
+}
+
+@keyframes sanaPregnancyAppear {
+  from { opacity: 0; transform: translateY(15px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.sana-pregnancy-top {
+  padding: 18px 20px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fbf9fe;
+}
+
+.sana-pregnancy-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.sana-pregnancy-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #3b185f;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+}
+
+.sana-pregnancy-title {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.sana-pregnancy-subtitle {
+  font-size: 11px;
+  color: #91849b;
+  margin-top: 3px;
+}
+
+.sana-pregnancy-close {
+  border: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f0e9f7;
+  color: #633d83;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.sana-pregnancy-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 17px 85px;
+  scrollbar-width: none;
+}
+
+.sana-pregnancy-content::-webkit-scrollbar {
+  display: none;
+}
+
+.sana-p-card {
+  background: white;
+  border: 1px solid #f0e8f7;
+  border-radius: 23px;
+  padding: 17px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(65, 35, 90, .04);
+}
+
+.sana-p-week-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 13px;
+}
+
+.sana-p-small-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #8b55ad;
+}
+
+.sana-p-trimester {
+  font-size: 11px;
+  font-weight: 700;
+  color: #782da3;
+  background: #f1eafa;
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+
+.sana-p-weeks {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
+}
+
+.sana-p-week {
+  border: 0;
+  border-radius: 15px;
+  background: #f7f4fb;
+  color: #65576e;
+  padding: 10px 3px;
+  cursor: pointer;
+}
+
+.sana-p-week span {
+  display: block;
+  font-size: 10px;
+}
+
+.sana-p-week strong {
+  display: block;
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.sana-p-week.active {
+  background: #351052;
+  color: white;
+  box-shadow: 0 5px 12px #35105225;
+}
+
+.sana-p-progress-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sana-p-progress-head h2 {
+  font-size: 18px;
+  line-height: 1.35;
+  margin: 12px 0 7px;
+}
+
+.sana-p-muted {
+  color: #95889e;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.sana-p-circle {
+  width: 68px;
+  height: 68px;
+  flex-shrink: 0;
+  border: 5px solid #eadcf5;
+  border-top-color: #67328e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transform: rotate(0deg);
+  margin-top: 8px;
+}
+
+.sana-p-circle strong {
+  font-size: 13px;
+}
+
+.sana-p-circle span {
+  font-size: 8px;
+  color: #8b55ad;
+  font-weight: 800;
+}
+
+.sana-p-divider {
+  height: 1px;
+  background: #f0ebf3;
+  margin: 15px 0 12px;
+}
+
+.sana-p-progress-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  color: #81748a;
+}
+
+.sana-p-progress-bottom strong {
+  color: #493557;
+}
+
+.sana-p-baby-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.sana-p-baby-heading h3 {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 5px 0 0;
+}
+
+.sana-p-fruit-label {
+  background: #eaf5ea;
+  color: #39733e;
+  border-radius: 20px;
+  padding: 6px 9px;
+  font-size: 10px;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.sana-p-avocado {
+  background: #edf6ed;
+  border: 1px solid #e4f0e3;
+  border-radius: 20px;
+  margin-top: 15px;
+  min-height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sana-p-avocado-emoji {
+  font-size: 85px;
+  line-height: 1.2;
+  filter: drop-shadow(0 5px 5px #456b3520);
+}
+
+.sana-p-comparison {
+  background: white;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 10px;
+  color: #647466;
+}
+
+.sana-p-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.sana-p-metric {
+  background: #f5f1fa;
+  border-radius: 17px;
+  padding: 13px 10px;
+}
+
+.sana-p-metric span {
+  display: block;
+  font-size: 10px;
+  color: #8b7c95;
+}
+
+.sana-p-metric strong {
+  display: block;
+  font-size: 17px;
+  margin-top: 5px;
+  color: #453051;
+}
+
+.sana-p-article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sana-p-article span {
+  color: #8b55ad;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.sana-p-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,.96);
+  border-top: 1px solid #eee6f4;
+  padding: 12px 8px max(12px, env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: space-around;
+}
+
+.sana-p-bottom div {
+  color: #a094aa;
+  font-size: 10px;
+  text-align: center;
+}
+
+.sana-p-bottom b {
+  display: block;
+  font-size: 19px;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.sana-p-bottom .active {
+  color: #603080;
+  font-weight: 800;
+}
+
+@media (max-width: 500px) {
+  #sana-pregnancy-popup-v2 {
+    padding: 0;
+  }
+
+  .sana-pregnancy-window {
+    height: 100dvh;
+    max-width: none;
+    border-radius: 0;
+  }
+}
+</style>
+
+<div id="sana-pregnancy-popup-v2">
+  <div class="sana-pregnancy-window">
+
+    <header class="sana-pregnancy-top">
+      <div class="sana-pregnancy-logo">
+        <div class="sana-pregnancy-icon">♡</div>
+        <div>
+          <div class="sana-pregnancy-title">Жүктілік <small style="color:#8955ad;font-size:9px">РЕЖИМ</small></div>
+          <div class="sana-pregnancy-subtitle">Sana қамқорлығымен</div>
+        </div>
+      </div>
+      <button class="sana-pregnancy-close" id="sana-pregnancy-close" aria-label="Закрыть">×</button>
+    </header>
+
+    <main class="sana-pregnancy-content">
+
+      <section class="sana-p-card">
+        <div class="sana-p-week-heading">
+          <span class="sana-p-small-title">АПТА ТАҢДАУ</span>
+          <span class="sana-p-trimester">2-триместр</span>
+        </div>
+
+        <div class="sana-p-weeks">
+          <button class="sana-p-week" data-week="14"><span>апта</span><strong>14</strong></button>
+          <button class="sana-p-week" data-week="15"><span>апта</span><strong>15</strong></button>
+          <button class="sana-p-week active" data-week="16"><span>апта</span><strong>16</strong></button>
+          <button class="sana-p-week" data-week="17"><span>апта</span><strong>17</strong></button>
+          <button class="sana-p-week" data-week="18"><span>апта</span><strong>18</strong></button>
+        </div>
+      </section>
+
+      <section class="sana-p-card">
+        <div class="sana-p-progress-head">
+          <div>
+            <span class="sana-p-trimester">♡ 2-триместр</span>
+            <h2 id="sana-p-week-title">Жүктіліктің 16-аптасы</h2>
+            <p class="sana-p-muted">Баланың өсуі қарқынды жүріп жатыр</p>
+          </div>
+          <div class="sana-p-circle">
+            <strong id="sana-p-progress-number">16/40</strong>
+            <span>АПТА</span>
+          </div>
+        </div>
+        <div class="sana-p-divider"></div>
+        <div class="sana-p-progress-bottom">
+          <span>Босануға дейін: <strong id="sana-p-remaining">24 апта</strong> қалды</span>
+          <strong id="sana-p-percent">40% өтті</strong>
+        </div>
+      </section>
+
+      <section class="sana-p-card">
+        <div class="sana-p-baby-heading">
+          <div>
+            <span class="sana-p-small-title">БАЛАҢЫЗДЫҢ ӨЛШЕМІ</span>
+            <h3 id="sana-p-baby-title">Бұл аптада балаңыз авокадо көлеміндей</h3>
+          </div>
+          <span class="sana-p-fruit-label">🥑 16-апта</span>
+        </div>
+
+        <div class="sana-p-avocado">
+          <div class="sana-p-avocado-emoji">🥑</div>
+          <span class="sana-p-comparison">● Көрнекі салыстыру</span>
+        </div>
+
+        <div class="sana-p-metrics">
+          <div class="sana-p-metric">
+            <span>Ұзындығы</span>
+            <strong id="sana-p-length">12 см</strong>
+          </div>
+          <div class="sana-p-metric">
+            <span>Салмағы</span>
+            <strong id="sana-p-weight">100 г</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="sana-p-card sana-p-article">
+        <div>16-аптада не болып жатыр?</div>
+        <span>Даму кезеңі →</span>
+      </section>
+
+      <p class="sana-p-muted" style="text-align:center;padding:0 8px 10px">
+        Ақпарат таныстыру мақсатында берілген. Нақты мерзім мен баланың дамуын дәрігермен анықтаңыз.
+      </p>
+
+    </main>
+
+    <nav class="sana-p-bottom">
+      <div><b>⌂</b>Басты</div>
+      <div><b>▦</b>Күнтізбе</div>
+      <div class="active"><b>✧</b>AI көмекші</div>
+      <div><b>▥</b>Талдау</div>
+      <div><b>♙</b>Профиль</div>
+    </nav>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  const popup = document.getElementById('sana-pregnancy-popup-v2');
+  if (!popup) return;
+
+  // Открытие окна по существующей кнопке «Беременность»
+  document.addEventListener('click', function (event) {
+    const button = event.target.closest(
+      '.pregnancy-menu-btn, [data-pregnancy-button], #sana-pregnancy-launch'
+    );
+
+    if (!button) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    popup.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }, true);
+
+  // Закрытие окна
+  function closePregnancyPopup() {
+    popup.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('sana-pregnancy-close')
+    .addEventListener('click', closePregnancyPopup);
+
+  popup.addEventListener('click', function (event) {
+    if (event.target === popup) closePregnancyPopup();
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closePregnancyPopup();
+  });
+
+  // Выбор недели
+  popup.querySelectorAll('[data-week]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      popup.querySelectorAll('[data-week]').forEach(function (item) {
+        item.classList.remove('active');
+      });
+
+      button.classList.add('active');
+
+      const week = Number(button.dataset.week);
+      document.getElementById('sana-p-week-title').textContent =
+        'Жүктіліктің ' + week + '-аптасы';
+
+      document.getElementById('sana-p-progress-number').textContent =
+        week + '/40';
+
+      document.getElementById('sana-p-remaining').textContent =
+        (40 - week) + ' апта';
+
+      document.getElementById('sana-p-percent').textContent =
+        Math.round(week / 40 * 100) + '% өтті';
+    });
+  });
+})();
+</script>
+<!-- ===== КОНЕЦ ОКНА БЕРЕМЕННОСТИ ===== -->
   <!-- КНОПКА БЕРЕМЕННОСТЬ -->
 <style>
   .pregnancy-menu-btn {

@@ -266,3 +266,655 @@
 </script>
 
 </body></html>
+<script src="./app.js?v=14"></script>
+</body>
+
+<style>
+/* ===== SANA PREGNANCY MODE ===== */
+#sana-pregnancy-launch {
+  position: fixed;
+  right: 22px;
+  bottom: 24px;
+  z-index: 9990;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 23px;
+  color: white;
+  background: linear-gradient(135deg,#b99ad9,#8055a8);
+  box-shadow: 0 7px 24px #8055a844;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#sana-pregnancy {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9991;
+  overflow-y: auto;
+  background: #f8f3fc;
+  color: #352344;
+  font-family: Arial, sans-serif;
+}
+
+#sana-pregnancy.open { display: block; }
+
+#sana-pregnancy * { box-sizing: border-box; }
+
+.sp-wrap {
+  max-width: 1050px;
+  margin: auto;
+  padding: 25px 20px 60px;
+}
+
+.sp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.sp-brand {
+  color: #704c91;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.sp-close, .sp-tab, .sp-button {
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.sp-close {
+  background: white;
+  color: #704c91;
+  border-radius: 12px;
+  padding: 11px 16px;
+}
+
+.sp-welcome {
+  padding: 30px;
+  border-radius: 25px;
+  background: linear-gradient(135deg,#eee2f8,#f8eafa,#fcecf3);
+  margin-bottom: 22px;
+}
+
+.sp-welcome small {
+  color: #8969a3;
+  font-weight: 700;
+}
+
+.sp-welcome h1 {
+  color: #55356f;
+  font-size: 29px;
+  margin: 12px 0;
+}
+
+.sp-welcome p {
+  color: #75617e;
+  line-height: 1.6;
+}
+
+.sp-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 20px 0;
+}
+
+.sp-tab {
+  padding: 12px 17px;
+  border-radius: 13px;
+  color: #785b91;
+  background: white;
+}
+
+.sp-tab.active {
+  color: white;
+  background: #9671b5;
+}
+
+.sp-panel { display: none; }
+.sp-panel.active { display: block; }
+
+.sp-card {
+  background: white;
+  border: 1px solid #f0e6f6;
+  border-radius: 21px;
+  padding: 23px;
+  margin-bottom: 18px;
+  box-shadow: 0 5px 20px #684c8110;
+}
+
+.sp-card h2 {
+  color: #62417d;
+  margin-top: 0;
+}
+
+.sp-muted {
+  color: #8b7b94;
+  line-height: 1.6;
+}
+
+.sp-stats {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.sp-stat {
+  padding: 17px 10px;
+  text-align: center;
+  border-radius: 17px;
+  background: #f7f0fb;
+}
+
+.sp-stat strong {
+  display: block;
+  color: #704c91;
+  font-size: 23px;
+  margin-bottom: 7px;
+}
+
+.sp-stat span {
+  font-size: 12px;
+  color: #887795;
+}
+
+.sp-progress {
+  height: 11px;
+  border-radius: 20px;
+  background: #eee5f4;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.sp-progress div {
+  height: 100%;
+  width: 0;
+  border-radius: 20px;
+  background: linear-gradient(90deg,#c5a5df,#8b63ad);
+}
+
+.sp-label {
+  display: block;
+  margin: 17px 0 8px;
+  color: #634777;
+  font-weight: 700;
+}
+
+.sp-input, .sp-select, .sp-textarea {
+  width: 100%;
+  border: 1px solid #e8dced;
+  border-radius: 12px;
+  padding: 13px;
+  background: #fff;
+  color: #493456;
+  font-size: 15px;
+}
+
+.sp-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.sp-button {
+  padding: 14px 20px;
+  border-radius: 12px;
+  color: white;
+  background: #8b65aa;
+  margin-top: 15px;
+}
+
+.sp-button.secondary {
+  color: #76518f;
+  background: #f1e8f7;
+}
+
+.sp-result {
+  margin-top: 16px;
+  padding: 17px;
+  border-radius: 15px;
+  background: #f7f0fb;
+  color: #64447c;
+  line-height: 1.8;
+}
+
+.sp-development {
+  padding: 20px;
+  background: linear-gradient(135deg,#f8effb,#fceef5);
+  border-radius: 17px;
+  line-height: 1.7;
+}
+
+.sp-log {
+  padding: 14px;
+  border-bottom: 1px solid #eee5f3;
+  line-height: 1.6;
+}
+
+.sp-note {
+  font-size: 12px;
+  color: #96869c;
+  line-height: 1.6;
+  margin-top: 22px;
+}
+
+@media(max-width:600px) {
+  #sana-pregnancy-launch {
+    right: 12px;
+    bottom: 15px;
+  }
+  .sp-wrap { padding: 15px 12px 45px; }
+  .sp-welcome { padding: 22px; }
+  .sp-welcome h1 { font-size: 24px; }
+  .sp-card { padding: 18px; }
+  .sp-stats { gap: 7px; }
+  .sp-stat { padding: 13px 5px; }
+  .sp-stat strong { font-size: 19px; }
+  .sp-stat span { font-size: 11px; }
+}
+</style>
+
+<button id="sana-pregnancy-launch" type="button">
+  ♡ Беременность
+</button>
+
+<div id="sana-pregnancy">
+  <div class="sp-wrap">
+
+    <header class="sp-header">
+      <div class="sp-brand">♡ Sana Pregnancy</div>
+      <button class="sp-close" id="sp-close">← Назад</button>
+    </header>
+
+    <section class="sp-welcome">
+      <small>ТВОЙ ОСОБЕННЫЙ ПЕРИОД</small>
+      <h1>Добро пожаловать в режим беременности ♡</h1>
+      <p>Следи за своим самочувствием, развитием малыша
+      и важными моментами этого путешествия.</p>
+    </section>
+
+    <section class="sp-card">
+      <h2>Начнём с даты 💜</h2>
+      <p class="sp-muted">
+        Укажи первый день последней менструации.
+        Мы рассчитаем примерный срок беременности.
+      </p>
+      <label class="sp-label" for="sp-date">
+        Первый день последней менструации
+      </label>
+      <input class="sp-input" id="sp-date" type="date">
+      <button class="sp-button" id="sp-save-date">
+        Рассчитать беременность
+      </button>
+      <div id="sp-date-message" class="sp-result" hidden></div>
+    </section>
+
+    <nav class="sp-tabs">
+      <button class="sp-tab active" data-tab="overview">Главная</button>
+      <button class="sp-tab" data-tab="baby">Малыш</button>
+      <button class="sp-tab" data-tab="calendar">Календарь</button>
+      <button class="sp-tab" data-tab="health">Самочувствие</button>
+    </nav>
+
+    <section class="sp-panel active" id="sp-overview">
+      <div class="sp-card">
+        <h2>Твоя беременность ♡</h2>
+        <p class="sp-muted" id="sp-status">
+          Сначала введи дату последней менструации.
+        </p>
+
+        <div class="sp-stats">
+          <div class="sp-stat">
+            <strong id="sp-weeks">—</strong>
+            <span>Недель</span>
+          </div>
+          <div class="sp-stat">
+            <strong id="sp-days">—</strong>
+            <span>Дней</span>
+          </div>
+          <div class="sp-stat">
+            <strong id="sp-trimester">—</strong>
+            <span>Триместр</span>
+          </div>
+        </div>
+
+        <p class="sp-muted">Прогресс до 40 недель</p>
+        <div class="sp-progress">
+          <div id="sp-progress-bar"></div>
+        </div>
+        <p class="sp-muted" id="sp-progress-text">—</p>
+      </div>
+
+      <div class="sp-card">
+        <h2>Предполагаемая дата родов</h2>
+        <div class="sp-development">
+          <h2 id="sp-due-date">—</h2>
+          <p class="sp-muted">
+            Это ориентировочная дата. Фактический срок
+            может отличаться.
+          </p>
+        </div>
+      </div>
+
+      <div class="sp-card">
+        <h2>Твой маленький совет 💜</h2>
+        <p class="sp-muted">
+          Заботься о себе, отдыхай, пей достаточно воды
+          и посещай плановые осмотры у врача.
+        </p>
+      </div>
+    </section>
+
+    <section class="sp-panel" id="sp-baby">
+      <div class="sp-card">
+        <h2>Развитие малыша 🌸</h2>
+        <p class="sp-muted" id="sp-baby-week">
+          Введи дату беременности, чтобы увидеть информацию
+          о текущей неделе.
+        </p>
+        <div class="sp-development" id="sp-baby-info">
+          Каждая неделя — новый этап развития малыша.
+        </div>
+      </div>
+    </section>
+
+    <section class="sp-panel" id="sp-calendar">
+      <div class="sp-card">
+        <h2>Календарь беременности</h2>
+        <p class="sp-muted">
+          Основные даты твоего пути.
+        </p>
+        <div class="sp-result" id="sp-calendar-info">
+          Сначала укажи дату последней менструации.
+        </div>
+      </div>
+    </section>
+
+    <section class="sp-panel" id="sp-health">
+      <div class="sp-card">
+        <h2>Дневник самочувствия ♡</h2>
+
+        <label class="sp-label" for="sp-mood">Настроение</label>
+        <select class="sp-select" id="sp-mood">
+          <option>Хорошее</option>
+          <option>Спокойное</option>
+          <option>Чувствительное</option>
+          <option>Усталость</option>
+          <option>Тревожное</option>
+        </select>
+
+        <label class="sp-label" for="sp-symptoms">Самочувствие и симптомы</label>
+        <input class="sp-input" id="sp-symptoms"
+          placeholder="Например: усталость, тошнота...">
+
+        <label class="sp-label" for="sp-weight">Вес (кг), необязательно</label>
+        <input class="sp-input" id="sp-weight"
+          type="number" min="1" max="300" step="0.1"
+          placeholder="Например: 55">
+
+        <label class="sp-label" for="sp-notes">Заметки</label>
+        <textarea class="sp-textarea" id="sp-notes"
+          placeholder="Запиши свои мысли..."></textarea>
+
+        <button class="sp-button" id="sp-save-log">
+          Сохранить запись
+        </button>
+        <div id="sp-log-message" class="sp-result" hidden></div>
+      </div>
+
+      <div class="sp-card">
+        <h2>Мои записи</h2>
+        <div id="sp-log-list">
+          <p class="sp-muted">Пока записей нет.</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="sp-note">
+      Sana не заменяет врача и не ставит медицинские диагнозы.
+      Срок беременности рассчитывается приблизительно по дате
+      последней менструации. Уточняй срок и развитие малыша
+      у своего врача.
+    </p>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  const root = document.getElementById('sana-pregnancy');
+  if (!root || root.dataset.ready) return;
+  root.dataset.ready = 'yes';
+
+  const $ = id => document.getElementById(id);
+  const storageKey = 'sana-pregnancy-data-v1';
+
+  let saved = {};
+  try {
+    saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  } catch (e) {
+    saved = {};
+  }
+
+  if (saved.date) $('sp-date').value = saved.date;
+
+  function saveData() {
+    localStorage.setItem(storageKey, JSON.stringify(saved));
+  }
+
+  function getPregnancy() {
+    if (!saved.date) return null;
+
+    const p = saved.date.split('-').map(Number);
+    const start = Date.UTC(p[0], p[1] - 1, p[2]);
+    const now = new Date();
+    const today = Date.UTC(
+      now.getFullYear(), now.getMonth(), now.getDate()
+    );
+
+    const days = Math.floor((today - start) / 86400000);
+    if (days < 0 || days > 300) return null;
+
+    const due = new Date(start + 280 * 86400000);
+    return {
+      days,
+      weeks: Math.floor(days / 7),
+      extra: days % 7,
+      due
+    };
+  }
+
+  function dateText(date) {
+    return date.toLocaleDateString('ru-RU', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    });
+  }
+
+  function updatePregnancy() {
+    const p = getPregnancy();
+
+    if (!p) {
+      $('sp-status').textContent =
+        'Укажи корректную дату последней менструации.';
+      $('sp-weeks').textContent = '—';
+      $('sp-days').textContent = '—';
+      $('sp-trimester').textContent = '—';
+      $('sp-due-date').textContent = '—';
+      $('sp-progress-bar').style.width = '0%';
+      $('sp-progress-text').textContent = '—';
+      $('sp-baby-week').textContent =
+        'Сначала укажи корректную дату беременности.';
+      $('sp-baby-info').textContent =
+        'Информация о развитии появится после расчёта.';
+      $('sp-calendar-info').textContent =
+        'Сначала укажи корректную дату.';
+      return;
+    }
+
+    const trimester = p.weeks < 13 ? 'I' :
+      p.weeks < 28 ? 'II' : 'III';
+
+    $('sp-status').textContent =
+      'Сейчас идёт ' + (p.weeks + 1) + '-я неделя беременности.';
+
+    $('sp-weeks').textContent = p.weeks;
+    $('sp-days').textContent = p.extra;
+    $('sp-trimester').textContent = trimester;
+    $('sp-due-date').textContent = dateText(p.due);
+
+    const progress = Math.min(100, p.days / 280 * 100);
+    $('sp-progress-bar').style.width = progress + '%';
+    $('sp-progress-text').textContent =
+      Math.round(progress) + '% ориентировочного пути';
+
+    $('sp-baby-week').textContent =
+      'Текущий срок: ' + p.weeks + ' недель и ' +
+      p.extra + ' дней.';
+
+    let description = '';
+
+    if (p.weeks < 13) {
+      description =
+        'Первый триместр. Формируются основные структуры организма малыша. ' +
+        'Это важный этап раннего развития.';
+    } else if (p.weeks < 28) {
+      description =
+        'Второй триместр. Малыш растёт, развивается и становится активнее. ' +
+        'Многие будущие мамы начинают ощущать движения.';
+    } else {
+      description =
+        'Третий триместр. Малыш продолжает набирать вес, ' +
+        'а его организм готовится к жизни вне матки.';
+    }
+
+    $('sp-baby-info').textContent = description;
+
+    const milestones = [
+      ['Начало беременности', new Date(startDate(saved.date))],
+      ['Начало второго триместра',
+        new Date(startDate(saved.date) + 91 * 86400000)],
+      ['Начало третьего триместра',
+        new Date(startDate(saved.date) + 196 * 86400000)],
+      ['Предполагаемая дата родов', p.due]
+    ];
+
+    $('sp-calendar-info').innerHTML = milestones.map(item =>
+      '<div style="padding:9px 0;border-bottom:1px solid #eadff0">' +
+      '<strong>' + item[0] + '</strong><br>' +
+      dateText(item[1]) + '</div>'
+    ).join('');
+  }
+
+  function startDate(value) {
+    const p = value.split('-').map(Number);
+    return Date.UTC(p[0], p[1] - 1, p[2]);
+  }
+
+  $('sana-pregnancy-launch').addEventListener('click', () => {
+    root.classList.add('open');
+    updatePregnancy();
+  });
+
+  $('sp-close').addEventListener('click', () => {
+    root.classList.remove('open');
+  });
+
+  $('sp-save-date').addEventListener('click', () => {
+    const value = $('sp-date').value;
+    const message = $('sp-date-message');
+
+    if (!value) {
+      message.hidden = false;
+      message.textContent = 'Пожалуйста, выбери дату.';
+      return;
+    }
+
+    const p = value.split('-').map(Number);
+    const chosen = Date.UTC(p[0], p[1] - 1, p[2]);
+    const now = new Date();
+    const today = Date.UTC(
+      now.getFullYear(), now.getMonth(), now.getDate()
+    );
+
+    if (chosen > today || today - chosen > 300 * 86400000) {
+      message.hidden = false;
+      message.textContent =
+        'Проверь дату. Она должна быть не в будущем и не слишком давней.';
+      return;
+    }
+
+    saved.date = value;
+    saveData();
+    updatePregnancy();
+
+    message.hidden = false;
+    message.textContent = 'Дата сохранена 💜';
+  });
+
+  root.querySelectorAll('.sp-tab').forEach(button => {
+    button.addEventListener('click', () => {
+      root.querySelectorAll('.sp-tab').forEach(tab =>
+        tab.classList.remove('active')
+      );
+      root.querySelectorAll('.sp-panel').forEach(panel =>
+        panel.classList.remove('active')
+      );
+
+      button.classList.add('active');
+      $('sp-' + button.dataset.tab).classList.add('active');
+    });
+  });
+
+  function showLogs() {
+    const list = $('sp-log-list');
+    const logs = saved.logs || [];
+
+    if (!logs.length) {
+      list.innerHTML = '<p class="sp-muted">Пока записей нет.</p>';
+      return;
+    }
+
+    list.innerHTML = logs.slice().reverse().map(log =>
+      '<div class="sp-log"><strong>' + log.date +
+      '</strong><br>Настроение: ' + log.mood +
+      '<br>Самочувствие: ' + (log.symptoms || 'Не указано') +
+      '<br>Вес: ' + (log.weight || 'Не указан') +
+      '<br>Заметки: ' + (log.notes || 'Нет') +
+      '</div>'
+    ).join('');
+  }
+
+  $('sp-save-log').addEventListener('click', () => {
+    const log = {
+      date: new Date().toLocaleDateString('ru-RU'),
+      mood: $('sp-mood').value,
+      symptoms: $('sp-symptoms').value,
+      weight: $('sp-weight').value,
+      notes: $('sp-notes').value
+    };
+
+    saved.logs = saved.logs || [];
+    saved.logs.push(log);
+    saveData();
+    showLogs();
+
+    $('sp-log-message').hidden = false;
+    $('sp-log-message').textContent = 'Запись сохранена 💜';
+
+    $('sp-symptoms').value = '';
+    $('sp-weight').value = '';
+    $('sp-notes').value = '';
+  });
+
+  showLogs();
+  updatePregnancy();
+})();
+</script>
+
+</html>

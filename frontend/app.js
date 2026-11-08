@@ -1313,3 +1313,133 @@ async function init() {
 }
 
 init();
+t();
+
+// ===== SANA PREGNANCY MODE FIX =====
+(function () {
+  if (window.sanaPregnancyFixLoaded) return;
+  window.sanaPregnancyFixLoaded = true;
+
+  // Стили режима беременности
+  const style = document.createElement('style');
+  style.textContent = `
+    .pregnancy-hero {
+      padding: 30px;
+      margin-bottom: 22px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #f8eafa, #fce9ef);
+    }
+
+    .pregnancy-hero-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: white;
+      color: #a45c91;
+      margin-bottom: 18px;
+    }
+
+    .pregnancy-hero h2 {
+      font-size: 26px;
+      margin: 10px 0;
+      color: #3b185f;
+    }
+
+    .pregnancy-hero p:last-child {
+      color: #675a70;
+    }
+
+    .pregnancy-card {
+      padding: 26px;
+      border-radius: 22px;
+      margin-bottom: 24px;
+    }
+
+    .pregnancy-card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .pregnancy-card label {
+      display: block;
+      margin: 18px 0 8px;
+    }
+
+    .pregnancy-card input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ead9f7;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .pregnancy-result {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 14px;
+      background: #f8f1fb;
+      color: #3b185f;
+      line-height: 1.7;
+    }
+
+    .pregnancy-disclaimer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #675a70;
+      line-height: 1.5;
+    }
+
+    .pregnancy-nav-item,
+    .pregnancy-bottom-item {
+      color: #a45c91;
+    }
+
+    @media (max-width: 600px) {
+      .pregnancy-card,
+      .pregnancy-hero {
+        padding: 20px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Расчёт срока беременности
+  const calculateButton = document.getElementById('calculatePregnancy');
+
+  if (calculateButton) {
+    calculateButton.addEventListener('click', function () {
+      const input = document.getElementById('pregnancyLastPeriod');
+      const result = document.getElementById('pregnancyResult');
+
+      if (!input.value) {
+        result.textContent = 'Пожалуйста, укажите первый день последней менструации.';
+        return;
+      }
+
+      const start = new Date(input.value + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const days = Math.floor((today - start) / 86400000);
+
+      if (days < 0) {
+        result.textContent = 'Выбранная дата не может быть в будущем.';
+        return;
+      }
+
+      const weeks = Math.floor(days / 7);
+      const remainingDays = days % 7;
+
+      const dueDate = new Date(start);
+      dueDate.setDate(dueDate.getDate() + 280);
+
+      result.innerHTML =
+        '<strong>Примерный срок:</strong> ' +
+        weeks + ' недель и ' + remainingDays + ' дней' +
+        '<br><strong>Предполагаемая дата родов:</strong> ' +
+        dueDate.toLocaleDateString('ru-RU');
+    });
+  }
+})();

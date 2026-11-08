@@ -1313,3 +1313,228 @@ async function init() {
 }
 
 init();
+/* ===== SANA: Pregnancy Mode ===== */
+
+(function () {
+  // Защита от повторного добавления
+  if (window.sanaPregnancyLoaded) return;
+  window.sanaPregnancyLoaded = true;
+
+  // Переводы
+  Object.assign(copy.kk, {
+    navPregnancy: 'Жүктілік',
+    pregTitle: 'Жүктілік',
+    pregSubtitle: 'Sana қамқорлығымен',
+    pregWeekLabel: 'АПТА ТАҢДАУ',
+    pregTrimester: '2-триместр',
+    pregProgressTitle: 'Жүктіліктің 16-аптасы',
+    pregProgressText: 'Баланың өсуі қарқынды жүріп жатыр',
+    pregRemaining: 'Босануға дейін:',
+    pregPassed: '40% өтті',
+    pregBabyLabel: 'БАЛАҢЫЗДЫҢ ӨЛШЕМІ',
+    pregBabyTitle: 'Бұл аптада балаңыз авокадо көлеміндей',
+    pregVisual: 'Көрнекі салыстыру',
+    pregLength: 'Ұзындығы',
+    pregWeight: 'Салмағы',
+    pregArticleTitle: '16-аптада не болып жатыр?',
+    pregArticleTag: 'Даму кезеңі'
+  });
+
+  Object.assign(copy.ru, {
+    navPregnancy: 'Беременность',
+    pregTitle: 'Беременность',
+    pregSubtitle: 'С заботой от Sana',
+    pregWeekLabel: 'ВЫБЕРИТЕ НЕДЕЛЮ',
+    pregTrimester: '2-й триместр',
+    pregProgressTitle: '16-я неделя беременности',
+    pregProgressText: 'Малыш продолжает активно расти',
+    pregRemaining: 'До родов:',
+    pregPassed: 'Прошло 40%',
+    pregBabyLabel: 'РАЗМЕР МАЛЫША',
+    pregBabyTitle: 'На этой неделе малыш размером с авокадо',
+    pregVisual: 'Визуальное сравнение',
+    pregLength: 'Длина',
+    pregWeight: 'Вес',
+    pregArticleTitle: 'Что происходит на 16-й неделе?',
+    pregArticleTag: 'Развитие малыша'
+  });
+
+  // Создаём страницу беременности
+  const pregnancyView = document.createElement('section');
+  pregnancyView.className = 'view';
+  pregnancyView.id = 'pregnancyView';
+  pregnancyView.dataset.viewPanel = 'pregnancy';
+
+  pregnancyView.innerHTML = `
+    <div class="pregnancy-page">
+
+      <div class="preg-heading">
+        <div>
+          <h2 data-i18n="pregTitle">Жүктілік</h2>
+          <p class="preg-subtitle" data-i18n="pregSubtitle">Sana қамқорлығымен</p>
+        </div>
+        <span class="preg-pill">♥ РЕЖИМ</span>
+      </div>
+
+      <section class="preg-card">
+        <div class="preg-week-title">
+          <span data-i18n="pregWeekLabel">АПТА ТАҢДАУ</span>
+          <span class="preg-pill" data-i18n="pregTrimester">2-триместр</span>
+        </div>
+
+        <div class="preg-weeks">
+          <div class="preg-week">
+            <span>апта</span><strong>14</strong>
+          </div>
+          <div class="preg-week">
+            <span>апта</span><strong>15</strong>
+          </div>
+          <div class="preg-week active">
+            <span>апта</span><strong>16</strong>
+          </div>
+          <div class="preg-week">
+            <span>апта</span><strong>17</strong>
+          </div>
+          <div class="preg-week">
+            <span>апта</span><strong>18</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="preg-card">
+        <div class="preg-progress-top">
+          <div>
+            <span class="preg-pill" data-i18n="pregTrimester">2-триместр</span>
+            <h3 data-i18n="pregProgressTitle">Жүктіліктің 16-аптасы</h3>
+            <p data-i18n="pregProgressText">Баланың өсуі қарқынды жүріп жатыр</p>
+          </div>
+
+          <div class="preg-circle">
+            <span>16/40</span>
+          </div>
+        </div>
+
+        <div class="preg-progress-bottom">
+          <span>
+            <span data-i18n="pregRemaining">Босануға дейін:</span>
+            <strong>24 апта</strong>
+          </span>
+          <strong data-i18n="pregPassed">40% өтті</strong>
+        </div>
+      </section>
+
+      <section class="preg-card">
+        <div class="preg-baby-title">
+          <div>
+            <span class="preg-baby-label" data-i18n="pregBabyLabel">
+              БАЛАҢЫЗДЫҢ ӨЛШЕМІ
+            </span>
+            <h3 data-i18n="pregBabyTitle">
+              Бұл аптада балаңыз авокадо көлеміндей
+            </h3>
+          </div>
+          <span class="preg-pill">🥑 16-апта</span>
+        </div>
+
+        <div class="preg-avocado">
+          <div class="preg-avocado-emoji">🥑</div>
+          <small data-i18n="pregVisual">Көрнекі салыстыру</small>
+        </div>
+
+        <div class="preg-measures">
+          <div class="preg-measure">
+            <span data-i18n="pregLength">Ұзындығы</span>
+            <strong>Шамамен 12 см</strong>
+          </div>
+          <div class="preg-measure">
+            <span data-i18n="pregWeight">Салмағы</span>
+            <strong>Шамамен 100 г</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="preg-card preg-article">
+        <h3 data-i18n="pregArticleTitle">
+          16-аптада не болып жатыр?
+        </h3>
+        <span data-i18n="pregArticleTag">Даму кезеңі</span>
+      </section>
+
+    </div>
+  `;
+
+  // Добавляем раздел в основную рабочую область Sana
+  const workspace = document.querySelector('.workspace');
+  workspace.appendChild(pregnancyView);
+
+  // Создаём кнопку для бокового меню
+  function createPregnancyButton(mobile) {
+    const button = document.createElement('button');
+
+    button.type = 'button';
+    button.dataset.view = 'pregnancy';
+
+    if (mobile) {
+      button.innerHTML = `
+        <svg class="ui-icon">
+          <use href="#icon-heart"></use>
+        </svg>
+        <b data-i18n="navPregnancy">Жүктілік</b>
+      `;
+    } else {
+      button.className = 'nav-item';
+      button.innerHTML = `
+        <svg class="ui-icon">
+          <use href="#icon-heart"></use>
+        </svg>
+        <b data-i18n="navPregnancy">Жүктілік</b>
+      `;
+    }
+
+    button.addEventListener('click', function () {
+      setView('pregnancy');
+    });
+
+    return button;
+  }
+
+  // Добавляем кнопку в оба меню
+  const railNav = document.querySelector('.rail-nav');
+  const bottomNav = document.querySelector('.bottom-nav');
+
+  if (railNav) {
+    railNav.appendChild(createPregnancyButton(false));
+  }
+
+  if (bottomNav) {
+    bottomNav.appendChild(createPregnancyButton(true));
+  }
+
+  // Добавляем поддержку заголовка страницы
+  const originalSetView = setView;
+
+  setView = function (view) {
+    originalSetView(view);
+
+    if (view === 'pregnancy') {
+      document.querySelector('#pageTitle').textContent =
+        state.lang === 'kk' ? 'Жүктілік' : 'Беременность';
+    }
+  };
+
+  // Обновляем заголовок при смене языка
+  const originalApplyLanguage = applyLanguage;
+
+  applyLanguage = function (lang) {
+    originalApplyLanguage(lang);
+
+    if (state.view === 'pregnancy') {
+      document.querySelector('#pageTitle').textContent =
+        lang === 'kk' ? 'Жүктілік' : 'Беременность';
+    }
+  };
+
+  // Применяем текущий язык к новому разделу
+  applyLanguage(state.lang);
+
+})();

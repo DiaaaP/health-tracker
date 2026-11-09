@@ -548,6 +548,20 @@ button, textarea {
   display: grid;
   gap: 10px;
 }
+.period-history-block {
+  margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line);
+}
+.period-history-block h3 { margin: 4px 0; font: 700 1rem Georgia,serif; }
+.period-history { display: grid; gap: 8px; margin-top: 10px; }
+.period-history-item {
+  width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;
+  border: 1px solid var(--line); border-radius: 13px; padding: 11px 12px; background: #fbf8fd;
+  color: var(--ink); text-align: left; cursor: pointer;
+}
+.period-history-item:hover { border-color: #b98bd7; background: #f5edf9; }
+.period-history-item span { display: flex; flex-direction: column; gap: 2px; }
+.period-history-item small, .period-history-empty { color: var(--muted); font-size: .72rem; }
+.period-flow { padding: 4px 7px; border-radius: 999px; background: #efdfef; color: #7d235a; font-size: .66rem; }
 .insights-grid {
   display: grid; grid-template-columns: .8fr 1.4fr; gap: 18px;
 }
@@ -563,6 +577,7 @@ button, textarea {
 .stat-pair {
   display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 24px;
 }
+.insight-stats { grid-template-columns: repeat(2,1fr); }
 .stat-pair div {
   background: #f3e9f8; border-radius: 16px; padding: 16px;
 }
@@ -873,18 +888,91 @@ button, textarea {
 .auth-modal label {
   margin-top: 8px; font-weight: 750; color: var(--ink);
 }
-.auth-modal input {
+.auth-modal input, .auth-modal select {
   width: 100%; border: 1px solid var(--line); border-radius: 13px; padding: 12px 14px;
   background: #fbf8fd; color: var(--ink); font: inherit; outline: none;
 }
-.auth-modal input:focus {
+.auth-modal input:focus, .auth-modal select:focus {
   border-color: var(--plum); box-shadow: 0 0 0 3px rgba(59,24,95,.1);
 }
+.modal-actions { display: grid; grid-template-columns: auto 1fr; gap: 10px; margin-top: 8px; }
+.danger-button {
+  border: 1px solid #e8b4c8; border-radius: 14px; padding: 12px 15px; background: #fff2f6;
+  color: #982a5a; font-weight: 800; cursor: pointer;
+}
+.danger-button[hidden] { display: none; }
+.danger-button[hidden] + .primary-button { grid-column: 1 / -1; }
+.onboarding-modal { text-align: center; }
+.onboarding-modal h2 { margin-right: 0; }
+.onboarding-icon { width: 64px; height: 64px; display: grid; place-items: center; margin: 0 auto 14px; border-radius: 20px; background: var(--plum); color: #fff; }
+.onboarding-icon .ui-icon { width: 34px; height: 34px; }
+.onboarding-steps { display: grid; gap: 8px; margin: 20px 0; text-align: left; }
+.onboarding-steps span { padding: 11px 13px; border-radius: 12px; background: var(--wash); color: var(--ink); font-weight: 700; font-size: .83rem; }
+.late-state .ring-progress { stroke: #b33f6c; }
+.late-state .phase-pill { color: #8a2552; background: #ffe3ee; }
+.import-label { font-size: .84rem; }
 .form-message {
   min-height: 21px; margin: 6px 0 0; color: #a32d62; font-size: .84rem;
 }
 .form-message.success {
   color: #27734a;
+}
+.input-invalid {
+  outline: 2px solid #a32d62;
+  outline-offset: 1px;
+}
+.server-summary {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #eadcf3;
+}
+.server-summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.summary-badge {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f6e8f1;
+  color: #8a3d66;
+  font-size: .72rem;
+  font-weight: 800;
+}
+.summary-badge.ready {
+  background: #e5f6ea;
+  color: #27734a;
+}
+.summary-range,
+.summary-note {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+.summary-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.summary-list-title {
+  color: var(--plum);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.summary-list li:not(.summary-list-title) {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: .84rem;
 }
 .modal-open {
   overflow: hidden;
@@ -970,10 +1058,18 @@ button, textarea {
   }
   .dashboard-grid {
     gap: 14px;
-    grid-template-areas: "cycle" "stats" "mood" "chart" "tip";
+    grid-template-areas: "cycle" "calendar" "stats" "mood" "chart" "tip";
   }
   .home-calendar-card {
-    display: none;
+    display: block;
+    padding: 16px 12px;
+  }
+  .home-calendar-day {
+    min-height: 36px;
+    font-size: .78rem;
+  }
+  .home-calendar-day:hover {
+    transform: none;
   }
   .overview-stats {
     gap: 8px;
@@ -1225,19 +1321,65 @@ button, textarea {
 
 @media (max-width: 520px) {
   .calendar-card {
-    padding: 16px 12px;
+    padding: 16px 10px 18px;
+    overflow: hidden;
+  }
+
+  .calendar-head h2 {
+    font-size: 1.15rem;
+  }
+
+  .weekdays {
+    margin-top: 16px;
+    font-size: 0.68rem;
   }
 
   .calendar-grid {
-    gap: 4px;
+    gap: 3px;
   }
 
   .calendar-day {
-    font-size: 0.82rem;
+    min-height: 40px;
+    font-size: 0.78rem;
+    border-radius: 12px;
+  }
+
+  .calendar-day:hover {
+    transform: none;
+  }
+
+  .calendar-day.logged::after {
+    width: 4px;
+    height: 4px;
+    bottom: 4px;
+  }
+
+  .legend {
+    gap: 8px 10px;
+  }
+
+  .legend b {
+    font-size: 0.68rem;
   }
 
   .day-summary {
-    padding: 20px 16px;
+    padding: 18px 14px;
+  }
+
+  .day-summary h2 {
+    font-size: 1.25rem;
+    margin-bottom: 14px;
+  }
+
+  .data-list div {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  .calendar-day {
+    min-height: 34px;
+    font-size: 0.72rem;
   }
 }
 /* ===== SANA: Pregnancy Mode ===== */
@@ -1520,4 +1662,77 @@ button, textarea {
   .bottom-nav button[data-view="pregnancy"] b {
     font-size: .55rem;
   }
+}
+
+/* Integrated pregnancy update from the remote frontend. */
+#pregnancyView.pregnancy-modal {
+  width: min(720px, 100%);
+  max-height: min(880px, 94vh);
+  overflow-y: auto;
+  padding: 24px;
+}
+
+#pregnancyView .pregnancy-hero {
+  padding: 24px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #f8eafa, #fce9ef);
+}
+
+#pregnancyView .pregnancy-hero-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  margin-bottom: 16px;
+  background: #fff;
+  color: #9a4f77;
+  font-size: 1.6rem;
+}
+
+#pregnancyView .pregnancy-hero h2 {
+  margin: 6px 42px 8px 0;
+  color: #3b185f;
+  font: 700 1.7rem/1.2 Georgia, serif;
+}
+
+#pregnancyView .pregnancy-hero p:last-child,
+#pregnancyView .pregnancy-disclaimer {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+#pregnancyView .pregnancy-card {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+#pregnancyView .pregnancy-card label { font-weight: 800; }
+#pregnancyView .pregnancy-card input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #fbf8fd;
+  color: var(--ink);
+  font: inherit;
+}
+
+#pregnancyView .pregnancy-result {
+  padding: 14px;
+  border-radius: 14px;
+  background: #f3e9f8;
+  color: #3b185f;
+  line-height: 1.55;
+}
+
+#pregnancyView .pregnancy-disclaimer { margin: 4px 0 0; font-size: .75rem; }
+#pregnancyView .pregnancy-progress-card { margin-top: 16px; }
+#pregnancyView .preg-circle { background: conic-gradient(#35105c var(--pregnancy-progress, 0%), #eee6f5 0); }
+.pregnancy-setting-icon { display: grid; place-items: center; font-size: 1.25rem; }
+
+@media (max-width: 520px) {
+  #pregnancyView.pregnancy-modal { max-height: 100dvh; height: 100dvh; border-radius: 0; padding: 18px; }
+  #pregnancyView .pregnancy-hero { padding: 20px; }
 }

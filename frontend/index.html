@@ -7,7 +7,7 @@
   <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
   <title>Sana — цикл күнделігі</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./styles.css?v=16" />
+  <link rel="stylesheet" href="./styles.css?v=19" />
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true">
@@ -157,13 +157,24 @@
               <p id="calendarNoteText">Бұл күнге жазба жоқ</p>
             </div>
             <div class="day-actions"><button class="primary-button full" data-go="log" type="button" data-i18n="logThisDay">Осы күнді белгілеу</button><button class="secondary-button full" id="markSelectedPeriodButton" type="button"><svg class="ui-icon"><use href="#icon-drop"></use></svg><span id="markSelectedPeriodText" data-i18n="markPeriodStart">Етеккірдің басталуын белгілеу</span></button></div>
+            <div class="period-history-block"><div class="section-heading compact"><h3 data-i18n="periodHistory">История менструаций</h3><button class="text-button" id="addPeriodButton" type="button" data-i18n="addPeriod">Добавить</button></div><div id="periodHistory" class="period-history"></div></div>
           </aside>
         </div>
       </section>
 
       <section class="view" id="insightsView" data-view-panel="insights">
         <div class="insights-grid">
-          <article class="surface insight-lead"><p class="eyebrow" data-i18n="cycleAnalysis">Цикл талдауы</p><h2 data-i18n="stableCycle">Соңғы 3 цикл тұрақты</h2><p data-i18n="analysisText">Сіздің орташа цикліңіз 28 күн. Ұзақтықтағы ауытқу 2 күннен аспайды.</p><div class="stat-pair"><div><strong>28</strong><span data-i18n="avgDays">орташа күн</span></div><div><strong>5</strong><span data-i18n="avgPeriod">етеккір күні</span></div></div></article>
+          <article class="surface insight-lead"><p class="eyebrow" data-i18n="cycleAnalysis">Цикл талдауы</p><h2 id="insightTitle">Недостаточно данных</h2><p id="insightSummary">Добавьте минимум два начала цикла для персональной аналитики.</p><div class="stat-pair insight-stats"><div><strong id="insightAverageCycle">—</strong><span data-i18n="avgDays">орташа күн</span></div><div><strong id="insightAveragePeriod">—</strong><span data-i18n="avgPeriod">етеккір күні</span></div><div><strong id="insightShortestCycle">—</strong><span data-i18n="shortestCycle">Короткий цикл</span></div><div><strong id="insightLongestCycle">—</strong><span data-i18n="longestCycle">Длинный цикл</span></div></div>
+            <div class="server-summary" id="serverSummaryCard">
+              <div class="server-summary-head"><p class="eyebrow" data-i18n="apiSummary">Сервер жиынтығы</p><span class="summary-badge" id="summaryStatus">—</span></div>
+              <div class="stat-pair insight-stats"><div><strong id="summaryLogs">—</strong><span data-i18n="summaryLogsLabel">күнделік жазбасы</span></div><div><strong id="summaryPeriods">—</strong><span data-i18n="summaryPeriodsLabel">цикл белгісі</span></div></div>
+              <p class="summary-range" id="summaryRange"></p>
+              <ul class="summary-list" id="summaryMoodList"></ul>
+              <ul class="summary-list" id="summaryEnergyList"></ul>
+              <ul class="summary-list" id="summarySymptomList"></ul>
+              <p class="summary-note" id="summaryNote"></p>
+            </div>
+          </article>
           <article class="surface pattern-card">
             <div class="section-heading compact"><div><p class="eyebrow" data-i18n="wellbeing">Хал-жағдай</p><h2 data-i18n="energyPattern">Қуат үлгісі</h2></div></div>
             <div class="line-chart" aria-label="Цикл бойынша қуат деңгейі">
@@ -175,14 +186,14 @@
             <div class="chart-legend"><span><i class="energy-high"></i><b data-i18n="highEnergy">Жоғары қуат</b></span><span><i class="energy-medium"></i><b data-i18n="mediumEnergy">Орташа қуат</b></span><span><i class="energy-low"></i><b data-i18n="lowEnergy">Төмен қуат</b></span></div>
             <div class="chart-explanation"><strong data-i18n="chartHelpTitle">Диаграмманы қалай оқу керек?</strong><span data-i18n="chartHelpText">Сызық күнделікті журналдағы қуат белгілерінен құрылады.</span></div>
           </article>
-          <article class="surface insight-note"><span class="note-icon"><svg class="ui-icon"><use href="#icon-note"></use></svg></span><div><p class="eyebrow" data-i18n="observation">Бақылау</p><h2 data-i18n="headachePattern">Бас ауруы цикл соңында жиілейді</h2><p data-i18n="observeText">Келесі екі циклде бақылауды жалғастырыңыз. Қатты немесе әдеттен тыс ауырсыну болса, дәрігерге жүгініңіз.</p></div></article>
+          <article class="surface insight-note"><span class="note-icon"><svg class="ui-icon"><use href="#icon-note"></use></svg></span><div><p class="eyebrow" data-i18n="observation">Бақылау</p><h2 id="insightObservationTitle">Добавляйте ежедневные записи</h2><p id="insightObservationText">Sana покажет наиболее частые симптомы, когда накопится достаточно данных.</p></div></article>
         </div>
       </section>
 
       <section class="view" id="profileView" data-view-panel="profile">
         <div class="profile-layout">
-          <article class="surface profile-card"><div class="profile-hero"><div class="profile-avatar" id="profileAvatar">А</div><div><p class="eyebrow" data-i18n="yourProfile">Сіздің профиліңіз</p><h2 id="profileName">Амина</h2><p data-i18n="cycleMode">Циклді бақылау режимі</p></div></div><div class="settings-list"><button data-open-register type="button"><svg class="ui-icon setting-icon"><use href="#icon-plus"></use></svg><div><b data-i18n="createAccount">Аккаунт құру</b><small data-i18n="createAccountShort">Деректеріңізді тіркеңіз</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button data-open-login type="button"><svg class="ui-icon setting-icon"><use href="#icon-login"></use></svg><div><b data-i18n="loginAccount">Аккаунтқа кіру</b><small data-i18n="loginAccountShort">Email және құпиясөз арқылы</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="logoutButton" type="button" hidden><svg class="ui-icon setting-icon"><use href="#icon-login"></use></svg><div><b data-i18n="logoutAccount">Аккаунттан шығу</b><small data-i18n="logoutAccountShort">Қонақ режиміне өту</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="notificationsButton" type="button"><svg class="ui-icon setting-icon"><use href="#icon-bell"></use></svg><div><b data-i18n="notifications">Хабарламалар</b><small id="notificationsValue" data-i18n="notificationsOff">Өшірулі</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="profileLanguageButton" type="button"><svg class="ui-icon setting-icon"><use href="#icon-language"></use></svg><div><b data-i18n="language">Тіл</b><small id="languageValue">Қазақша</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="privacyButton" type="button"><svg class="ui-icon setting-icon"><use href="#icon-shield"></use></svg><div><b data-i18n="privacy">Құпиялылық</b><small data-i18n="privacyAction">Экрандағы деректерді жасыру</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button></div></article>
-          <article class="privacy-card"><svg class="ui-icon privacy-icon"><use href="#icon-shield"></use></svg><div><h2 data-i18n="privateDiary">Жеке күнделік</h2><p data-i18n="privacyText">Бұл демонстрация енгізілген деректерді браузердің жергілікті жадында сақтайды. Ортақ құрылғыда қолдансаңыз, жазбаларды тазалаңыз.</p><div class="diary-actions"><button id="exportDiary" class="diary-export" type="button"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></svg><span data-i18n="exportDiary">Күнделікті CSV жүктеу</span></button><button id="clearData" class="ghost-light" type="button" data-i18n="clearData">Деректерді тазалау</button></div></div></article>
+          <article class="surface profile-card"><div class="profile-hero"><div class="profile-avatar" id="profileAvatar">А</div><div><p class="eyebrow" data-i18n="yourProfile">Сіздің профиліңіз</p><h2 id="profileName">Амина</h2><p data-i18n="cycleMode">Циклді бақылау режимі</p></div></div><div class="settings-list"><button data-open-register type="button"><svg class="ui-icon setting-icon"><use href="#icon-plus"></use></svg><div><b data-i18n="createAccount">Аккаунт құру</b><small data-i18n="createAccountShort">Деректеріңізді тіркеңіз</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button data-open-login type="button"><svg class="ui-icon setting-icon"><use href="#icon-login"></use></svg><div><b data-i18n="loginAccount">Аккаунтқа кіру</b><small data-i18n="loginAccountShort">Email және құпиясөз арқылы</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="logoutButton" type="button" hidden><svg class="ui-icon setting-icon"><use href="#icon-login"></use></svg><div><b data-i18n="logoutAccount">Аккаунттан шығу</b><small data-i18n="logoutAccountShort">Қонақ режиміне өту</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="cycleSettingsButton" type="button"><svg class="ui-icon setting-icon"><use href="#icon-cycle"></use></svg><div><b data-i18n="cycleSettings">Настройки цикла</b><small id="cycleSettingsValue">28 / 5</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="pregnancyButton" type="button"><span class="setting-icon pregnancy-setting-icon" aria-hidden="true">🤰</span><div><b data-i18n="pregnancyMode">Беременность</b><small data-i18n="pregnancyModeShort">Расчёт срока и даты родов</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="notificationsButton" type="button"><svg class="ui-icon setting-icon"><use href="#icon-bell"></use></svg><div><b data-i18n="notifications">Хабарламалар</b><small id="notificationsValue" data-i18n="notificationsOff">Өшірулі</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="profileLanguageButton" type="button"><svg class="ui-icon setting-icon"><use href="#icon-language"></use></svg><div><b data-i18n="language">Тіл</b><small id="languageValue">Қазақша</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button><button id="privacyButton" type="button"><svg class="ui-icon setting-icon"><use href="#icon-shield"></use></svg><div><b data-i18n="privacy">Құпиялылық</b><small data-i18n="privacyAction">Экрандағы деректерді жасыру</small></div><svg class="ui-icon setting-chevron"><use href="#icon-chevron"></use></svg></button></div></article>
+          <article class="privacy-card"><svg class="ui-icon privacy-icon"><use href="#icon-shield"></use></svg><div><h2 data-i18n="privateDiary">Жеке күнделік</h2><p data-i18n="privacyText">Бұл демонстрация енгізілген деректерді браузердің жергілікті жадында сақтайды. Ортақ құрылғыда қолдансаңыз, жазбаларды тазалаңыз.</p><div class="diary-actions"><button id="exportDiary" class="diary-export" type="button"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></svg><span data-i18n="exportDiary">Күнделікті CSV жүктеу</span></button><button id="exportBackup" class="diary-export" type="button" data-i18n="exportBackup">Скачать резервную копию</button><label class="diary-export import-label" for="importBackup" data-i18n="importBackup">Восстановить из файла</label><input id="importBackup" type="file" accept="application/json,.json" hidden /><button id="clearData" class="ghost-light" type="button" data-i18n="clearData">Деректерді тазалау</button></div></div></article>
           <p class="medical-note" data-i18n="medicalNote">Sana медициналық диагноз қоймайды. Денсаулығыңызға қатысты сұрақтар болса, дәрігермен кеңесіңіз.</p>
         </div>
       </section>
@@ -204,7 +215,8 @@
           <div class="form-section"><h3 data-i18n="mood">Көңіл-күй</h3><div class="choice-grid" id="moodChoices"><button data-value="happy" type="button"><svg class="ui-icon"><use href="#icon-happy"></use></svg><b data-i18n="happy">Қуанышты</b></button><button class="selected" data-value="calm" type="button"><svg class="ui-icon"><use href="#icon-calm"></use></svg><b data-i18n="calm">Сабырлы</b></button><button data-value="sensitive" type="button"><svg class="ui-icon"><use href="#icon-heart"></use></svg><b data-i18n="sensitive">Сезімтал</b></button><button data-value="sad" type="button"><svg class="ui-icon"><use href="#icon-sad"></use></svg><b data-i18n="sad">Мұңды</b></button><button data-value="angry" type="button"><svg class="ui-icon"><use href="#icon-angry"></use></svg><b data-i18n="angry">Ашулы</b></button></div></div>
           <div class="form-section"><h3 data-i18n="symptoms">Белгілер</h3><div class="chips" id="symptomChoices"><button data-value="pain" type="button" data-i18n="pain">Ауырсыну</button><button data-value="headache" type="button" data-i18n="headache">Бас ауруы</button><button data-value="bloating" type="button" data-i18n="bloating">Іш кебуі</button><button data-value="skin" type="button" data-i18n="skin">Бөртпе</button><button data-value="back" type="button" data-i18n="backPain">Бел ауруы</button><button class="selected" data-value="none" type="button" data-i18n="none">Ешқандай</button></div></div>
           <div class="form-section"><h3 data-i18n="energy">Күш-қуат</h3><div class="segmented" id="energyChoices"><button data-value="low" type="button" data-i18n="low">Төмен</button><button data-value="medium" type="button" data-i18n="medium">Орташа</button><button class="selected" data-value="high" type="button" data-i18n="high">Жоғары</button></div></div>
-          <div class="form-section"><div class="form-label-row"><label for="notes" data-i18n="notes">Жазбалар</label><button class="text-button" id="insertTemplate" type="button" data-i18n="noteTemplate">Үлгі</button></div><textarea id="notes" rows="4" data-i18n-placeholder="notesPlaceholder" placeholder="Өзіңіз үшін қысқа жазба қалдырыңыз..."></textarea></div>
+          <div class="form-section"><div class="form-label-row"><label for="notes" data-i18n="notes">Жазбалар</label><button class="text-button" id="insertTemplate" type="button" data-i18n="noteTemplate">Үлгі</button></div><textarea id="notes" rows="4" maxlength="500" data-i18n-placeholder="notesPlaceholder" placeholder="Өзіңіз үшін қысқа жазба қалдырыңыз..."></textarea></div>
+          <p class="form-message" id="logMessage" role="status" aria-live="polite"></p>
           <button class="primary-button full large" id="saveLog" type="button" data-i18n="saveToday">Бүгінгіні сақтау</button>
         </article>
       </section>
@@ -255,579 +267,58 @@
     </section>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=15"></script>
+  <div class="modal-backdrop" id="periodModal" hidden>
+    <section class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="periodModalTitle">
+      <button class="modal-close" id="closePeriodModal" type="button" aria-label="Закрыть">×</button>
+      <p class="eyebrow" data-i18n="period">Менструация</p><h2 id="periodModalTitle" data-i18n="periodDetails">Данные периода</h2>
+      <form id="periodForm"><input id="periodId" type="hidden" />
+        <label for="periodStart" data-i18n="startDate">Дата начала</label><input id="periodStart" type="date" required />
+        <label for="periodEnd" data-i18n="endDate">Дата окончания</label><input id="periodEnd" type="date" />
+        <label for="periodFlow" data-i18n="flowIntensity">Интенсивность</label><select id="periodFlow"><option value="spotting" data-i18n="flowSpotting">Мажущие</option><option value="light" data-i18n="flowLight">Лёгкая</option><option value="medium" data-i18n="flowMedium" selected>Средняя</option><option value="heavy" data-i18n="flowHeavy">Сильная</option></select>
+        <p class="form-message" id="periodMessage" role="status" aria-live="polite"></p>
+        <div class="modal-actions"><button class="danger-button" id="deletePeriodButton" type="button" data-i18n="deletePeriod">Удалить</button><button class="primary-button" type="submit" data-i18n="savePeriod">Сохранить</button></div>
+      </form>
+    </section>
+  </div>
 
-</body>
- <!-- КНОПКА БЕРЕМЕННОСТЬ -->
-<style>
-  .pregnancy-menu-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    width: calc(100% - 30px);
-    margin: 12px auto;
-    padding: 13px 18px;
-    border: 1px solid #eadcf7;
-    border-radius: 16px;
-    background: #f3eafa;
-    color: #65358a;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-  }
+  <div class="modal-backdrop" id="cycleSettingsModal" hidden>
+    <section class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="cycleSettingsTitle">
+      <button class="modal-close" id="closeCycleSettings" type="button" aria-label="Закрыть">×</button>
+      <p class="eyebrow" data-i18n="personalForecast">Персональный прогноз</p><h2 id="cycleSettingsTitle" data-i18n="cycleSettings">Настройки цикла</h2>
+      <form id="cycleSettingsForm"><label for="preferredCycleLength" data-i18n="cycleLength">Длина цикла</label><input id="preferredCycleLength" type="number" min="21" max="45" required /><label for="preferredPeriodLength" data-i18n="periodLength">Длительность менструации</label><input id="preferredPeriodLength" type="number" min="1" max="10" required /><label for="reminderDays" data-i18n="reminderDays">Напомнить заранее, дней</label><input id="reminderDays" type="number" min="0" max="7" required /><p class="form-message" id="cycleSettingsMessage" role="status" aria-live="polite"></p><button class="primary-button full large" type="submit" data-i18n="saveSettings">Сохранить настройки</button></form>
+    </section>
+  </div>
 
-  .pregnancy-menu-btn:hover {
-    background: #eadcf7;
-    transform: translateY(-1px);
-  }
-</style>
-
-<button class="pregnancy-menu-btn" type="button">
-  <span>🤰</span>
-  <span>Беременность</span>
-</button>
-#sana-pregnancy-popup-v2.is-open {
-  display: flex;
-}
-
-#sana-pregnancy-popup-v2 * {
-  box-sizing: border-box;
-}
-
-.sana-pregnancy-window {
-  width: 100%;
-  max-width: 460px;
-  height: min(850px, 94vh);
-  background: #fbf9fe;
-  border-radius: 30px;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 25px 80px rgba(30, 10, 50, .25);
-  animation: sanaPregnancyAppear .25s ease;
-}
-
-@keyframes sanaPregnancyAppear {
-  from { opacity: 0; transform: translateY(15px) scale(.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.sana-pregnancy-top {
-  padding: 18px 20px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fbf9fe;
-}
-
-.sana-pregnancy-logo {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-}
-
-.sana-pregnancy-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #3b185f;
-  color: white;
-  display: grid;
-  place-items: center;
-  font-size: 22px;
-}
-
-.sana-pregnancy-title {
-  font-size: 17px;
-  font-weight: 800;
-}
-
-.sana-pregnancy-subtitle {
-  font-size: 11px;
-  color: #91849b;
-  margin-top: 3px;
-}
-
-.sana-pregnancy-close {
-  border: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #f0e9f7;
-  color: #633d83;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.sana-pregnancy-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px 17px 85px;
-  scrollbar-width: none;
-}
-
-.sana-pregnancy-content::-webkit-scrollbar {
-  display: none;
-}
-
-.sana-p-card {
-  background: white;
-  border: 1px solid #f0e8f7;
-  border-radius: 23px;
-  padding: 17px;
-  margin-bottom: 14px;
-  box-shadow: 0 4px 16px rgba(65, 35, 90, .04);
-}
-
-.sana-p-week-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 13px;
-}
-
-.sana-p-small-title {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: #8b55ad;
-}
-
-.sana-p-trimester {
-  font-size: 11px;
-  font-weight: 700;
-  color: #782da3;
-  background: #f1eafa;
-  padding: 6px 10px;
-  border-radius: 20px;
-}
-
-.sana-p-weeks {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 7px;
-}
-
-.sana-p-week {
-  border: 0;
-  border-radius: 15px;
-  background: #f7f4fb;
-  color: #65576e;
-  padding: 10px 3px;
-  cursor: pointer;
-}
-
-.sana-p-week span {
-  display: block;
-  font-size: 10px;
-}
-
-.sana-p-week strong {
-  display: block;
-  font-size: 16px;
-  margin-top: 4px;
-}
-
-.sana-p-week.active {
-  background: #351052;
-  color: white;
-  box-shadow: 0 5px 12px #35105225;
-}
-
-.sana-p-progress-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.sana-p-progress-head h2 {
-  font-size: 18px;
-  line-height: 1.35;
-  margin: 12px 0 7px;
-}
-
-.sana-p-muted {
-  color: #95889e;
-  font-size: 11px;
-  line-height: 1.6;
-}
-
-.sana-p-circle {
-  width: 68px;
-  height: 68px;
-  flex-shrink: 0;
-  border: 5px solid #eadcf5;
-  border-top-color: #67328e;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  transform: rotate(0deg);
-  margin-top: 8px;
-}
-
-.sana-p-circle strong {
-  font-size: 13px;
-}
-
-.sana-p-circle span {
-  font-size: 8px;
-  color: #8b55ad;
-  font-weight: 800;
-}
-
-.sana-p-divider {
-  height: 1px;
-  background: #f0ebf3;
-  margin: 15px 0 12px;
-}
-
-.sana-p-progress-bottom {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 11px;
-  color: #81748a;
-}
-
-.sana-p-progress-bottom strong {
-  color: #493557;
-}
-
-.sana-p-baby-heading {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.sana-p-baby-heading h3 {
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 5px 0 0;
-}
-
-.sana-p-fruit-label {
-  background: #eaf5ea;
-  color: #39733e;
-  border-radius: 20px;
-  padding: 6px 9px;
-  font-size: 10px;
-  white-space: nowrap;
-  font-weight: 700;
-}
-
-.sana-p-avocado {
-  background: #edf6ed;
-  border: 1px solid #e4f0e3;
-  border-radius: 20px;
-  margin-top: 15px;
-  min-height: 170px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sana-p-avocado-emoji {
-  font-size: 85px;
-  line-height: 1.2;
-  filter: drop-shadow(0 5px 5px #456b3520);
-}
-
-.sana-p-comparison {
-  background: white;
-  border-radius: 20px;
-  padding: 6px 12px;
-  font-size: 10px;
-  color: #647466;
-}
-
-.sana-p-metrics {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.sana-p-metric {
-  background: #f5f1fa;
-  border-radius: 17px;
-  padding: 13px 10px;
-}
-
-.sana-p-metric span {
-  display: block;
-  font-size: 10px;
-  color: #8b7c95;
-}
-
-.sana-p-metric strong {
-  display: block;
-  font-size: 17px;
-  margin-top: 5px;
-  color: #453051;
-}
-
-.sana-p-article {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.sana-p-article span {
-  color: #8b55ad;
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-.sana-p-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(255,255,255,.96);
-  border-top: 1px solid #eee6f4;
-  padding: 12px 8px max(12px, env(safe-area-inset-bottom));
-  display: flex;
-  justify-content: space-around;
-}
-
-.sana-p-bottom div {
-  color: #a094aa;
-  font-size: 10px;
-  text-align: center;
-}
-
-.sana-p-bottom b {
-  display: block;
-  font-size: 19px;
-  margin-bottom: 4px;
-  font-weight: 500;
-}
-
-.sana-p-bottom .active {
-  color: #603080;
-  font-weight: 800;
-}
-
-@media (max-width: 500px) {
-  #sana-pregnancy-popup-v2 {
-    padding: 0;
-  }
-
-  .sana-pregnancy-window {
-    height: 100dvh;
-    max-width: none;
-    border-radius: 0;
-  }
-}
-</style>
-
-<div id="sana-pregnancy-popup-v2">
-  <div class="sana-pregnancy-window">
-
-    <header class="sana-pregnancy-top">
-      <div class="sana-pregnancy-logo">
-        <div class="sana-pregnancy-icon">♡</div>
-        <div>
-          <div class="sana-pregnancy-title">Жүктілік <small style="color:#8955ad;font-size:9px">РЕЖИМ</small></div>
-          <div class="sana-pregnancy-subtitle">Sana қамқорлығымен</div>
+  <div class="modal-backdrop" id="pregnancyModal" hidden>
+    <section class="auth-modal pregnancy-modal" id="pregnancyView" role="dialog" aria-modal="true" aria-labelledby="pregnancyTitle">
+      <button class="modal-close" id="closePregnancy" type="button" aria-label="Закрыть">×</button>
+      <div class="pregnancy-page">
+        <div class="pregnancy-hero">
+          <span class="pregnancy-hero-icon" aria-hidden="true">♡</span>
+          <p class="eyebrow" data-i18n="pregnancyMode">Беременность</p>
+          <h2 id="pregnancyTitle" data-i18n="pregnancyTitle">Расчёт срока беременности</h2>
+          <p data-i18n="pregnancyIntro">Укажите первый день последней менструации, чтобы получить ориентировочный срок.</p>
+        </div>
+        <div class="preg-card pregnancy-card">
+          <label for="pregnancyLastPeriod" data-i18n="lastPeriodDate">Первый день последней менструации</label>
+          <input id="pregnancyLastPeriod" type="date" />
+          <button class="primary-button full" id="calculatePregnancy" type="button" data-i18n="calculatePregnancy">Рассчитать</button>
+          <div class="pregnancy-result" id="pregnancyResult" role="status" aria-live="polite" hidden></div>
+          <p class="pregnancy-disclaimer" data-i18n="pregnancyDisclaimer">Расчёт ориентировочный и не заменяет наблюдение у врача.</p>
+        </div>
+        <div class="preg-card pregnancy-progress-card" id="pregnancyProgress" hidden>
+          <div class="preg-progress-top"><div><span class="preg-pill" id="pregnancyTrimester">—</span><h3 id="pregnancyWeekTitle">—</h3><p id="pregnancyRemaining">—</p></div><div class="preg-circle" id="pregnancyCircle"><span id="pregnancyWeekCircle">—</span></div></div>
+          <div class="preg-progress-bottom"><span data-i18n="estimatedDueDate">Предполагаемая дата родов</span><strong id="pregnancyDueDate">—</strong></div>
         </div>
       </div>
-      <button class="sana-pregnancy-close" id="sana-pregnancy-close" aria-label="Закрыть">×</button>
-    </header>
-
-    <main class="sana-pregnancy-content">
-
-      <section class="sana-p-card">
-        <div class="sana-p-week-heading">
-          <span class="sana-p-small-title">АПТА ТАҢДАУ</span>
-          <span class="sana-p-trimester">2-триместр</span>
-        </div>
-
-        <div class="sana-p-weeks">
-          <button class="sana-p-week" data-week="14"><span>апта</span><strong>14</strong></button>
-          <button class="sana-p-week" data-week="15"><span>апта</span><strong>15</strong></button>
-          <button class="sana-p-week active" data-week="16"><span>апта</span><strong>16</strong></button>
-          <button class="sana-p-week" data-week="17"><span>апта</span><strong>17</strong></button>
-          <button class="sana-p-week" data-week="18"><span>апта</span><strong>18</strong></button>
-        </div>
-      </section>
-
-      <section class="sana-p-card">
-        <div class="sana-p-progress-head">
-          <div>
-            <span class="sana-p-trimester">♡ 2-триместр</span>
-            <h2 id="sana-p-week-title">Жүктіліктің 16-аптасы</h2>
-            <p class="sana-p-muted">Баланың өсуі қарқынды жүріп жатыр</p>
-          </div>
-          <div class="sana-p-circle">
-            <strong id="sana-p-progress-number">16/40</strong>
-            <span>АПТА</span>
-          </div>
-        </div>
-        <div class="sana-p-divider"></div>
-        <div class="sana-p-progress-bottom">
-          <span>Босануға дейін: <strong id="sana-p-remaining">24 апта</strong> қалды</span>
-          <strong id="sana-p-percent">40% өтті</strong>
-        </div>
-      </section>
-
-      <section class="sana-p-card">
-        <div class="sana-p-baby-heading">
-          <div>
-            <span class="sana-p-small-title">БАЛАҢЫЗДЫҢ ӨЛШЕМІ</span>
-            <h3 id="sana-p-baby-title">Бұл аптада балаңыз авокадо көлеміндей</h3>
-          </div>
-          <span class="sana-p-fruit-label">🥑 16-апта</span>
-        </div>
-
-        <div class="sana-p-avocado">
-          <div class="sana-p-avocado-emoji">🥑</div>
-          <span class="sana-p-comparison">● Көрнекі салыстыру</span>
-        </div>
-
-        <div class="sana-p-metrics">
-          <div class="sana-p-metric">
-            <span>Ұзындығы</span>
-            <strong id="sana-p-length">12 см</strong>
-          </div>
-          <div class="sana-p-metric">
-            <span>Салмағы</span>
-            <strong id="sana-p-weight">100 г</strong>
-          </div>
-        </div>
-      </section>
-
-      <section class="sana-p-card sana-p-article">
-        <div>16-аптада не болып жатыр?</div>
-        <span>Даму кезеңі →</span>
-      </section>
-
-      <p class="sana-p-muted" style="text-align:center;padding:0 8px 10px">
-        Ақпарат таныстыру мақсатында берілген. Нақты мерзім мен баланың дамуын дәрігермен анықтаңыз.
-      </p>
-
-    </main>
-
-    <nav class="sana-p-bottom">
-      <div><b>⌂</b>Басты</div>
-      <div><b>▦</b>Күнтізбе</div>
-      <div class="active"><b>✧</b>AI көмекші</div>
-      <div><b>▥</b>Талдау</div>
-      <div><b>♙</b>Профиль</div>
-    </nav>
-
+    </section>
   </div>
-</div>
 
-<script>
-(function () {
-  const popup = document.getElementById('sana-pregnancy-popup-v2');
-  if (!popup) return;
+  <div class="modal-backdrop" id="onboardingModal" hidden>
+    <section class="auth-modal onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle"><span class="onboarding-icon"><svg class="ui-icon"><use href="#icon-brand"></use></svg></span><p class="eyebrow">Sana</p><h2 id="onboardingTitle" data-i18n="onboardingTitle">Начните с первой отметки</h2><p class="modal-description" data-i18n="onboardingText">Добавьте начало последней менструации. После двух циклов прогноз станет персональным.</p><div class="onboarding-steps"><span data-i18n="onboardingStep1">1. Отметьте период</span><span data-i18n="onboardingStep2">2. Ведите дневник</span><span data-i18n="onboardingStep3">3. Следите за динамикой</span></div><button class="primary-button full large" id="finishOnboarding" type="button" data-i18n="onboardingAction">Добавить первую дату</button><button class="text-button full" id="skipOnboarding" type="button" data-i18n="later">Позже</button></section>
+  </div>
 
-  // Открытие окна по существующей кнопке «Беременность»
-  document.addEventListener('click', function (event) {
-    const button = event.target.closest(
-      '.pregnancy-menu-btn, [data-pregnancy-button], #sana-pregnancy-launch'
-    );
-
-    if (!button) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    popup.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-  }, true);
-
-  // Закрытие окна
-  function closePregnancyPopup() {
-    popup.classList.remove('is-open');
-    document.body.style.overflow = '';
-  }
-
-  document.getElementById('sana-pregnancy-close')
-    .addEventListener('click', closePregnancyPopup);
-
-  popup.addEventListener('click', function (event) {
-    if (event.target === popup) closePregnancyPopup();
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') closePregnancyPopup();
-  });
-
-  // Выбор недели
-  popup.querySelectorAll('[data-week]').forEach(function (button) {
-    button.addEventListener('click', function () {
-      popup.querySelectorAll('[data-week]').forEach(function (item) {
-        item.classList.remove('active');
-      });
-
-      button.classList.add('active');
-
-      const week = Number(button.dataset.week);
-      document.getElementById('sana-p-week-title').textContent =
-        'Жүктіліктің ' + week + '-аптасы';
-
-      document.getElementById('sana-p-progress-number').textContent =
-        week + '/40';
-
-      document.getElementById('sana-p-remaining').textContent =
-        (40 - week) + ' апта';
-
-      document.getElementById('sana-p-percent').textContent =
-        Math.round(week / 40 * 100) + '% өтті';
-    });
-  });
-})();
-</script>
-<!-- ===== КОНЕЦ ОКНА БЕРЕМЕННОСТИ ===== -->
-  <!-- КНОПКА БЕРЕМЕННОСТЬ -->
-<style>
-  .pregnancy-menu-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    width: calc(100% - 30px);
-    margin: 12px auto;
-    padding: 13px 18px;
-    border: 1px solid #eadcf7;
-    border-radius: 16px;
-    background: #f3eafa;
-    color: #65358a;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .pregnancy-menu-btn:hover {
-    background: #eadcf7;
-    transform: translateY(-1px);
-  }
-</style>
-
-<button
-  class="pregnancy-menu-btn"
-  onclick="alert('Режим беременности скоро появится 💜')"
->
-  <span>🤰</span>
-  <span>Беременность</span>
-</button>
-</html>
-
-</script>
-
+  <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
+  <script src="./app.js?v=19"></script>
+</body>
 </html>

@@ -145,12 +145,18 @@ const state = {
   logs: new Map(),
   periods: [],
   calendar: null,
+  summary: null,
   chatMessages: [],
+  preferences: readPreferences(),
   authToken: localStorage.getItem('sana-auth-token') || ''
 };
 
 const registerModal = document.querySelector('#registerModal');
 const loginModal = document.querySelector('#loginModal');
+const periodModal = document.querySelector('#periodModal');
+const cycleSettingsModal = document.querySelector('#cycleSettingsModal');
+const pregnancyModal = document.querySelector('#pregnancyModal');
+const onboardingModal = document.querySelector('#onboardingModal');
 const ollamaBaseUrl = 'http://127.0.0.1:11434';
 
 Object.assign(copy.ru, {
@@ -168,6 +174,91 @@ Object.assign(copy.kk, {
   historyError: 'Тарих жүктелмеді. Хабар жібермес бұрын бетті жаңартыңыз.',
   historySaveError: 'Жауап алынды, бірақ чат серверде сақталмады.',
   exportError: 'Күнделік жүктелмеді. Сервер мен аккаунтты тексеріңіз.'
+});
+
+Object.assign(copy.ru, {
+  phaseLate: 'Задержка', lateDays: 'Задержка: {days} дн.', dueToday: 'Ожидается сегодня',
+  periodHistory: 'История менструаций', addPeriod: 'Добавить', noPeriods: 'Пока нет записей',
+  periodDetails: 'Данные периода', startDate: 'Дата начала', endDate: 'Дата окончания',
+  editPeriod: 'Изменить менструацию',
+  flowIntensity: 'Интенсивность', flowSpotting: 'Мажущие', flowLight: 'Лёгкая',
+  flowMedium: 'Средняя', flowHeavy: 'Сильная', deletePeriod: 'Удалить', savePeriod: 'Сохранить',
+  periodUpdated: 'Данные периода сохранены', invalidPeriodDates: 'Дата окончания не может быть раньше начала',
+  confirmDeletePeriod: 'Удалить эту запись о менструации?', cycleSettings: 'Настройки цикла',
+  personalForecast: 'Персональный прогноз', reminderDays: 'Напомнить заранее, дней',
+  saveSettings: 'Сохранить настройки', settingsSaved: 'Настройки сохранены',
+  shortestCycle: 'Самый короткий', longestCycle: 'Самый длинный',
+  analyticsNeedCycles: 'Нужно больше циклов', analyticsNeedCyclesText: 'Добавьте минимум два начала цикла для персональной аналитики.',
+  analyticsStable: 'Цикл выглядит стабильным', analyticsVariable: 'Длина цикла меняется',
+  analyticsSummary: 'Средняя длина — {average} дн., диапазон — {min}–{max} дн.',
+  observationEmpty: 'Добавляйте ежедневные записи', observationEmptyText: 'Sana покажет наиболее частые симптомы, когда накопится достаточно данных.',
+  observationFound: 'Чаще всего отмечается: {symptom}', observationFoundText: 'Отмечено {count} раз. Это наблюдение, а не медицинский диагноз.',
+  notificationsDenied: 'Браузер запретил уведомления', notificationDue: 'Ожидаемая дата менструации — сегодня.',
+  notificationSoon: 'До ожидаемой менструации: {days} дн.', notificationLate: 'Задержка по прогнозу: {days} дн.',
+  exportBackup: 'Скачать резервную копию', importBackup: 'Восстановить из файла',
+  backupExported: 'Резервная копия скачана', backupImported: 'Данные восстановлены', backupInvalid: 'Не удалось прочитать резервную копию',
+  confirmClear: 'Удалить все записи о цикле и самочувствии? Это действие нельзя отменить.',
+  onboardingTitle: 'Начните с первой отметки', onboardingText: 'Добавьте начало последней менструации. После двух циклов прогноз станет персональным.',
+  onboardingStep1: '1. Отметьте период', onboardingStep2: '2. Ведите дневник', onboardingStep3: '3. Следите за динамикой', onboardingAction: 'Добавить первую дату', later: 'Позже',
+  apiSummary: 'Сводка с сервера', summaryReady: 'Достаточно данных', summaryNeedsData: 'Мало данных',
+  summaryLogsLabel: 'записей дневника', summaryPeriodsLabel: 'отметок цикла',
+  summaryRange: 'Записи с {from} по {to}', summaryOffline: 'Сервер недоступен. Показаны данные этого устройства.',
+  summaryCycle: 'По данным сервера: цикл {cycle} дн., менструация {period} дн.',
+  summaryNeedsDataText: 'Отметьте менструацию и дневник, чтобы сводка стала персональной.',
+  invalidName: 'Имя: от 2 до 60 символов', invalidEmail: 'Введите корректный email',
+  invalidPassword: 'Пароль: от 8 до 128 символов', invalidNotes: 'Заметка не длиннее 500 символов',
+  invalidLog: 'Выберите настроение, энергию и симптомы из списка', invalidDate: 'Укажите корректную дату',
+  invalidSettings: 'Цикл 21–45 дней, менструация 1–10 дней, напоминание 0–7 дней',
+  periodTooLong: 'Длительность менструации — не больше 10 дней', invalidFlow: 'Выберите интенсивность',
+  invalidChat: 'Вопрос: от 1 до 1000 символов',
+  pregnancyMode: 'Беременность', pregnancyModeShort: 'Расчёт срока и даты родов',
+  pregnancyTitle: 'Расчёт срока беременности', pregnancyIntro: 'Укажите первый день последней менструации, чтобы получить ориентировочный срок.',
+  lastPeriodDate: 'Первый день последней менструации', calculatePregnancy: 'Рассчитать',
+  pregnancyDisclaimer: 'Расчёт ориентировочный и не заменяет наблюдение у врача.',
+  pregnancyDateRequired: 'Укажите дату последней менструации.', pregnancyFutureDate: 'Дата не может быть в будущем.',
+  pregnancyWeekResult: 'Ориентировочный срок: {weeks} нед. {days} дн.', estimatedDueDate: 'Предполагаемая дата родов',
+  pregnancyRemaining: 'До 40 недель: около {weeks} нед.', trimester: '{number}-й триместр'
+});
+Object.assign(copy.kk, {
+  phaseLate: 'Кешігу', lateDays: 'Кешігу: {days} күн', dueToday: 'Бүгін күтіледі',
+  periodHistory: 'Етеккір тарихы', addPeriod: 'Қосу', noPeriods: 'Әзірге жазба жоқ',
+  periodDetails: 'Етеккір деректері', startDate: 'Басталу күні', endDate: 'Аяқталу күні',
+  editPeriod: 'Етеккірді өзгерту',
+  flowIntensity: 'Қарқындылық', flowSpotting: 'Жағынды', flowLight: 'Жеңіл', flowMedium: 'Орташа', flowHeavy: 'Күшті',
+  deletePeriod: 'Жою', savePeriod: 'Сақтау', periodUpdated: 'Етеккір деректері сақталды',
+  invalidPeriodDates: 'Аяқталу күні басталу күнінен ерте болмауы керек', confirmDeletePeriod: 'Бұл етеккір жазбасын жою керек пе?',
+  cycleSettings: 'Цикл баптаулары', personalForecast: 'Жеке болжам', reminderDays: 'Алдын ала еске салу, күн',
+  saveSettings: 'Баптауларды сақтау', settingsSaved: 'Баптаулар сақталды', shortestCycle: 'Ең қысқа', longestCycle: 'Ең ұзын',
+  analyticsNeedCycles: 'Қосымша циклдер қажет', analyticsNeedCyclesText: 'Жеке талдау үшін кемінде екі циклдің басталуын қосыңыз.',
+  analyticsStable: 'Цикл тұрақты көрінеді', analyticsVariable: 'Цикл ұзақтығы өзгеріп тұрады',
+  analyticsSummary: 'Орташа ұзақтық — {average} күн, аралығы — {min}–{max} күн.',
+  observationEmpty: 'Күнделікті жазбаларды қосыңыз', observationEmptyText: 'Дерек жеткілікті болғанда Sana жиі кездесетін белгілерді көрсетеді.',
+  observationFound: 'Ең жиі белгі: {symptom}', observationFoundText: '{count} рет белгіленді. Бұл медициналық диагноз емес, тек бақылау.',
+  notificationsDenied: 'Браузер хабарламаларға рұқсат бермеді', notificationDue: 'Етеккір бүгін күтіледі.',
+  notificationSoon: 'Етеккірге дейін: {days} күн.', notificationLate: 'Болжам бойынша кешігу: {days} күн.',
+  exportBackup: 'Сақтық көшірмені жүктеу', importBackup: 'Файлдан қалпына келтіру', backupExported: 'Сақтық көшірме жүктелді',
+  backupImported: 'Деректер қалпына келтірілді', backupInvalid: 'Сақтық көшірме оқылмады',
+  confirmClear: 'Цикл мен хал-жағдай туралы барлық жазбаларды жою керек пе? Бұл әрекетті қайтару мүмкін емес.',
+  onboardingTitle: 'Алғашқы белгіден бастаңыз', onboardingText: 'Соңғы етеккірдің басталуын қосыңыз. Екі циклден кейін болжам жеке болады.',
+  onboardingStep1: '1. Етеккірді белгілеңіз', onboardingStep2: '2. Күнделік жүргізіңіз', onboardingStep3: '3. Өзгерістерді бақылаңыз', onboardingAction: 'Алғашқы күнді қосу', later: 'Кейін',
+  apiSummary: 'Сервер жиынтығы', summaryReady: 'Дерек жеткілікті', summaryNeedsData: 'Дерек аз',
+  summaryLogsLabel: 'күнделік жазбасы', summaryPeriodsLabel: 'цикл белгісі',
+  summaryRange: 'Жазбалар: {from} — {to}', summaryOffline: 'Сервер қолжетімсіз. Осы құрылғы деректері көрсетілген.',
+  summaryCycle: 'Сервер бойынша: цикл {cycle} күн, етеккір {period} күн.',
+  summaryNeedsDataText: 'Жиынтық жеке болуы үшін етеккір мен күнделікті белгілеңіз.',
+  invalidName: 'Аты: 2–60 таңба', invalidEmail: 'Дұрыс email енгізіңіз',
+  invalidPassword: 'Құпиясөз: 8–128 таңба', invalidNotes: 'Жазба 500 таңбадан аспауы керек',
+  invalidLog: 'Көңіл-күй, қуат және белгілерді тізімнен таңдаңыз', invalidDate: 'Дұрыс күнді көрсетіңіз',
+  invalidSettings: 'Цикл 21–45 күн, етеккір 1–10 күн, еске салу 0–7 күн',
+  periodTooLong: 'Етеккір ұзақтығы 10 күннен аспауы керек', invalidFlow: 'Қарқындылықты таңдаңыз',
+  invalidChat: 'Сұрақ: 1–1000 таңба',
+  pregnancyMode: 'Жүктілік', pregnancyModeShort: 'Мерзім мен босану күнін есептеу',
+  pregnancyTitle: 'Жүктілік мерзімін есептеу', pregnancyIntro: 'Болжамды мерзімді білу үшін соңғы етеккірдің бірінші күнін көрсетіңіз.',
+  lastPeriodDate: 'Соңғы етеккірдің бірінші күні', calculatePregnancy: 'Есептеу',
+  pregnancyDisclaimer: 'Есеп шамамен беріледі және дәрігер бақылауын алмастырмайды.',
+  pregnancyDateRequired: 'Соңғы етеккір күнін көрсетіңіз.', pregnancyFutureDate: 'Күн болашақта болмауы керек.',
+  pregnancyWeekResult: 'Болжамды мерзім: {weeks} апта {days} күн.', estimatedDueDate: 'Болжамды босану күні',
+  pregnancyRemaining: '40 аптаға дейін шамамен {weeks} апта.', trimester: '{number}-триместр'
 });
 
 async function loadChatHistory() {
@@ -223,8 +314,64 @@ async function exportDiary() {
   }
 }
 
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob); const link = document.createElement('a');
+  link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+}
+
+function exportBackup() {
+  const backup = {
+    format: 'sana-backup', version: 1, exported_at: new Date().toISOString(),
+    logs: Array.from(state.logs.values()), periods: state.periods, preferences: state.preferences
+  };
+  downloadBlob(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }), 'sana-backup-' + dateKey(today) + '.json');
+  showToast(t('backupExported'));
+}
+
+async function importBackup(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  try {
+    const backup = JSON.parse(await file.text());
+    if (backup.format !== 'sana-backup' || !Array.isArray(backup.logs) || !Array.isArray(backup.periods)) throw new Error('Invalid backup');
+    if (state.authToken) {
+      await apiRequest('/api/data', { method: 'DELETE' });
+      for (const log of backup.logs) await apiRequest('/api/logs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ entry_date: log.entry_date, mood: log.mood, energy: log.energy, symptoms: log.symptoms || [], notes: log.notes || '' }) });
+      for (const period of backup.periods) await apiRequest('/api/periods', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ start_date: period.start_date, end_date: period.end_date || null, flow: period.flow || 'medium' }) });
+    } else {
+      setLogs(backup.logs); state.periods = backup.periods; cacheLogs(); cachePeriods();
+    }
+    if (backup.preferences) { state.preferences = Object.assign(readPreferences(), backup.preferences); savePreferences(); }
+    await loadTrackerData(); showToast(t('backupImported'));
+  } catch (error) { showToast(t('backupInvalid')); }
+  event.target.value = '';
+}
+
 function t(key) {
   return copy[state.lang][key] || key;
+}
+
+function readPreferences() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('sana-preferences') || '{}');
+    return {
+      useCustom: Boolean(saved.useCustom),
+      cycleLength: Math.min(45, Math.max(21, Number(saved.cycleLength) || 28)),
+      periodLength: Math.min(10, Math.max(1, Number(saved.periodLength) || 5)),
+      reminderDays: Math.min(7, Math.max(0, Number(saved.reminderDays) || 2))
+    };
+  } catch (error) {
+    return { useCustom: false, cycleLength: 28, periodLength: 5, reminderDays: 2 };
+  }
+}
+
+function savePreferences() {
+  localStorage.setItem('sana-preferences', JSON.stringify(state.preferences));
+  const value = document.querySelector('#cycleSettingsValue');
+  if (value) value.textContent = state.preferences.useCustom
+    ? state.preferences.cycleLength + ' / ' + state.preferences.periodLength
+    : (state.lang === 'kk' ? 'Автоматты' : 'Автоматически');
 }
 
 function dateKey(date) {
@@ -292,8 +439,8 @@ function buildLocalCalendarForecast(year, month) {
       return sum + value;
     }, 0) / values.length) : fallback;
   };
-  const cycleLength = average(gaps, 28);
-  const periodLength = average(lengths, 5);
+  const cycleLength = state.preferences.useCustom ? state.preferences.cycleLength : average(gaps, 28);
+  const periodLength = state.preferences.useCustom ? state.preferences.periodLength : average(lengths, 5);
   const recorded = new Set();
   periods.forEach(function (period) {
     keysBetween(period.start, period.end).forEach(function (key) {
@@ -310,6 +457,10 @@ function buildLocalCalendarForecast(year, month) {
     current_cycle_day: null,
     current_phase: 'unknown',
     next_period_start: null,
+    expected_period_start: null,
+    late_days: 0,
+    is_late: false,
+    calculation_source: state.preferences.useCustom ? 'settings' : (gaps.length || lengths.length ? 'history' : 'default'),
     next_fertile_start: null,
     next_fertile_end: null,
     recorded_period_dates: Array.from(recorded).sort(),
@@ -320,17 +471,17 @@ function buildLocalCalendarForecast(year, month) {
   if (!starts.length) return result;
 
   const anchor = starts[starts.length - 1];
-  let nextPeriod = new Date(anchor);
-  while (nextPeriod <= today) nextPeriod = addDays(nextPeriod, cycleLength);
+  const nextPeriod = addDays(anchor, cycleLength);
+  const lateDays = Math.max(0, Math.floor((today - nextPeriod) / 86400000));
   const elapsed = Math.floor((today - anchor) / 86400000);
   if (elapsed >= 0) {
-    const currentDay = elapsed % cycleLength + 1;
-    const currentStart = addDays(today, -(currentDay - 1));
-    const ovulation = addDays(currentStart, Math.max(0, cycleLength - 14));
+    const currentDay = elapsed + 1;
+    const ovulation = addDays(anchor, Math.max(0, cycleLength - 14));
     const fertileStart = addDays(ovulation, -5);
     const fertileEnd = addDays(ovulation, 1);
     result.current_cycle_day = currentDay;
-    if (currentDay <= periodLength) result.current_phase = 'period';
+    if (lateDays) result.current_phase = 'late';
+    else if (currentDay <= periodLength) result.current_phase = 'period';
     else if (today >= fertileStart && today <= fertileEnd) result.current_phase = dateKey(today) === dateKey(ovulation) ? 'ovulation' : 'fertile';
     else result.current_phase = today < fertileStart ? 'follicular' : 'luteal';
   }
@@ -346,6 +497,9 @@ function buildLocalCalendarForecast(year, month) {
     nextFertileEnd = addDays(nextOvulation, 1);
   }
   result.next_period_start = dateKey(nextPeriod);
+  result.expected_period_start = dateKey(nextPeriod);
+  result.late_days = lateDays;
+  result.is_late = Boolean(lateDays);
   result.next_fertile_start = dateKey(nextFertileStart);
   result.next_fertile_end = dateKey(nextFertileEnd);
 
@@ -441,6 +595,7 @@ function applyLanguage(lang) {
   const todayText = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(today);
   document.querySelector('#todayLabel').textContent = (lang === 'kk' ? 'Бүгін • ' : 'Сегодня • ') + todayText;
   updateNotificationsText();
+  savePreferences();
   renderForecastSummary();
   updateSelectedDate();
   updateLoggerDate();
@@ -466,7 +621,7 @@ function updateSelectedDate() {
     ? formatDate(state.calendar.next_period_start)
     : '—';
   const existingPeriod = getPeriodForDate(key);
-  document.querySelector('#markSelectedPeriodText').textContent = t(existingPeriod ? 'removePeriod' : 'markPeriodStart');
+  document.querySelector('#markSelectedPeriodText').textContent = t(existingPeriod ? 'editPeriod' : 'markPeriodStart');
 }
 
 function phaseForDate(key) {
@@ -480,6 +635,7 @@ function phaseForDate(key) {
 function phaseTranslation(phase) {
   const phases = {
     period: 'phasePeriod',
+    late: 'phaseLate',
     fertile: 'phaseFertile',
     ovulation: 'phaseOvulation',
     follicular: 'phaseFollicular',
@@ -500,9 +656,12 @@ function renderForecastSummary() {
   document.querySelector('#fertileRange').textContent = hasData && calendar.next_fertile_start
     ? formatDate(calendar.next_fertile_start) + ' — ' + formatDate(calendar.next_fertile_end)
     : t('notEnoughData');
-  if (hasData && calendar.next_period_start) {
+  document.querySelector('.cycle-card').classList.toggle('late-state', Boolean(hasData && calendar.is_late));
+  if (hasData && calendar.is_late) {
+    document.querySelector('#nextPeriodText').textContent = t('lateDays').replace('{days}', calendar.late_days);
+  } else if (hasData && calendar.next_period_start) {
     const days = Math.max(0, daysBetween(dateKey(today), calendar.next_period_start));
-    document.querySelector('#nextPeriodText').textContent = t('daysUntilPeriod').replace('{days}', days);
+    document.querySelector('#nextPeriodText').textContent = days === 0 ? t('dueToday') : t('daysUntilPeriod').replace('{days}', days);
   } else {
     document.querySelector('#nextPeriodText').textContent = t('markFirstPeriod');
   }
@@ -743,6 +902,7 @@ async function loadTrackerData() {
     state.periods = readLocalPeriods();
   }
   await loadCalendarForecast();
+  await loadSummary();
   renderForecastSummary();
   updateSelectedDate();
   renderCalendar();
@@ -751,12 +911,171 @@ async function loadTrackerData() {
 
 async function loadCalendarForecast() {
   try {
+    const custom = state.preferences.useCustom
+      ? '&cycle_length=' + state.preferences.cycleLength + '&period_length=' + state.preferences.periodLength
+      : '';
     state.calendar = await apiRequest(
-      '/api/calendar?year=' + state.shownYear + '&month=' + (state.shownMonth + 1)
+      '/api/calendar?year=' + state.shownYear + '&month=' + (state.shownMonth + 1) + custom
     );
   } catch (error) {
     state.calendar = buildLocalCalendarForecast(state.shownYear, state.shownMonth);
   }
+}
+
+const allowedMoods = ['happy', 'calm', 'sensitive', 'sad', 'angry'];
+const allowedEnergy = ['low', 'medium', 'high'];
+const allowedSymptoms = ['pain', 'headache', 'bloating', 'skin', 'back', 'none'];
+const allowedFlows = ['spotting', 'light', 'medium', 'heavy'];
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+function symptomLabel(key) {
+  return t(key === 'back' ? 'backPain' : key);
+}
+
+function showFormError(element, text) {
+  element.textContent = text || '';
+  element.classList.remove('success');
+}
+
+function markInvalid(field, invalid) {
+  if (field) field.classList.toggle('input-invalid', Boolean(invalid));
+}
+
+function cleanedName(value) {
+  return value.trim().replace(/\s+/g, ' ');
+}
+
+function validateAccount(name, email, password, requireName) {
+  if (requireName && (name.length < 2 || name.length > 60)) return t('invalidName');
+  if (!emailPattern.test(email) || email.length > 254) return t('invalidEmail');
+  if (password.length < 8 || password.length > 128) return t('invalidPassword');
+  return '';
+}
+
+function validateLog(payload) {
+  if (!datePattern.test(payload.entry_date)) return t('invalidDate');
+  if (!allowedMoods.includes(payload.mood) || !allowedEnergy.includes(payload.energy)) return t('invalidLog');
+  if (!payload.symptoms.length || payload.symptoms.some(function (item) { return !allowedSymptoms.includes(item); })) return t('invalidLog');
+  if (payload.symptoms.includes('none') && payload.symptoms.length > 1) return t('invalidLog');
+  if (payload.notes.length > 500) return t('invalidNotes');
+  return '';
+}
+
+function validatePeriod(payload) {
+  if (!datePattern.test(payload.start_date)) return t('invalidDate');
+  if (payload.end_date && !datePattern.test(payload.end_date)) return t('invalidDate');
+  if (payload.end_date && payload.end_date < payload.start_date) return t('invalidPeriodDates');
+  if (payload.end_date && daysBetween(payload.start_date, payload.end_date) + 1 > 10) return t('periodTooLong');
+  if (!allowedFlows.includes(payload.flow)) return t('invalidFlow');
+  return '';
+}
+
+function validateCycleSettings(cycleLength, periodLength, reminderDays) {
+  const values = [cycleLength, periodLength, reminderDays];
+  if (values.some(function (value) { return !Number.isInteger(value); })) return t('invalidSettings');
+  if (cycleLength < 21 || cycleLength > 45 || periodLength < 1 || periodLength > 10 || reminderDays < 0 || reminderDays > 7) {
+    return t('invalidSettings');
+  }
+  return '';
+}
+
+function countEntries(counts) {
+  return Object.keys(counts || {}).map(function (key) {
+    return { key: key, count: counts[key] };
+  }).sort(function (first, second) {
+    return second.count - first.count;
+  });
+}
+
+function fillSummaryList(element, title, items, labelFor) {
+  element.innerHTML = '';
+  if (!items.length) {
+    element.hidden = true;
+    return;
+  }
+  element.hidden = false;
+  const heading = document.createElement('li');
+  heading.className = 'summary-list-title';
+  heading.textContent = title;
+  element.appendChild(heading);
+  items.forEach(function (item) {
+    const row = document.createElement('li');
+    const name = document.createElement('span');
+    name.textContent = labelFor(item.key);
+    const count = document.createElement('b');
+    count.textContent = String(item.count);
+    row.append(name, count);
+    element.appendChild(row);
+  });
+}
+
+function localSummary() {
+  const mood = {};
+  const energy = {};
+  const symptoms = {};
+  state.logs.forEach(function (log) {
+    if (log.mood) mood[log.mood] = (mood[log.mood] || 0) + 1;
+    if (log.energy) energy[log.energy] = (energy[log.energy] || 0) + 1;
+    (log.symptoms || []).forEach(function (symptom) {
+      if (symptom !== 'none') symptoms[symptom] = (symptoms[symptom] || 0) + 1;
+    });
+  });
+  let first = null;
+  let latest = null;
+  state.logs.forEach(function (log) {
+    if (!first || log.entry_date < first) first = log.entry_date;
+    if (!latest || log.entry_date > latest) latest = log.entry_date;
+  });
+  return {
+    logs_count: state.logs.size,
+    periods_count: state.periods.length,
+    mood_counts: mood,
+    energy_counts: energy,
+    symptom_counts: symptoms,
+    cycle_length: state.calendar && state.calendar.has_data ? state.calendar.cycle_length : null,
+    period_length: state.calendar && state.calendar.has_data ? state.calendar.period_length : null,
+    first_log_date: first,
+    latest_log_date: latest,
+    status: state.logs.size && state.periods.length ? 'ready' : 'needs_more_data',
+    offline: true
+  };
+}
+
+async function loadSummary() {
+  try {
+    state.summary = await apiRequest('/api/summary');
+  } catch (error) {
+    state.summary = null;
+  }
+  renderServerSummary();
+}
+
+function renderServerSummary() {
+  const summary = state.summary || localSummary();
+  document.querySelector('#summaryLogs').textContent = summary.logs_count;
+  document.querySelector('#summaryPeriods').textContent = summary.periods_count;
+  const status = document.querySelector('#summaryStatus');
+  status.textContent = t(summary.status === 'ready' ? 'summaryReady' : 'summaryNeedsData');
+  status.classList.toggle('ready', summary.status === 'ready');
+  const range = document.querySelector('#summaryRange');
+  if (summary.first_log_date && summary.latest_log_date) {
+    range.textContent = t('summaryRange')
+      .replace('{from}', formatDate(summary.first_log_date))
+      .replace('{to}', formatDate(summary.latest_log_date));
+  } else {
+    range.textContent = summary.offline ? t('summaryOffline') : '';
+  }
+  if (summary.offline && summary.first_log_date) {
+    range.textContent = t('summaryOffline') + ' ' + range.textContent;
+  }
+  fillSummaryList(document.querySelector('#summaryMoodList'), t('mood'), countEntries(summary.mood_counts), t);
+  fillSummaryList(document.querySelector('#summaryEnergyList'), t('energy'), countEntries(summary.energy_counts), t);
+  fillSummaryList(document.querySelector('#summarySymptomList'), t('symptoms'), countEntries(summary.symptom_counts), symptomLabel);
+  const note = document.querySelector('#summaryNote');
+  note.textContent = summary.cycle_length
+    ? t('summaryCycle').replace('{cycle}', summary.cycle_length).replace('{period}', summary.period_length || '—')
+    : t('summaryNeedsDataText');
 }
 
 async function saveLog() {
@@ -764,9 +1083,14 @@ async function saveLog() {
     entry_date: state.logDate,
     mood: state.mood,
     energy: state.energy,
-    symptoms: state.symptoms,
+    symptoms: state.symptoms.slice(),
     notes: document.querySelector('#notes').value.trim()
   };
+  const logMessage = document.querySelector('#logMessage');
+  const logError = validateLog(payload);
+  showFormError(logMessage, logError);
+  markInvalid(document.querySelector('#notes'), payload.notes.length > 500);
+  if (logError) return;
 
   let saved = payload;
   try {
@@ -789,50 +1113,137 @@ async function saveLog() {
   updateSelectedDate();
   renderCalendar();
   renderCharts();
+  await loadSummary();
   showToast(t('saved'));
   setTimeout(function () {
     setView('calendar');
   }, 400);
 }
 
-async function markPeriod(key) {
-  const existing = getPeriodForDate(key);
-  if (existing) {
-    try {
-      await apiRequest('/api/periods/' + existing.id, { method: 'DELETE' });
-    } catch (error) {
-      // GitHub Pages uses the local fallback below.
-    }
-    state.periods = state.periods.filter(function (period) {
-      return period.id !== existing.id;
-    });
-    showToast(t('periodRemoved'));
-  } else {
-    const payload = { start_date: key, end_date: null };
-    let saved = payload;
-    try {
-      saved = await apiRequest('/api/periods', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-    } catch (error) {
-      saved = Object.assign({ id: Date.now() }, payload);
-    }
-    state.periods.unshift(saved);
-    showToast(t('periodSaved'));
-  }
+function openPeriodEditor(key, period) {
+  const existing = period || getPeriodForDate(key);
+  document.querySelector('#periodId').value = existing ? existing.id : '';
+  document.querySelector('#periodStart').value = existing ? existing.start_date : key;
+  document.querySelector('#periodEnd').value = existing && existing.end_date ? existing.end_date : '';
+  document.querySelector('#periodFlow').value = existing && existing.flow ? existing.flow : 'medium';
+  document.querySelector('#deletePeriodButton').hidden = !existing;
+  document.querySelector('#periodMessage').textContent = '';
+  setModal(periodModal, true, '#periodStart');
+}
+
+async function refreshPeriodViews() {
   cachePeriods();
   await loadCalendarForecast();
+  await loadSummary();
   renderForecastSummary();
   updateSelectedDate();
   renderCalendar();
+  renderCharts();
+  renderPeriodHistory();
+  maybeSendCycleNotification();
+}
+
+async function savePeriodDetails(event) {
+  event.preventDefault();
+  const id = document.querySelector('#periodId').value;
+  const payload = {
+    start_date: document.querySelector('#periodStart').value,
+    end_date: document.querySelector('#periodEnd').value || null,
+    flow: document.querySelector('#periodFlow').value
+  };
+  const message = document.querySelector('#periodMessage');
+  const periodError = validatePeriod(payload);
+  showFormError(message, periodError);
+  markInvalid(document.querySelector('#periodStart'), !datePattern.test(payload.start_date));
+  markInvalid(document.querySelector('#periodEnd'), Boolean(periodError) && Boolean(payload.end_date));
+  if (periodError) return;
+  let saved;
+  try {
+    saved = await apiRequest(id ? '/api/periods/' + id : '/api/periods', {
+      method: id ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+    });
+  } catch (error) {
+    saved = Object.assign({ id: id ? Number(id) : Date.now(), created_at: new Date().toISOString() }, payload);
+  }
+  const index = state.periods.findIndex(function (period) { return String(period.id) === String(saved.id); });
+  if (index >= 0) state.periods[index] = saved;
+  else state.periods.unshift(saved);
+  await refreshPeriodViews();
+  setModal(periodModal, false);
+  showToast(t(id ? 'periodUpdated' : 'periodSaved'));
+}
+
+async function deleteEditedPeriod() {
+  const id = document.querySelector('#periodId').value;
+  if (!id || !window.confirm(t('confirmDeletePeriod'))) return;
+  try { await apiRequest('/api/periods/' + id, { method: 'DELETE' }); } catch (error) {}
+  state.periods = state.periods.filter(function (period) { return String(period.id) !== String(id); });
+  await refreshPeriodViews();
+  setModal(periodModal, false);
+  showToast(t('periodRemoved'));
+}
+
+function renderPeriodHistory() {
+  const container = document.querySelector('#periodHistory');
+  if (!container) return;
+  container.innerHTML = '';
+  const periods = state.periods.slice().sort(function (a, b) { return b.start_date.localeCompare(a.start_date); }).slice(0, 6);
+  if (!periods.length) {
+    const empty = document.createElement('p'); empty.className = 'period-history-empty'; empty.textContent = t('noPeriods'); container.appendChild(empty); return;
+  }
+  periods.forEach(function (period) {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'period-history-item';
+    const dates = document.createElement('span');
+    const title = document.createElement('b'); title.textContent = formatDate(period.start_date) + (period.end_date ? ' — ' + formatDate(period.end_date) : '');
+    const length = document.createElement('small'); length.textContent = period.end_date ? (daysBetween(period.start_date, period.end_date) + 1) + ' ' + t('days') : t('notMarked');
+    dates.append(title, length);
+    const flow = document.createElement('i'); flow.className = 'period-flow'; flow.textContent = t('flow' + (period.flow || 'medium').charAt(0).toUpperCase() + (period.flow || 'medium').slice(1));
+    button.append(dates, flow); button.addEventListener('click', function () { openPeriodEditor(period.start_date, period); }); container.appendChild(button);
+  });
 }
 
 function renderCharts() {
   document.querySelector('#savedEntriesCount').textContent = state.logs.size;
   renderWeeklyChart();
   renderEnergyChart();
+  renderAnalytics();
+  renderServerSummary();
+  renderPeriodHistory();
+}
+
+function renderAnalytics() {
+  const starts = state.periods.map(function (period) { return period.start_date; }).filter(Boolean).sort();
+  const gaps = [];
+  for (let index = 1; index < starts.length; index += 1) {
+    const gap = daysBetween(starts[index - 1], starts[index]);
+    if (gap >= 21 && gap <= 45) gaps.push(gap);
+  }
+  const lengths = state.periods.filter(function (period) { return period.end_date; }).map(function (period) {
+    return daysBetween(period.start_date, period.end_date) + 1;
+  }).filter(function (length) { return length >= 1 && length <= 10; });
+  const average = function (values) { return values.length ? Math.round(values.reduce(function (sum, value) { return sum + value; }, 0) / values.length) : null; };
+  const avgCycle = average(gaps); const avgPeriod = average(lengths);
+  document.querySelector('#insightAverageCycle').textContent = avgCycle || '—';
+  document.querySelector('#insightAveragePeriod').textContent = avgPeriod || '—';
+  document.querySelector('#insightShortestCycle').textContent = gaps.length ? Math.min.apply(null, gaps) : '—';
+  document.querySelector('#insightLongestCycle').textContent = gaps.length ? Math.max.apply(null, gaps) : '—';
+  if (!gaps.length) {
+    document.querySelector('#insightTitle').textContent = t('analyticsNeedCycles');
+    document.querySelector('#insightSummary').textContent = t('analyticsNeedCyclesText');
+  } else {
+    const minimum = Math.min.apply(null, gaps); const maximum = Math.max.apply(null, gaps);
+    document.querySelector('#insightTitle').textContent = t(maximum - minimum <= 4 ? 'analyticsStable' : 'analyticsVariable');
+    document.querySelector('#insightSummary').textContent = t('analyticsSummary').replace('{average}', avgCycle).replace('{min}', minimum).replace('{max}', maximum);
+  }
+  const counts = state.summary && state.summary.symptom_counts
+    ? Object.assign({}, state.summary.symptom_counts)
+    : {};
+  if (!state.summary) {
+    state.logs.forEach(function (log) { (log.symptoms || []).forEach(function (symptom) { if (symptom !== 'none') counts[symptom] = (counts[symptom] || 0) + 1; }); });
+  }
+  const top = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; })[0];
+  document.querySelector('#insightObservationTitle').textContent = top ? t('observationFound').replace('{symptom}', symptomLabel(top)) : t('observationEmpty');
+  document.querySelector('#insightObservationText').textContent = top ? t('observationFoundText').replace('{count}', counts[top]) : t('observationEmptyText');
 }
 
 function renderWeeklyChart() {
@@ -941,10 +1352,16 @@ async function register(event) {
   const button = document.querySelector('#registerSubmit');
   const message = document.querySelector('#registerMessage');
   const payload = {
-    name: form.elements.name.value.trim(),
+    name: cleanedName(form.elements.name.value),
     email: form.elements.email.value.trim(),
     password: form.elements.password.value
   };
+  const accountError = validateAccount(payload.name, payload.email, payload.password, true);
+  showFormError(message, accountError);
+  markInvalid(form.elements.name, accountError === t('invalidName'));
+  markInvalid(form.elements.email, accountError === t('invalidEmail'));
+  markInvalid(form.elements.password, accountError === t('invalidPassword'));
+  if (accountError) return;
 
   button.disabled = true;
   button.textContent = t('registering');
@@ -974,6 +1391,11 @@ async function login(event) {
     email: form.elements.email.value.trim(),
     password: form.elements.password.value
   };
+  const accountError = validateAccount('', payload.email, payload.password, false);
+  showFormError(message, accountError);
+  markInvalid(form.elements.email, accountError === t('invalidEmail'));
+  markInvalid(form.elements.password, accountError === t('invalidPassword'));
+  if (accountError) return;
 
   button.disabled = true;
   button.textContent = t('loggingIn');
@@ -1017,11 +1439,34 @@ function updateNotificationsText() {
   document.querySelector('#notificationsButton').setAttribute('aria-pressed', String(enabled));
 }
 
-function toggleNotifications() {
-  const enabled = localStorage.getItem('sana-notifications') !== 'true';
-  localStorage.setItem('sana-notifications', String(enabled));
+async function toggleNotifications() {
+  const enabling = localStorage.getItem('sana-notifications') !== 'true';
+  if (enabling) {
+    if (!('Notification' in window)) { showToast(t('notificationsDenied')); return; }
+    const permission = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+    if (permission !== 'granted') { showToast(t('notificationsDenied')); return; }
+  }
+  localStorage.setItem('sana-notifications', String(enabling));
   updateNotificationsText();
-  showToast(t(enabled ? 'notificationsEnabled' : 'notificationsDisabled'));
+  showToast(t(enabling ? 'notificationsEnabled' : 'notificationsDisabled'));
+  if (enabling) maybeSendCycleNotification(true);
+}
+
+function maybeSendCycleNotification(force) {
+  if (localStorage.getItem('sana-notifications') !== 'true' || !state.calendar || !state.calendar.has_data) return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const key = dateKey(today); const last = localStorage.getItem('sana-last-notification');
+  if (!force && last === key) return;
+  let message = '';
+  if (state.calendar.is_late) message = t('notificationLate').replace('{days}', state.calendar.late_days);
+  else {
+    const days = daysBetween(key, state.calendar.next_period_start);
+    if (days === 0) message = t('notificationDue');
+    else if (days > 0 && days <= state.preferences.reminderDays) message = t('notificationSoon').replace('{days}', days);
+  }
+  if (!message) return;
+  new Notification('Sana', { body: message, icon: './favicon.svg', tag: 'sana-cycle' });
+  localStorage.setItem('sana-last-notification', key);
 }
 
 function togglePrivacy() {
@@ -1029,7 +1474,85 @@ function togglePrivacy() {
   showToast(t(enabled ? 'privacyEnabled' : 'privacyDisabled'));
 }
 
+function openCycleSettings() {
+  document.querySelector('#preferredCycleLength').value = state.preferences.cycleLength;
+  document.querySelector('#preferredPeriodLength').value = state.preferences.periodLength;
+  document.querySelector('#reminderDays').value = state.preferences.reminderDays;
+  setModal(cycleSettingsModal, true, '#preferredCycleLength');
+}
+
+function openPregnancyMode() {
+  const input = document.querySelector('#pregnancyLastPeriod');
+  const latestPeriod = state.periods.slice().sort(function (a, b) {
+    return b.start_date.localeCompare(a.start_date);
+  })[0];
+  input.value = localStorage.getItem('sana-pregnancy-lmp') || (latestPeriod ? latestPeriod.start_date : '');
+  document.querySelector('#pregnancyResult').hidden = true;
+  document.querySelector('#pregnancyProgress').hidden = true;
+  setModal(pregnancyModal, true, '#pregnancyLastPeriod');
+}
+
+function calculatePregnancy() {
+  const input = document.querySelector('#pregnancyLastPeriod');
+  const result = document.querySelector('#pregnancyResult');
+  result.hidden = false;
+  if (!input.value) {
+    result.textContent = t('pregnancyDateRequired');
+    document.querySelector('#pregnancyProgress').hidden = true;
+    return;
+  }
+  const start = dateFromKey(input.value);
+  const current = dateFromKey(dateKey(today));
+  const elapsedDays = Math.floor((current - start) / 86400000);
+  if (!Number.isFinite(elapsedDays) || elapsedDays < 0) {
+    result.textContent = t('pregnancyFutureDate');
+    document.querySelector('#pregnancyProgress').hidden = true;
+    return;
+  }
+  localStorage.setItem('sana-pregnancy-lmp', input.value);
+  const weeks = Math.floor(elapsedDays / 7);
+  const extraDays = elapsedDays % 7;
+  const trimester = weeks <= 13 ? 1 : weeks <= 27 ? 2 : 3;
+  const remainingWeeks = Math.max(0, 40 - weeks);
+  const dueDate = addDays(start, 280);
+  const progress = Math.min(100, Math.round((elapsedDays / 280) * 100));
+  result.textContent = t('pregnancyWeekResult').replace('{weeks}', weeks).replace('{days}', extraDays);
+  document.querySelector('#pregnancyTrimester').textContent = t('trimester').replace('{number}', trimester);
+  document.querySelector('#pregnancyWeekTitle').textContent = t('pregnancyWeekResult').replace('{weeks}', weeks).replace('{days}', extraDays);
+  document.querySelector('#pregnancyRemaining').textContent = t('pregnancyRemaining').replace('{weeks}', remainingWeeks);
+  document.querySelector('#pregnancyWeekCircle').textContent = weeks + '/40';
+  document.querySelector('#pregnancyDueDate').textContent = new Intl.DateTimeFormat(state.lang === 'kk' ? 'kk-KZ' : 'ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).format(dueDate);
+  document.querySelector('#pregnancyCircle').style.setProperty('--pregnancy-progress', progress + '%');
+  document.querySelector('#pregnancyProgress').hidden = false;
+}
+
+async function saveCycleSettingsForm(event) {
+  event.preventDefault();
+  const cycleLength = Number(document.querySelector('#preferredCycleLength').value);
+  const periodLength = Number(document.querySelector('#preferredPeriodLength').value);
+  const reminderDays = Number(document.querySelector('#reminderDays').value);
+  const settingsError = validateCycleSettings(cycleLength, periodLength, reminderDays);
+  showFormError(document.querySelector('#cycleSettingsMessage'), settingsError);
+  if (settingsError) return;
+  state.preferences = {
+    useCustom: true,
+    cycleLength: cycleLength,
+    periodLength: periodLength,
+    reminderDays: reminderDays
+  };
+  savePreferences();
+  await loadCalendarForecast(); renderForecastSummary(); renderCalendar(); renderCharts(); maybeSendCycleNotification(true);
+  setModal(cycleSettingsModal, false); showToast(t('settingsSaved'));
+}
+
+function closeOnboarding(openEditor) {
+  localStorage.setItem('sana-onboarding-done', 'true');
+  setModal(onboardingModal, false);
+  if (openEditor) openPeriodEditor(dateKey(today));
+}
+
 async function clearLocalData() {
+  if (!window.confirm(t('confirmClear'))) return;
   try {
     await apiRequest('/api/data', { method: 'DELETE' });
   } catch (error) {
@@ -1041,6 +1564,7 @@ async function clearLocalData() {
   state.logs.clear();
   state.periods = [];
   await loadCalendarForecast();
+  await loadSummary();
   renderForecastSummary();
   renderCalendar();
   renderCharts();
@@ -1096,7 +1620,10 @@ async function sendChatMessage(event) {
   const input = document.querySelector('#chatInput');
   const button = document.querySelector('#chatSend');
   const question = input.value.trim();
-  if (!question) return;
+  if (!question || question.length > 1000) {
+    showToast(t('invalidChat'));
+    return;
+  }
   if (button.disabled) return;
   const chatToken = state.authToken;
 
@@ -1182,6 +1709,8 @@ function bindEvents() {
     applyLanguage(state.lang === 'kk' ? 'ru' : 'kk');
   });
   document.querySelector('#notificationsButton').addEventListener('click', toggleNotifications);
+  document.querySelector('#cycleSettingsButton').addEventListener('click', openCycleSettings);
+  document.querySelector('#pregnancyButton').addEventListener('click', openPregnancyMode);
   document.querySelector('#privacyButton').addEventListener('click', togglePrivacy);
   document.querySelector('#clearData').addEventListener('click', clearLocalData);
   document.querySelector('#logoutButton').addEventListener('click', logout);
@@ -1202,7 +1731,10 @@ function bindEvents() {
   document.querySelector('#closeLogin').addEventListener('click', function () {
     setModal(loginModal, false);
   });
-  [registerModal, loginModal].forEach(function (modal) {
+  document.querySelector('#closePeriodModal').addEventListener('click', function () { setModal(periodModal, false); });
+  document.querySelector('#closeCycleSettings').addEventListener('click', function () { setModal(cycleSettingsModal, false); });
+  document.querySelector('#closePregnancy').addEventListener('click', function () { setModal(pregnancyModal, false); });
+  [registerModal, loginModal, periodModal, cycleSettingsModal, pregnancyModal].forEach(function (modal) {
     modal.addEventListener('click', function (event) {
       if (event.target === modal) setModal(modal, false);
     });
@@ -1211,18 +1743,27 @@ function bindEvents() {
     if (event.key === 'Escape') {
       setModal(registerModal, false);
       setModal(loginModal, false);
+      setModal(periodModal, false);
+      setModal(cycleSettingsModal, false);
+      setModal(pregnancyModal, false);
+      setModal(onboardingModal, false);
     }
   });
 
   document.querySelector('#registerForm').addEventListener('submit', register);
   document.querySelector('#loginForm').addEventListener('submit', login);
+  document.querySelector('#periodForm').addEventListener('submit', savePeriodDetails);
+  document.querySelector('#deletePeriodButton').addEventListener('click', deleteEditedPeriod);
+  document.querySelector('#cycleSettingsForm').addEventListener('submit', saveCycleSettingsForm);
+  document.querySelector('#calculatePregnancy').addEventListener('click', calculatePregnancy);
   document.querySelector('#saveLog').addEventListener('click', saveLog);
   document.querySelector('#logPeriodButton').addEventListener('click', function () {
-    markPeriod(dateKey(today));
+    openPeriodEditor(dateKey(today));
   });
   document.querySelector('#markSelectedPeriodButton').addEventListener('click', function () {
-    markPeriod(selectedDateKey());
+    openPeriodEditor(selectedDateKey());
   });
+  document.querySelector('#addPeriodButton').addEventListener('click', function () { openPeriodEditor(selectedDateKey()); });
 
   document.querySelectorAll('.mood').forEach(function (button) {
     button.addEventListener('click', function () {
@@ -1296,7 +1837,11 @@ function bindEvents() {
   });
   document.querySelector('#chatForm').addEventListener('submit', sendChatMessage);
   document.querySelector('#exportDiary').addEventListener('click', exportDiary);
+  document.querySelector('#exportBackup').addEventListener('click', exportBackup);
+  document.querySelector('#importBackup').addEventListener('change', importBackup);
   document.querySelector('#clearChatHistory').addEventListener('click', clearChatHistory);
+  document.querySelector('#finishOnboarding').addEventListener('click', function () { closeOnboarding(true); });
+  document.querySelector('#skipOnboarding').addEventListener('click', function () { closeOnboarding(false); });
 }
 
 async function init() {
@@ -1304,142 +1849,15 @@ async function init() {
   const savedModel = localStorage.getItem('sana-ollama-model');
   if (savedModel) document.querySelector('#ollamaModel').value = savedModel;
   applyProfileName(localStorage.getItem('sana-user-name'));
+  savePreferences();
   updateAuthUI();
   fillLogForm(dateKey(today));
   applyLanguage(state.lang);
   await loadTrackerData();
   await loadChatHistory();
+  maybeSendCycleNotification();
+  if (!localStorage.getItem('sana-onboarding-done') && !state.periods.length) setModal(onboardingModal, true);
   checkOllama();
 }
 
 init();
-t();
-
-// ===== SANA PREGNANCY MODE FIX =====
-(function () {
-  if (window.sanaPregnancyFixLoaded) return;
-  window.sanaPregnancyFixLoaded = true;
-
-  // Стили режима беременности
-  const style = document.createElement('style');
-  style.textContent = `
-    .pregnancy-hero {
-      padding: 30px;
-      margin-bottom: 22px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, #f8eafa, #fce9ef);
-    }
-
-    .pregnancy-hero-icon {
-      width: 54px;
-      height: 54px;
-      display: grid;
-      place-items: center;
-      border-radius: 18px;
-      background: white;
-      color: #a45c91;
-      margin-bottom: 18px;
-    }
-
-    .pregnancy-hero h2 {
-      font-size: 26px;
-      margin: 10px 0;
-      color: #3b185f;
-    }
-
-    .pregnancy-hero p:last-child {
-      color: #675a70;
-    }
-
-    .pregnancy-card {
-      padding: 26px;
-      border-radius: 22px;
-      margin-bottom: 24px;
-    }
-
-    .pregnancy-card h3 {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-
-    .pregnancy-card label {
-      display: block;
-      margin: 18px 0 8px;
-    }
-
-    .pregnancy-card input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ead9f7;
-      border-radius: 12px;
-      margin-bottom: 16px;
-    }
-
-    .pregnancy-result {
-      margin-top: 18px;
-      padding: 18px;
-      border-radius: 14px;
-      background: #f8f1fb;
-      color: #3b185f;
-      line-height: 1.7;
-    }
-
-    .pregnancy-disclaimer {
-      margin-top: 16px;
-      font-size: 12px;
-      color: #675a70;
-      line-height: 1.5;
-    }
-
-    .pregnancy-nav-item,
-    .pregnancy-bottom-item {
-      color: #a45c91;
-    }
-
-    @media (max-width: 600px) {
-      .pregnancy-card,
-      .pregnancy-hero {
-        padding: 20px;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-
-  // Расчёт срока беременности
-  const calculateButton = document.getElementById('calculatePregnancy');
-
-  if (calculateButton) {
-    calculateButton.addEventListener('click', function () {
-      const input = document.getElementById('pregnancyLastPeriod');
-      const result = document.getElementById('pregnancyResult');
-
-      if (!input.value) {
-        result.textContent = 'Пожалуйста, укажите первый день последней менструации.';
-        return;
-      }
-
-      const start = new Date(input.value + 'T00:00:00');
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const days = Math.floor((today - start) / 86400000);
-
-      if (days < 0) {
-        result.textContent = 'Выбранная дата не может быть в будущем.';
-        return;
-      }
-
-      const weeks = Math.floor(days / 7);
-      const remainingDays = days % 7;
-
-      const dueDate = new Date(start);
-      dueDate.setDate(dueDate.getDate() + 280);
-
-      result.innerHTML =
-        '<strong>Примерный срок:</strong> ' +
-        weeks + ' недель и ' + remainingDays + ' дней' +
-        '<br><strong>Предполагаемая дата родов:</strong> ' +
-        dueDate.toLocaleDateString('ru-RU');
-    });
-  }
-})();

@@ -1,6 +1,6 @@
 const copy={
-kk:{navHome:'Басты',navCalendar:'Күнтізбе',navInsights:'Талдау',navProfile:'Профиль',currentCycle:'Қазіргі цикл',cycleStatus:'Денеңіздің ырғағы',details:'Толығырақ',ovulationPhase:'Овуляция кезеңі',dayOfCycle:'цикл күні',nextPeriod:'Келесі етеккірге 14 күн',fertility:'Құнарлылық',highPhase:'Жоғары фаза',fertileDates:'13–18 қыркүйек',cycleLength:'Цикл ұзақтығы',days:'күн',regularRhythm:'Тұрақты ырғақ',markPeriod:'Етеккірді белгілеу',dailyCheck:'Күнделікті белгі',howFeel:'Өзіңізді қалай сезінесіз?',happy:'Қуанышты',calm:'Сабырлы',sensitive:'Сезімтал',sad:'Мұңды',angry:'Ашулы',addSymptoms:'Белгілерді қосу',todayTip:'Бүгінгі кеңес',listenBody:'Денеңізді тыңдаңыз',tipText:'Қуат деңгейі жоғары болуы мүмкін. Жайлы қозғалыс пен жеткілікті су ішуге көңіл бөліңіз.',weekOverview:'Апта көрінісі',rhythm:'Сіздің ырғағыңыз',privacyShort:'Деректер осы құрылғыда сақталады',cycleCalendar:'Цикл күнтізбесі',period:'Етеккір',fertileWindow:'Қолайлы кезең',today:'Бүгін',selectedDay:'Таңдалған күн',chooseDay:'Күнді таңдаңыз',highChance:'Ықтималдық жоғары',prediction:'Болжам',nextPeriodDate:'29 қыркүйек',loggedMood:'Көңіл-күй',energy:'Күш-қуат',logThisDay:'Осы күнді белгілеу',cycleAnalysis:'Цикл талдауы',stableCycle:'Соңғы 3 цикл тұрақты',analysisText:'Сіздің орташа цикліңіз 28 күн. Ұзақтықтағы ауытқу 2 күннен аспайды.',avgDays:'орташа күн',avgPeriod:'етеккір күні',wellbeing:'Хал-жағдай',energyPattern:'Қуат үлгісі',observation:'Бақылау',headachePattern:'Бас ауруы цикл соңында жиілейді',observeText:'Келесі екі циклде бақылауды жалғастырыңыз. Қатты немесе әдеттен тыс ауырсыну болса, дәрігерге жүгініңіз.',account:'Аккаунт',createAccount:'Аккаунт құру',createAccountShort:'Деректеріңізді тіркеңіз',createAccountDescription:'Жазбаларды сақтау үшін қысқа тіркеуден өтіңіз.',fullName:'Аты-жөніңіз',namePlaceholder:'Амина',email:'Email',password:'Құпиясөз',passwordPlaceholder:'Кемінде 8 таңба',register:'Тіркелу',registering:'Тіркелуде...',registrationSuccess:'Аккаунт сәтті құрылды',emailExists:'Бұл email бұрын тіркелген',registrationFailed:'Тіркелу кезінде қате шықты',backendRequired:'Тіркелу үшін жергілікті серверді іске қосыңыз',loginAccount:'Аккаунтқа кіру',loginAccountShort:'Email және құпиясөз арқылы',loginDescription:'Тіркелген email мен құпиясөзді енгізіңіз.',login:'Кіру',loggingIn:'Кіруде...',loginSuccess:'Аккаунтқа сәтті кірдіңіз',invalidLogin:'Email немесе құпиясөз қате',loginFailed:'Кіру кезінде қате шықты',logoutAccount:'Аккаунттан шығу',logoutAccountShort:'Қонақ режиміне өту',yourProfile:'Сіздің профиліңіз',cycleMode:'Циклді бақылау режимі',notifications:'Хабарламалар',notificationsDesc:'Етеккір және цикл болжамдары',language:'Тіл',privacy:'Құпиялылық',localStorage:'Осы құрылғыда сақтау',privateDiary:'Жеке күнделік',privacyText:'Бұл демонстрация енгізілген деректерді браузердің жергілікті жадында сақтайды. Ортақ құрылғыда қолдансаңыз, жазбаларды тазалаңыз.',clearData:'Деректерді тазалау',medicalNote:'Sana медициналық диагноз қоймайды. Денсаулығыңызға қатысты сұрақтар болса, дәрігермен кеңесіңіз.',dailyLog:'Күнделікті журнал',howFeelToday:'Бүгін өзіңізді қалай сезінесіз?',mood:'Көңіл-күй',symptoms:'Белгілер',pain:'Ауырсыну',headache:'Бас ауруы',bloating:'Іш кебуі',skin:'Бөртпе',backPain:'Бел ауруы',none:'Ешқандай',low:'Төмен',medium:'Орташа',high:'Жоғары',notes:'Жазбалар',noteTemplate:'Үлгі',templateText:'Көңіл-күй: \nБелгілер: \nҚосымша: ',notesPlaceholder:'Өзіңіз үшін қысқа жазба қалдырыңыз...',saveToday:'Бүгінгіні сақтау',saved:'Сақталды',periodSaved:'Етеккір күні белгіленді',cleared:'Деректер тазаланды'},
-ru:{navHome:'Главная',navCalendar:'Календарь',navInsights:'Аналитика',navProfile:'Профиль',currentCycle:'Текущий цикл',cycleStatus:'Ритм вашего тела',details:'Подробнее',ovulationPhase:'Фаза овуляции',dayOfCycle:'день цикла',nextPeriod:'До следующей менструации 14 дней',fertility:'Фертильность',highPhase:'Высокая фаза',fertileDates:'13–18 сентября',cycleLength:'Длина цикла',days:'дней',regularRhythm:'Стабильный ритм',markPeriod:'Отметить менструацию',dailyCheck:'Ежедневная отметка',howFeel:'Как вы себя чувствуете?',happy:'Радостно',calm:'Спокойно',sensitive:'Чувствительно',sad:'Грустно',angry:'Раздражённо',addSymptoms:'Добавить симптомы',todayTip:'Совет на сегодня',listenBody:'Прислушайтесь к телу',tipText:'Уровень энергии может быть выше обычного. Выберите комфортную активность и не забывайте пить воду.',weekOverview:'Обзор недели',rhythm:'Ваш ритм',privacyShort:'Данные хранятся на этом устройстве',cycleCalendar:'Календарь цикла',period:'Менструация',fertileWindow:'Фертильное окно',today:'Сегодня',selectedDay:'Выбранный день',chooseDay:'Выберите день',highChance:'Высокая вероятность',prediction:'Прогноз',nextPeriodDate:'29 сентября',loggedMood:'Настроение',energy:'Энергия',logThisDay:'Отметить этот день',cycleAnalysis:'Анализ цикла',stableCycle:'Последние 3 цикла стабильны',analysisText:'Средняя длина цикла — 28 дней. Отклонение не превышает 2 дней.',avgDays:'дней в среднем',avgPeriod:'дней менструации',wellbeing:'Самочувствие',energyPattern:'Динамика энергии',observation:'Наблюдение',headachePattern:'Головная боль чаще в конце цикла',observeText:'Продолжайте наблюдение ещё два цикла. При сильной или необычной боли обратитесь к врачу.',account:'Аккаунт',createAccount:'Создать аккаунт',createAccountShort:'Зарегистрируйте свои данные',createAccountDescription:'Пройдите короткую регистрацию для сохранения записей.',fullName:'Ваше имя',namePlaceholder:'Амина',email:'Email',password:'Пароль',passwordPlaceholder:'Минимум 8 символов',register:'Зарегистрироваться',registering:'Регистрация...',registrationSuccess:'Аккаунт успешно создан',emailExists:'Этот email уже зарегистрирован',registrationFailed:'Не удалось зарегистрироваться',backendRequired:'Для регистрации запустите локальный сервер',loginAccount:'Войти в аккаунт',loginAccountShort:'По email и паролю',loginDescription:'Введите email и пароль, указанные при регистрации.',login:'Войти',loggingIn:'Входим...',loginSuccess:'Вы успешно вошли в аккаунт',invalidLogin:'Неверный email или пароль',loginFailed:'Не удалось войти в аккаунт',logoutAccount:'Выйти из аккаунта',logoutAccountShort:'Перейти в гостевой режим',yourProfile:'Ваш профиль',cycleMode:'Режим отслеживания цикла',notifications:'Уведомления',notificationsDesc:'Прогнозы цикла и менструации',language:'Язык',privacy:'Конфиденциальность',localStorage:'Хранение на этом устройстве',privateDiary:'Личный дневник',privacyText:'Демонстрация сохраняет введённые данные в локальной памяти браузера. Очистите записи, если используете общее устройство.',clearData:'Очистить данные',medicalNote:'Sana не ставит медицинские диагнозы. По вопросам здоровья проконсультируйтесь с врачом.',dailyLog:'Ежедневный журнал',howFeelToday:'Как вы себя чувствуете сегодня?',mood:'Настроение',symptoms:'Симптомы',pain:'Боль',headache:'Головная боль',bloating:'Вздутие',skin:'Высыпания',backPain:'Боль в пояснице',none:'Нет симптомов',low:'Низкая',medium:'Средняя',high:'Высокая',notes:'Заметки',noteTemplate:'Шаблон',templateText:'Настроение: \nСимптомы: \nДополнительно: ',notesPlaceholder:'Оставьте короткую заметку для себя...',saveToday:'Сохранить запись',saved:'Сохранено',periodSaved:'День менструации отмечен',cleared:'Данные очищены'}
+kk:{navHome:'Басты',navCalendar:'Күнтізбе',navInsights:'Талдау',navProfile:'Профиль',currentCycle:'Қазіргі цикл',cycleStatus:'Денеңіздің ырғағы',details:'Толығырақ',ovulationPhase:'Овуляция кезеңі',dayOfCycle:'цикл күні',nextPeriod:'Келесі етеккірге 14 күн',fertility:'Құнарлылық',highPhase:'Жоғары фаза',fertileDates:'13–18 қыркүйек',cycleLength:'Цикл ұзақтығы',days:'күн',regularRhythm:'Тұрақты ырғақ',markPeriod:'Етеккірді белгілеу',dailyCheck:'Күнделікті белгі',howFeel:'Өзіңізді қалай сезінесіз?',happy:'Қуанышты',calm:'Сабырлы',sensitive:'Сезімтал',sad:'Мұңды',angry:'Ашулы',addSymptoms:'Белгілерді қосу',todayTip:'Бүгінгі кеңес',listenBody:'Денеңізді тыңдаңыз',tipText:'Қуат деңгейі жоғары болуы мүмкін. Жайлы қозғалыс пен жеткілікті су ішуге көңіл бөліңіз.',weekOverview:'Апта көрінісі',rhythm:'Сіздің ырғағыңыз',privacyShort:'Деректер осы құрылғыда сақталады',cycleCalendar:'Цикл күнтізбесі',period:'Етеккір',fertileWindow:'Қолайлы кезең',today:'Бүгін',selectedDay:'Таңдалған күн',chooseDay:'Күнді таңдаңыз',highChance:'Ықтималдық жоғары',prediction:'Болжам',nextPeriodDate:'29 қыркүйек',loggedMood:'Көңіл-күй',energy:'Күш-қуат',logThisDay:'Осы күнді белгілеу',cycleAnalysis:'Цикл талдауы',stableCycle:'Соңғы 3 цикл тұрақты',analysisText:'Сіздің орташа цикліңіз 28 күн. Ұзақтықтағы ауытқу 2 күннен аспайды.',avgDays:'орташа күн',avgPeriod:'етеккір күні',wellbeing:'Хал-жағдай',energyPattern:'Қуат үлгісі',observation:'Бақылау',headachePattern:'Бас ауруы цикл соңында жиілейді',observeText:'Келесі екі циклде бақылауды жалғастырыңыз. Қатты немесе әдеттен тыс ауырсыну болса, дәрігерге жүгініңіз.',account:'Аккаунт',createAccount:'Аккаунт құру',createAccountShort:'Деректеріңізді тіркеңіз',createAccountDescription:'Жазбаларды сақтау үшін қысқа тіркеуден өтіңіз.',fullName:'Аты-жөніңіз',namePlaceholder:'Атыңыз',email:'Email',password:'Құпиясөз',passwordPlaceholder:'Кемінде 8 таңба',register:'Тіркелу',registering:'Тіркелуде...',registrationSuccess:'Аккаунт сәтті құрылды',emailExists:'Бұл email бұрын тіркелген',registrationFailed:'Тіркелу кезінде қате шықты',backendRequired:'Тіркелу үшін жергілікті серверді іске қосыңыз',loginAccount:'Аккаунтқа кіру',loginAccountShort:'Email және құпиясөз арқылы',loginDescription:'Тіркелген email мен құпиясөзді енгізіңіз.',login:'Кіру',loggingIn:'Кіруде...',loginSuccess:'Аккаунтқа сәтті кірдіңіз',invalidLogin:'Email немесе құпиясөз қате',loginFailed:'Кіру кезінде қате шықты',logoutAccount:'Аккаунттан шығу',logoutAccountShort:'Қонақ режиміне өту',yourProfile:'Сіздің профиліңіз',cycleMode:'Циклді бақылау режимі',notifications:'Хабарламалар',notificationsDesc:'Етеккір және цикл болжамдары',language:'Тіл',privacy:'Құпиялылық',localStorage:'Осы құрылғыда сақтау',privateDiary:'Жеке күнделік',privacyText:'Бұл демонстрация енгізілген деректерді браузердің жергілікті жадында сақтайды. Ортақ құрылғыда қолдансаңыз, жазбаларды тазалаңыз.',clearData:'Деректерді тазалау',medicalNote:'Sana медициналық диагноз қоймайды. Денсаулығыңызға қатысты сұрақтар болса, дәрігермен кеңесіңіз.',dailyLog:'Күнделікті журнал',howFeelToday:'Бүгін өзіңізді қалай сезінесіз?',mood:'Көңіл-күй',symptoms:'Белгілер',pain:'Ауырсыну',headache:'Бас ауруы',bloating:'Іш кебуі',skin:'Бөртпе',backPain:'Бел ауруы',none:'Ешқандай',low:'Төмен',medium:'Орташа',high:'Жоғары',notes:'Жазбалар',noteTemplate:'Үлгі',templateText:'Көңіл-күй: \nБелгілер: \nҚосымша: ',notesPlaceholder:'Өзіңіз үшін қысқа жазба қалдырыңыз...',saveToday:'Бүгінгіні сақтау',saved:'Сақталды',periodSaved:'Етеккір күні белгіленді',cleared:'Деректер тазаланды'},
+ru:{navHome:'Главная',navCalendar:'Календарь',navInsights:'Аналитика',navProfile:'Профиль',currentCycle:'Текущий цикл',cycleStatus:'Ритм вашего тела',details:'Подробнее',ovulationPhase:'Фаза овуляции',dayOfCycle:'день цикла',nextPeriod:'До следующей менструации 14 дней',fertility:'Фертильность',highPhase:'Высокая фаза',fertileDates:'13–18 сентября',cycleLength:'Длина цикла',days:'дней',regularRhythm:'Стабильный ритм',markPeriod:'Отметить менструацию',dailyCheck:'Ежедневная отметка',howFeel:'Как вы себя чувствуете?',happy:'Радостно',calm:'Спокойно',sensitive:'Чувствительно',sad:'Грустно',angry:'Раздражённо',addSymptoms:'Добавить симптомы',todayTip:'Совет на сегодня',listenBody:'Прислушайтесь к телу',tipText:'Уровень энергии может быть выше обычного. Выберите комфортную активность и не забывайте пить воду.',weekOverview:'Обзор недели',rhythm:'Ваш ритм',privacyShort:'Данные хранятся на этом устройстве',cycleCalendar:'Календарь цикла',period:'Менструация',fertileWindow:'Фертильное окно',today:'Сегодня',selectedDay:'Выбранный день',chooseDay:'Выберите день',highChance:'Высокая вероятность',prediction:'Прогноз',nextPeriodDate:'29 сентября',loggedMood:'Настроение',energy:'Энергия',logThisDay:'Отметить этот день',cycleAnalysis:'Анализ цикла',stableCycle:'Последние 3 цикла стабильны',analysisText:'Средняя длина цикла — 28 дней. Отклонение не превышает 2 дней.',avgDays:'дней в среднем',avgPeriod:'дней менструации',wellbeing:'Самочувствие',energyPattern:'Динамика энергии',observation:'Наблюдение',headachePattern:'Головная боль чаще в конце цикла',observeText:'Продолжайте наблюдение ещё два цикла. При сильной или необычной боли обратитесь к врачу.',account:'Аккаунт',createAccount:'Создать аккаунт',createAccountShort:'Зарегистрируйте свои данные',createAccountDescription:'Пройдите короткую регистрацию для сохранения записей.',fullName:'Ваше имя',namePlaceholder:'Ваше имя',email:'Email',password:'Пароль',passwordPlaceholder:'Минимум 8 символов',register:'Зарегистрироваться',registering:'Регистрация...',registrationSuccess:'Аккаунт успешно создан',emailExists:'Этот email уже зарегистрирован',registrationFailed:'Не удалось зарегистрироваться',backendRequired:'Для регистрации запустите локальный сервер',loginAccount:'Войти в аккаунт',loginAccountShort:'По email и паролю',loginDescription:'Введите email и пароль, указанные при регистрации.',login:'Войти',loggingIn:'Входим...',loginSuccess:'Вы успешно вошли в аккаунт',invalidLogin:'Неверный email или пароль',loginFailed:'Не удалось войти в аккаунт',logoutAccount:'Выйти из аккаунта',logoutAccountShort:'Перейти в гостевой режим',yourProfile:'Ваш профиль',cycleMode:'Режим отслеживания цикла',notifications:'Уведомления',notificationsDesc:'Прогнозы цикла и менструации',language:'Язык',privacy:'Конфиденциальность',localStorage:'Хранение на этом устройстве',privateDiary:'Личный дневник',privacyText:'Демонстрация сохраняет введённые данные в локальной памяти браузера. Очистите записи, если используете общее устройство.',clearData:'Очистить данные',medicalNote:'Sana не ставит медицинские диагнозы. По вопросам здоровья проконсультируйтесь с врачом.',dailyLog:'Ежедневный журнал',howFeelToday:'Как вы себя чувствуете сегодня?',mood:'Настроение',symptoms:'Симптомы',pain:'Боль',headache:'Головная боль',bloating:'Вздутие',skin:'Высыпания',backPain:'Боль в пояснице',none:'Нет симптомов',low:'Низкая',medium:'Средняя',high:'Высокая',notes:'Заметки',noteTemplate:'Шаблон',templateText:'Настроение: \nСимптомы: \nДополнительно: ',notesPlaceholder:'Оставьте короткую заметку для себя...',saveToday:'Сохранить запись',saved:'Сохранено',periodSaved:'День менструации отмечен',cleared:'Данные очищены'}
 };
 
 Object.assign(copy.kk, {
@@ -56,6 +56,7 @@ Object.assign(copy.kk, {
 });
 
 Object.assign(copy.ru, {
+  guestName: 'Гость', greeting: 'Здравствуйте', namePlaceholder: 'Ваше имя',
   navChat: 'AI-чат',
   notMarked: 'Не отмечено',
   noNotes: 'На этот день заметки нет',
@@ -168,6 +169,7 @@ Object.assign(copy.ru, {
   exportError: 'Не удалось скачать дневник. Проверьте сервер и вход в аккаунт.'
 });
 Object.assign(copy.kk, {
+  guestName: 'Қонақ', greeting: 'Сәлем', namePlaceholder: 'Атыңыз',
   exportDiary: 'Күнделікті CSV жүктеу', clearChatHistory: 'Чат тарихын тазалау',
   historyGuest: 'Хат алмасуды сақтау үшін аккаунтқа кіріңіз.',
   historySaved: 'Чат тарихы аккаунтыңызда сақталады.',
@@ -552,9 +554,9 @@ function setView(view) {
     button.classList.toggle('active', button.dataset.view === view);
   });
 
-  const name = localStorage.getItem('sana-user-name') || 'Амина';
+  const name = currentProfileName();
   const titles = {
-    home: state.lang === 'kk' ? 'Сәлем, ' + name : 'Здравствуйте, ' + name,
+    home: t('greeting') + (name ? ', ' + name : ''),
     calendar: t('navCalendar'),
     insights: t('navInsights'),
     chat: t('navChat'),
@@ -565,20 +567,29 @@ function setView(view) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function applyProfileName(name) {
-  const safeName = name || 'Амина';
-  const initial = safeName.trim().charAt(0).toUpperCase() || 'А';
-  document.querySelector('#profileName').textContent = safeName;
-  document.querySelector('#profileAvatar').textContent = initial;
-  document.querySelector('.avatar').textContent = initial;
-  document.querySelector('#sideProfileName').textContent = safeName;
-  document.querySelector('#sideProfileAvatar').textContent = initial;
+function currentProfileName() {
+  return state.authToken ? (localStorage.getItem('sana-user-name') || '').trim() : '';
+}
+
+function applyProfileName() {
+  const name = currentProfileName();
+  document.querySelector('#profileName').textContent = name || t('guestName');
+  document.querySelector('#sideProfileName').textContent = name || t('guestName');
+  ['#profileAvatar', '.avatar', '#sideProfileAvatar'].forEach(function (selector) {
+    const avatar = document.querySelector(selector);
+    if (name) {
+      avatar.textContent = name.charAt(0).toUpperCase();
+    } else {
+      avatar.innerHTML = '<svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg>';
+    }
+  });
 }
 
 function applyLanguage(lang) {
   state.lang = lang;
   localStorage.setItem('sana-lang', lang);
   document.documentElement.lang = lang;
+  applyProfileName();
 
   document.querySelectorAll('[data-i18n]').forEach(function (element) {
     element.textContent = t(element.dataset.i18n);
@@ -1328,6 +1339,8 @@ function updateAuthUI() {
   });
   const logoutButton = document.querySelector('#logoutButton');
   if (logoutButton) logoutButton.hidden = !loggedIn;
+  applyProfileName();
+  setView(state.view);
 }
 
 async function handleAuthSuccess(result, message, modal, form) {
@@ -1335,7 +1348,6 @@ async function handleAuthSuccess(result, message, modal, form) {
   localStorage.setItem('sana-auth-token', result.token);
   localStorage.setItem('sana-auth-expires', result.expires_at);
   localStorage.setItem('sana-user-name', result.user.name);
-  applyProfileName(result.user.name);
   updateAuthUI();
   await loadTrackerData();
   message.classList.add('success');
@@ -1426,7 +1438,6 @@ async function logout() {
   ['sana-auth-token', 'sana-auth-expires', 'sana-user-name'].forEach(function (key) {
     localStorage.removeItem(key);
   });
-  applyProfileName('Амина');
   updateAuthUI();
   await loadChatHistory();
   await loadTrackerData();
@@ -1849,7 +1860,6 @@ async function init() {
   bindEvents();
   const savedModel = localStorage.getItem('sana-ollama-model');
   if (savedModel) document.querySelector('#ollamaModel').value = savedModel;
-  applyProfileName(localStorage.getItem('sana-user-name'));
   savePreferences();
   updateAuthUI();
   fillLogForm(dateKey(today));

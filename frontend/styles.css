@@ -258,12 +258,13 @@ button, textarea {
   display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-top: 20px;
 }
 .diary-export {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
+  display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: center; gap: 12px;
   width: 100%; min-width: 0; border: 1px solid rgba(255,255,255,.25);
   border-radius: 12px; padding: 13px 16px; background: #fff;
-  color: var(--plum); font: inherit; font-weight: 700; cursor: pointer;
+  color: var(--plum); font: 700 .84rem/1.4 "Segoe UI", Inter, Arial, sans-serif; cursor: pointer;
+  min-height: 56px; text-align: left;
 }
-.diary-export span { min-width: 0; overflow-wrap: anywhere; }
+.diary-export span { min-width: 0; overflow-wrap: break-word; }
 .diary-export:hover { background: var(--lilac); }
 .diary-export:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
 .diary-actions .ghost-light { width: 100%; white-space: normal; }
@@ -720,17 +721,18 @@ button, textarea {
   color: var(--muted); margin-top: 3px;
 }
 .privacy-card {
-  background: var(--plum); color: #fff; border-radius: 22px; padding: 26px; display: flex; gap: 16px;
+  background: var(--plum); color: #fff; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; align-self: start;
   box-shadow: 0 18px 45px rgba(59,24,95,.18);
 }
+.privacy-heading { display: flex; align-items: center; gap: 14px; }
 .privacy-icon {
   width: 27px; height: 27px;
 }
 .privacy-card h2 {
-  font: 700 1.25rem Georgia,serif; margin: 0 0 8px;
+  font: 700 1.25rem Georgia,serif; margin: 0;
 }
 .privacy-card p {
-  color: #e8d9f2; font-size: .83rem; line-height: 1.55;
+  color: #e8d9f2; font-size: .83rem; line-height: 1.55; margin: 16px 0 0;
 }
 .ghost-light {
   border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; padding: 9px 12px;
@@ -1730,7 +1732,7 @@ button, textarea {
 #pregnancyView .pregnancy-disclaimer { margin: 4px 0 0; font-size: .75rem; }
 #pregnancyView .pregnancy-progress-card { margin-top: 16px; }
 #pregnancyView .preg-circle { background: conic-gradient(#35105c var(--pregnancy-progress, 0%), #eee6f5 0); }
-.pregnancy-setting-icon { display: grid; place-items: center; font-size: 1.25rem; }
+.pregnancy-hero-icon .ui-icon { width: 28px; height: 28px; }
 
 @media (max-width: 520px) {
   #pregnancyView.pregnancy-modal { max-height: 100dvh; height: 100dvh; border-radius: 0; padding: 18px; }

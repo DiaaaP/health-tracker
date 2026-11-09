@@ -1711,6 +1711,7 @@ function bindEvents() {
   document.querySelector('#notificationsButton').addEventListener('click', toggleNotifications);
   document.querySelector('#cycleSettingsButton').addEventListener('click', openCycleSettings);
   document.querySelector('#pregnancyButton').addEventListener('click', openPregnancyMode);
+  document.querySelector('#homePregnancyButton').addEventListener('click', openPregnancyMode);
   document.querySelector('#privacyButton').addEventListener('click', togglePrivacy);
   document.querySelector('#clearData').addEventListener('click', clearLocalData);
   document.querySelector('#logoutButton').addEventListener('click', logout);

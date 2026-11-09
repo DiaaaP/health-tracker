@@ -1734,6 +1734,27 @@ button, textarea {
 #pregnancyView .preg-circle { background: conic-gradient(#35105c var(--pregnancy-progress, 0%), #eee6f5 0); }
 .pregnancy-hero-icon .ui-icon { width: 28px; height: 28px; }
 
+#homeView { padding-bottom: 72px; }
+.home-pregnancy-shortcut {
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 999px;
+  padding: 13px 20px;
+  box-shadow: 0 8px 24px rgba(59, 24, 95, .24);
+}
+@media (max-width: 760px) {
+  .home-pregnancy-shortcut {
+    right: 16px;
+    bottom: calc(86px + env(safe-area-inset-bottom));
+    padding: 12px 17px;
+  }
+}
+
 @media (max-width: 520px) {
   #pregnancyView.pregnancy-modal { max-height: 100dvh; height: 100dvh; border-radius: 0; padding: 18px; }
   #pregnancyView .pregnancy-hero { padding: 20px; }

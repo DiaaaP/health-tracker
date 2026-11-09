@@ -7,7 +7,7 @@
   <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
   <title>Sana — цикл күнделігі</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./styles.css?v=23" />
+  <link rel="stylesheet" href="./styles.css?v=24" />
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true">
@@ -171,13 +171,14 @@
         <div class="insights-grid">
           <article class="surface insight-lead"><p class="eyebrow" data-i18n="cycleAnalysis">Цикл талдауы</p><h2 id="insightTitle">Недостаточно данных</h2><p id="insightSummary">Добавьте минимум два начала цикла для персональной аналитики.</p><div class="stat-pair insight-stats"><div><strong id="insightAverageCycle">—</strong><span data-i18n="avgDays">орташа күн</span></div><div><strong id="insightAveragePeriod">—</strong><span data-i18n="avgPeriod">етеккір күні</span></div><div><strong id="insightShortestCycle">—</strong><span data-i18n="shortestCycle">Короткий цикл</span></div><div><strong id="insightLongestCycle">—</strong><span data-i18n="longestCycle">Длинный цикл</span></div></div>
             <div class="server-summary" id="serverSummaryCard">
-              <div class="server-summary-head"><p class="eyebrow" data-i18n="apiSummary">Сервер жиынтығы</p><span class="summary-badge" id="summaryStatus">—</span></div>
+              <div class="server-summary-head"><p class="eyebrow" data-i18n="apiSummary">Деректер жиынтығы</p><span class="summary-badge" id="summaryStatus">—</span></div>
               <div class="stat-pair insight-stats"><div><strong id="summaryLogs">—</strong><span data-i18n="summaryLogsLabel">күнделік жазбасы</span></div><div><strong id="summaryPeriods">—</strong><span data-i18n="summaryPeriodsLabel">цикл белгісі</span></div></div>
               <p class="summary-range" id="summaryRange"></p>
               <ul class="summary-list" id="summaryMoodList"></ul>
               <ul class="summary-list" id="summaryEnergyList"></ul>
               <ul class="summary-list" id="summarySymptomList"></ul>
               <p class="summary-note" id="summaryNote"></p>
+              <button class="secondary-button" id="summaryAddEntry" data-go="log" type="button" data-i18n="addEntry">Жазба қосу</button>
             </div>
           </article>
           <article class="surface pattern-card">
@@ -244,6 +245,17 @@
       <button data-view="chat" type="button"><svg class="ui-icon"><use href="#icon-spark"></use></svg><b data-i18n="navChat">AI чат</b></button>
       <button data-view="profile" type="button"><svg class="ui-icon"><use href="#icon-user"></use></svg><b data-i18n="navProfile">Профиль</b></button>
     </nav>
+  </div>
+
+  <div class="modal-backdrop" id="clearDataModal" hidden>
+    <section class="auth-modal" role="alertdialog" aria-modal="true" aria-labelledby="clearDataTitle" aria-describedby="clearDataDescription">
+      <h2 id="clearDataTitle" data-i18n="clearDataTitle">Очистить все данные?</h2>
+      <p class="modal-description" id="clearDataDescription" data-i18n="clearDataDescription">Все записи дневника и данные цикла, сохранённые на этом устройстве, будут удалены. Это действие нельзя отменить.</p>
+      <div class="modal-actions">
+        <button class="secondary-button" id="cancelClearData" type="button" data-i18n="cancel">Отмена</button>
+        <button class="danger-button" id="confirmClearData" type="button" data-i18n="clearData">Очистить данные</button>
+      </div>
+    </section>
   </div>
 
   <div class="modal-backdrop" id="registerModal" hidden>
@@ -334,6 +346,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=23"></script>
+  <script src="./app.js?v=24"></script>
 </body>
 </html>

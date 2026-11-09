@@ -29,6 +29,8 @@ jobs:
         run: node --check frontend/app.js
       - name: Check guest and account identity
         run: node tests/check_profile_identity.cjs
+      - name: Check deletion confirmation and analytics actions
+        run: node tests/check_hci_ux.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site

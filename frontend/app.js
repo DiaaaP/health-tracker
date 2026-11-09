@@ -158,6 +158,7 @@ const periodModal = document.querySelector('#periodModal');
 const cycleSettingsModal = document.querySelector('#cycleSettingsModal');
 const pregnancyModal = document.querySelector('#pregnancyModal');
 const onboardingModal = document.querySelector('#onboardingModal');
+const clearDataModal = document.querySelector('#clearDataModal');
 const ollamaBaseUrl = 'http://127.0.0.1:11434';
 
 Object.assign(copy.ru, {
@@ -199,12 +200,14 @@ Object.assign(copy.ru, {
   notificationSoon: 'До ожидаемой менструации: {days} дн.', notificationLate: 'Задержка по прогнозу: {days} дн.',
   exportBackup: 'Скачать резервную копию', importBackup: 'Восстановить из файла',
   backupExported: 'Резервная копия скачана', backupImported: 'Данные восстановлены', backupInvalid: 'Не удалось прочитать резервную копию',
-  confirmClear: 'Удалить все записи о цикле и самочувствии? Это действие нельзя отменить.',
+  clearDataTitle: 'Очистить все данные?',
+  clearDataDescription: 'Все записи дневника и данные цикла, сохранённые на этом устройстве, будут удалены. Это действие нельзя отменить.',
+  cancel: 'Отмена', addEntry: 'Добавить запись',
   onboardingTitle: 'Начните с первой отметки', onboardingText: 'Добавьте начало последней менструации. После двух циклов прогноз станет персональным.',
   onboardingStep1: '1. Отметьте период', onboardingStep2: '2. Ведите дневник', onboardingStep3: '3. Следите за динамикой', onboardingAction: 'Добавить первую дату', later: 'Позже',
-  apiSummary: 'Сводка с сервера', summaryReady: 'Достаточно данных', summaryNeedsData: 'Мало данных',
+  apiSummary: 'Сводка данных', summaryReady: 'Достаточно данных', summaryNeedsData: 'Мало данных',
   summaryLogsLabel: 'записей дневника', summaryPeriodsLabel: 'отметок цикла',
-  summaryRange: 'Записи с {from} по {to}', summaryOffline: 'Сервер недоступен. Показаны данные этого устройства.',
+  summaryRange: 'Записи с {from} по {to}', summaryOffline: 'Не удалось синхронизировать данные. Сейчас показаны записи, сохранённые на этом устройстве.',
   summaryCycle: 'По данным сервера: цикл {cycle} дн., менструация {period} дн.',
   summaryNeedsDataText: 'Отметьте менструацию и дневник, чтобы сводка стала персональной.',
   invalidName: 'Имя: от 2 до 60 символов', invalidEmail: 'Введите корректный email',
@@ -240,12 +243,14 @@ Object.assign(copy.kk, {
   notificationSoon: 'Етеккірге дейін: {days} күн.', notificationLate: 'Болжам бойынша кешігу: {days} күн.',
   exportBackup: 'Сақтық көшірмені жүктеу', importBackup: 'Файлдан қалпына келтіру', backupExported: 'Сақтық көшірме жүктелді',
   backupImported: 'Деректер қалпына келтірілді', backupInvalid: 'Сақтық көшірме оқылмады',
-  confirmClear: 'Цикл мен хал-жағдай туралы барлық жазбаларды жою керек пе? Бұл әрекетті қайтару мүмкін емес.',
+  clearDataTitle: 'Барлық деректерді тазалау керек пе?',
+  clearDataDescription: 'Осы құрылғыда сақталған барлық күнделік жазбалары мен цикл деректері жойылады. Бұл әрекетті қайтару мүмкін емес.',
+  cancel: 'Бас тарту', addEntry: 'Жазба қосу',
   onboardingTitle: 'Алғашқы белгіден бастаңыз', onboardingText: 'Соңғы етеккірдің басталуын қосыңыз. Екі циклден кейін болжам жеке болады.',
   onboardingStep1: '1. Етеккірді белгілеңіз', onboardingStep2: '2. Күнделік жүргізіңіз', onboardingStep3: '3. Өзгерістерді бақылаңыз', onboardingAction: 'Алғашқы күнді қосу', later: 'Кейін',
-  apiSummary: 'Сервер жиынтығы', summaryReady: 'Дерек жеткілікті', summaryNeedsData: 'Дерек аз',
+  apiSummary: 'Деректер жиынтығы', summaryReady: 'Дерек жеткілікті', summaryNeedsData: 'Дерек аз',
   summaryLogsLabel: 'күнделік жазбасы', summaryPeriodsLabel: 'цикл белгісі',
-  summaryRange: 'Жазбалар: {from} — {to}', summaryOffline: 'Сервер қолжетімсіз. Осы құрылғы деректері көрсетілген.',
+  summaryRange: 'Жазбалар: {from} — {to}', summaryOffline: 'Деректерді синхрондау мүмкін болмады. Қазір осы құрылғыда сақталған жазбалар көрсетілген.',
   summaryCycle: 'Сервер бойынша: цикл {cycle} күн, етеккір {period} күн.',
   summaryNeedsDataText: 'Жиынтық жеке болуы үшін етеккір мен күнделікті белгілеңіз.',
   invalidName: 'Аты: 2–60 таңба', invalidEmail: 'Дұрыс email енгізіңіз',
@@ -1561,8 +1566,22 @@ function closeOnboarding(openEditor) {
   if (openEditor) openPeriodEditor(dateKey(today));
 }
 
+function openClearDataDialog() {
+  setModal(clearDataModal, true, '#cancelClearData');
+}
+
+function closeClearDataDialog() {
+  setModal(clearDataModal, false);
+  document.querySelector('#clearData').focus();
+}
+
+async function confirmClearData() {
+  if (clearDataModal.hidden) return;
+  closeClearDataDialog();
+  await clearLocalData();
+}
+
 async function clearLocalData() {
-  if (!window.confirm(t('confirmClear'))) return;
   try {
     await apiRequest('/api/data', { method: 'DELETE' });
   } catch (error) {
@@ -1723,7 +1742,22 @@ function bindEvents() {
   document.querySelector('#pregnancyButton').addEventListener('click', openPregnancyMode);
   document.querySelector('#homePregnancyButton').addEventListener('click', openPregnancyMode);
   document.querySelector('#privacyButton').addEventListener('click', togglePrivacy);
-  document.querySelector('#clearData').addEventListener('click', clearLocalData);
+  document.querySelector('#clearData').addEventListener('click', openClearDataDialog);
+  document.querySelector('#cancelClearData').addEventListener('click', closeClearDataDialog);
+  document.querySelector('#confirmClearData').addEventListener('click', confirmClearData);
+  clearDataModal.addEventListener('click', function (event) {
+    if (event.target === clearDataModal) closeClearDataDialog();
+  });
+  clearDataModal.addEventListener('keydown', function (event) {
+    if (event.key !== 'Tab') return;
+    const cancel = document.querySelector('#cancelClearData');
+    const confirm = document.querySelector('#confirmClearData');
+    if (event.shiftKey && document.activeElement === cancel) {
+      event.preventDefault(); confirm.focus();
+    } else if (!event.shiftKey && document.activeElement === confirm) {
+      event.preventDefault(); cancel.focus();
+    }
+  });
   document.querySelector('#logoutButton').addEventListener('click', logout);
 
   document.querySelectorAll('[data-open-register]').forEach(function (button) {
@@ -1752,6 +1786,7 @@ function bindEvents() {
   });
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') {
+      if (!clearDataModal.hidden) closeClearDataDialog();
       setModal(registerModal, false);
       setModal(loginModal, false);
       setModal(periodModal, false);

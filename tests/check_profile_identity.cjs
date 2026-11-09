@@ -24,24 +24,24 @@ const context = vm.createContext({
 // Load application functions without starting network requests or event handlers.
 vm.runInContext(source.replace(/\binit\(\);\s*$/, ''), context);
 
-for (const [lang, guest, greeting] of [['ru', 'Гость', 'Здравствуйте'], ['kk', 'Қонақ', 'Сәлем']]) {
+for (const [lang, guest, homeTitle] of [['ru', 'Гость', 'Главная'], ['kk', 'Қонақ', 'Басты']]) {
   vm.runInContext(`state.lang = '${lang}'; state.authToken = '';`, context);
   storage.set('sana-user-name', 'Старое имя');
   vm.runInContext('updateAuthUI()', context);
-  assert.equal(elements.get('#pageTitle').textContent, greeting);
+  assert.equal(elements.get('#pageTitle').textContent, homeTitle);
   assert.equal(elements.get('#profileName').textContent, guest);
   assert.equal(elements.get('#sideProfileName').textContent, guest);
   assert.match(elements.get('.avatar').innerHTML, /#icon-user/);
 
   storage.set('sana-user-name', 'Дана');
   vm.runInContext("state.authToken = 'test-session'; updateAuthUI()", context);
-  assert.equal(elements.get('#pageTitle').textContent, greeting + ', Дана');
+  assert.equal(elements.get('#pageTitle').textContent, homeTitle);
   assert.equal(elements.get('#profileName').textContent, 'Дана');
   assert.equal(elements.get('.avatar').textContent, 'Д');
 
   // Logging out must clear visible identity even if a stored name remains.
   vm.runInContext("state.authToken = ''; updateAuthUI()", context);
-  assert.equal(elements.get('#pageTitle').textContent, greeting);
+  assert.equal(elements.get('#pageTitle').textContent, homeTitle);
   assert.equal(elements.get('#sideProfileName').textContent, guest);
 }
 console.log('Profile identity: guest, login, logout and both languages passed');

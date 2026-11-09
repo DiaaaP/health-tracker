@@ -56,7 +56,7 @@ Object.assign(copy.kk, {
 });
 
 Object.assign(copy.ru, {
-  guestName: 'Гость', greeting: 'Здравствуйте', namePlaceholder: 'Ваше имя',
+  guestName: 'Гость', namePlaceholder: 'Ваше имя',
   navChat: 'AI-чат',
   notMarked: 'Не отмечено',
   noNotes: 'На этот день заметки нет',
@@ -169,7 +169,7 @@ Object.assign(copy.ru, {
   exportError: 'Не удалось скачать дневник. Проверьте сервер и вход в аккаунт.'
 });
 Object.assign(copy.kk, {
-  guestName: 'Қонақ', greeting: 'Сәлем', namePlaceholder: 'Атыңыз',
+  guestName: 'Қонақ', namePlaceholder: 'Атыңыз',
   exportDiary: 'Күнделікті CSV жүктеу', clearChatHistory: 'Чат тарихын тазалау',
   historyGuest: 'Хат алмасуды сақтау үшін аккаунтқа кіріңіз.',
   historySaved: 'Чат тарихы аккаунтыңызда сақталады.',
@@ -554,9 +554,8 @@ function setView(view) {
     button.classList.toggle('active', button.dataset.view === view);
   });
 
-  const name = currentProfileName();
   const titles = {
-    home: t('greeting') + (name ? ', ' + name : ''),
+    home: t('navHome'),
     calendar: t('navCalendar'),
     insights: t('navInsights'),
     chat: t('navChat'),

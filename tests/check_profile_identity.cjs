@@ -24,11 +24,12 @@ const context = vm.createContext({
   window: { scrollTo() {} },
   MutationObserver: class { observe() {} disconnect() {} }
 });
+
 // Load application functions without starting network requests or event handlers.
 vm.runInContext(source.replace(/\binit\(\);\s*$/, ''), context);
 
 for (const [lang, guest, homeTitle] of [['ru', 'Гость', 'Главная'], ['kk', 'Қонақ', 'Басты']]) {
-  vm.runInContext(\`state.lang = '\${lang}'; state.authToken = '';\`, context);
+  vm.runInContext("state.lang = '" + lang + "'; state.authToken = '';", context);
   storage.set('sana-user-name', 'Старое имя');
   vm.runInContext('updateAuthUI()', context);
   assert.equal(elements.get('#pageTitle').textContent, homeTitle);

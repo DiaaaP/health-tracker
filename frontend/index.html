@@ -315,8 +315,7 @@
       <form id="cycleSettingsForm"><label for="preferredCycleLength" data-i18n="cycleLength">Длина цикла</label><input id="preferredCycleLength" type="number" min="21" max="45" required /><label for="preferredPeriodLength" data-i18n="periodLength">Длительность менструации</label><input id="preferredPeriodLength" type="number" min="1" max="10" required /><label for="reminderDays" data-i18n="reminderDays">Напомнить заранее, дней</label><input id="reminderDays" type="number" min="0" max="7" required /><p class="form-message" id="cycleSettingsMessage" role="status" aria-live="polite"></p><button class="primary-button full large" type="submit" data-i18n="saveSettings">Сохранить настройки</button></form>
     </section>
   </div>
-
-   <div class="modal-backdrop" id="pregnancyModal" hidden>
+     <div class="modal-backdrop" id="pregnancyModal" hidden>
     <section class="auth-modal pregnancy-modal" id="pregnancyView" role="dialog" aria-modal="true" aria-labelledby="pregnancyTitle">
       <button class="modal-close" id="closePregnancy" type="button" aria-label="Закрыть">×</button>
       <div class="pregnancy-page">
@@ -338,7 +337,6 @@
           <div class="preg-progress-bottom"><span data-i18n="estimatedDueDate">Предполагаемая дата родов</span><strong id="pregnancyDueDate">—</strong></div>
         </div>
 
-        <!-- НОВОЕ 1: размер малыша -->
         <div class="preg-card pregnancy-baby-card" id="pregnancyBaby" hidden>
           <div class="preg-baby-title">
             <div>
@@ -358,7 +356,6 @@
           </div>
         </div>
 
-        <!-- НОВОЕ 2: что происходит на этой неделе -->
         <div class="preg-card pregnancy-week-info" id="pregnancyWeekInfo" hidden>
           <span class="preg-baby-label" data-i18n="weekInfoLabel">ПО НЕДЕЛЯМ</span>
           <h3 id="weekInfoTitle">—</h3>
@@ -367,3 +364,12 @@
       </div>
     </section>
   </div>
+
+  <div class="modal-backdrop" id="onboardingModal" hidden>
+    <section class="auth-modal onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle"><span class="onboarding-icon"><svg class="ui-icon"><use href="#icon-brand"></use></svg></span><p class="eyebrow">Sana</p><h2 id="onboardingTitle" data-i18n="onboardingTitle">Начните с первой отметки</h2><p class="modal-description" data-i18n="onboardingText">Добавьте начало последней менструации. После двух циклов прогноз станет персональным.</p><div class="onboarding-steps"><span data-i18n="onboardingStep1">1. Отметьте период</span><span data-i18n="onboardingStep2">2. Ведите дневник</span><span data-i18n="onboardingStep3">3. Следите за динамикой</span></div><button class="primary-button full large" id="finishOnboarding" type="button" data-i18n="onboardingAction">Добавить первую дату</button><button class="text-button full" id="skipOnboarding" type="button" data-i18n="later">Позже</button></section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
+  <script src="./app.js?v=25"></script>
+</body>
+</html>

@@ -35,7 +35,7 @@ const context = vm.createContext({
 });
 const run = code => vm.runInContext(code, context);
 const source = fs.readFileSync(path.join(__dirname, '../frontend/app.js'), 'utf8');
-run(source.replace(/\binit\(\);\s*$/, ''));
+run(source.replace(/\binit\(\);\s*/, ''));
 run('bindEvents()');
 const modal = elements.get('#clearDataModal');
 const trigger = elements.get('#clearData');

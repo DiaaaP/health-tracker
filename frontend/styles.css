@@ -1759,3 +1759,27 @@ button, textarea {
   #pregnancyView.pregnancy-modal { max-height: 100dvh; height: 100dvh; border-radius: 0; padding: 18px; }
   #pregnancyView .pregnancy-hero { padding: 20px; }
 }
+/* ===== SANA: размер малыша (фрукты и овощи) ===== */
+#pregnancyView .pregnancy-baby-card { margin-top: 16px; }
+#pregnancyView button.preg-week {
+  cursor: pointer;
+  font: inherit;
+  transition: background .18s, transform .18s, border-color .18s;
+}
+#pregnancyView button.preg-week:hover:not(.active) {
+  background: #f1e8f8;
+  border-color: #cdb2e3;
+}
+#pregnancyView button.preg-week:focus-visible {
+  outline: 3px solid var(--lilac);
+  outline-offset: 2px;
+}
+#pregnancyView .preg-week.current:not(.active) {
+  border-color: #9d70c6;
+}
+#pregnancyView .preg-baby-title h3 { line-height: 1.35; }
+#pregnancyView .preg-baby-title h3 #babyFruitName { color: var(--plum); }
+#pregnancyView .preg-baby-title { margin-bottom: 16px; }
+#pregnancyView .preg-avocado { transition: background .25s; }
+#pregnancyView .preg-avocado-emoji { transition: transform .25s; }
+#pregnancyView .preg-avocado:hover .preg-avocado-emoji { transform: scale(1.08) rotate(-4deg); }

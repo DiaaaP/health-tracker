@@ -50,6 +50,7 @@
       <nav class="rail-nav">
         <button class="nav-item active" data-view="home" type="button"><svg class="ui-icon"><use href="#icon-home"></use></svg><b data-i18n="navHome">Басты</b></button>
         <button class="nav-item" data-view="calendar" type="button"><svg class="ui-icon"><use href="#icon-calendar"></use></svg><b data-i18n="navCalendar">Күнтізбе</b></button>
+        <button class="nav-item" data-view="history" type="button"><svg class="ui-icon"><use href="#icon-calendar"></use></svg><b data-i18n="navHistory">Цикл тарихы</b></button>
         <button class="nav-item" data-view="insights" type="button"><svg class="ui-icon"><use href="#icon-chart"></use></svg><b data-i18n="navInsights">Талдау</b></button>
         <button class="nav-item" data-view="chat" type="button"><svg class="ui-icon"><use href="#icon-spark"></use></svg><b data-i18n="navChat">AI чат</b></button>
         <button class="nav-item" data-view="profile" type="button"><svg class="ui-icon"><use href="#icon-user"></use></svg><b data-i18n="navProfile">Профиль</b></button>
@@ -167,6 +168,26 @@
         </div>
       </section>
 
+      <section class="view" id="historyView" data-view-panel="history">
+        <div class="history-page">
+          <div class="history-intro">
+            <p class="eyebrow" data-i18n="historyEyebrow">ВАШЕ ЗДОРОВЬЕ</p>
+            <h2 data-i18n="historyHeading">История моих циклов</h2>
+            <p data-i18n="historyDescription">Все отмеченные менструации в одном месте.</p>
+          </div>
+          <div class="history-stats">
+            <article class="surface history-stat"><span data-i18n="historyTotal">Всего записей</span><strong id="historyTotal">0</strong></article>
+            <article class="surface history-stat"><span data-i18n="historyAvgCycle">Средний цикл</span><strong id="historyAvgCycle">—</strong></article>
+            <article class="surface history-stat"><span data-i18n="historyAvgPeriod">Средняя менструация</span><strong id="historyAvgPeriod">—</strong></article>
+          </div>
+          <article class="surface history-list-card">
+            <div class="section-heading compact"><div><p class="eyebrow" data-i18n="historyTimeline">ХРОНОЛОГИЯ</p><h2 data-i18n="historyAllCycles">Все циклы</h2></div><button class="primary-button" id="historyAddPeriod" type="button" data-i18n="addPeriod">Добавить</button></div>
+            <div id="fullPeriodHistory" class="full-period-history"></div>
+          </article>
+          <p class="history-footnote" data-i18n="historyNote">Данные основаны на датах, которые вы отметили. Прогнозы не являются медицинским заключением.</p>
+        </div>
+      </section>
+
       <section class="view" id="insightsView" data-view-panel="insights">
         <div class="insights-grid">
           <article class="surface insight-lead"><p class="eyebrow" data-i18n="cycleAnalysis">Цикл талдауы</p><h2 id="insightTitle">Недостаточно данных</h2><p id="insightSummary">Добавьте минимум два начала цикла для персональной аналитики.</p><div class="stat-pair insight-stats"><div><strong id="insightAverageCycle">—</strong><span data-i18n="avgDays">орташа күн</span></div><div><strong id="insightAveragePeriod">—</strong><span data-i18n="avgPeriod">етеккір күні</span></div><div><strong id="insightShortestCycle">—</strong><span data-i18n="shortestCycle">Короткий цикл</span></div><div><strong id="insightLongestCycle">—</strong><span data-i18n="longestCycle">Длинный цикл</span></div></div>
@@ -241,6 +262,7 @@
     <nav class="bottom-nav" aria-label="Мобильді навигация">
       <button class="active" data-view="home" type="button"><svg class="ui-icon"><use href="#icon-home"></use></svg><b data-i18n="navHome">Басты</b></button>
       <button data-view="calendar" type="button"><svg class="ui-icon"><use href="#icon-calendar"></use></svg><b data-i18n="navCalendar">Күнтізбе</b></button>
+      <button data-view="history" type="button"><svg class="ui-icon"><use href="#icon-calendar"></use></svg><b data-i18n="navHistory">История</b></button>
       <button data-view="insights" type="button"><svg class="ui-icon"><use href="#icon-chart"></use></svg><b data-i18n="navInsights">Талдау</b></button>
       <button data-view="chat" type="button"><svg class="ui-icon"><use href="#icon-spark"></use></svg><b data-i18n="navChat">AI чат</b></button>
       <button data-view="profile" type="button"><svg class="ui-icon"><use href="#icon-user"></use></svg><b data-i18n="navProfile">Профиль</b></button>

@@ -27,6 +27,7 @@ const document = {
 document.querySelector('#summaryAddEntry').dataset.go = 'log';
 const context = vm.createContext({
   document, window: { scrollTo() {} }, setTimeout: fn => fn(),
+  MutationObserver: class { observe() {} disconnect() {} },
   localStorage: {
     getItem: key => storage.get(key) ?? null,
     setItem: (key, value) => storage.set(key, String(value)),

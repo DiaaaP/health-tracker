@@ -80,6 +80,7 @@
         <button class="primary-button home-pregnancy-shortcut" id="homePregnancyButton" type="button"><svg class="ui-icon" aria-hidden="true"><use href="#icon-pregnancy"></use></svg><span data-i18n="pregnancyMode">Жүктілік</span></button>
         <div class="dashboard-grid">
           <article class="cycle-card surface">
+            <div class="late-notice" id="lateNotice" hidden><div><strong data-i18n="lateNoticeTitle">Менструация задерживается</strong><p data-i18n="lateNoticeText">Задержка не всегда означает беременность. При вероятности беременности можно сделать тест.</p></div><button class="secondary-button" id="latePregnancyButton" type="button" data-i18n="openPregnancy">Открыть раздел беременности</button></div>
             <div class="section-heading">
               <div><p class="eyebrow" data-i18n="currentCycle">Қазіргі цикл</p><h2 data-i18n="cycleStatus">Денеңіздің ырғағы</h2></div>
               <button class="text-button" data-go="calendar" type="button" data-i18n="details">Толығырақ</button>
@@ -162,7 +163,7 @@
               <div class="day-note-title"><svg class="ui-icon"><use href="#icon-note"></use></svg><b data-i18n="notes">Жазбалар</b></div>
               <p id="calendarNoteText">Бұл күнге жазба жоқ</p>
             </div>
-            <div class="day-actions"><button class="primary-button full" data-go="log" type="button" data-i18n="logThisDay">Осы күнді белгілеу</button><button class="secondary-button full" id="markSelectedPeriodButton" type="button"><svg class="ui-icon"><use href="#icon-drop"></use></svg><span id="markSelectedPeriodText" data-i18n="markPeriodStart">Етеккірдің басталуын белгілеу</span></button></div>
+            <div class="day-actions"><button class="primary-button full" data-go="log" type="button" data-i18n="logThisDay">Осы күнді белгілеу</button><button class="secondary-button full" id="markSelectedPeriodButton" type="button"><svg class="ui-icon"><use href="#icon-drop"></use></svg><span id="markSelectedPeriodText" data-i18n="markPeriodStart">Етеккірдің басталуын белгілеу</span></button><button class="secondary-button full" id="privateNoteButton" type="button"><svg class="ui-icon"><use href="#icon-lock"></use></svg><span data-i18n="privateNote">Личная запись</span></button></div><div class="private-note-summary" id="privateNoteSummary" hidden><span class="private-note-dot"></span><span id="privateNoteSummaryText"></span></div>
             <div class="period-history-block"><div class="section-heading compact"><h3 data-i18n="periodHistory">История менструаций</h3><button class="text-button" id="addPeriodButton" type="button" data-i18n="addPeriod">Добавить</button></div><div id="periodHistory" class="period-history"></div></div>
           </aside>
         </div>
@@ -330,6 +331,8 @@
     </section>
   </div>
 
+  <div class="modal-backdrop" id="privateNoteModal" hidden><section class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="privateNoteTitle"><button class="modal-close" id="closePrivateNote" type="button" aria-label="Закрыть">×</button><p class="eyebrow" data-i18n="privateNotes">Личные отметки</p><h2 id="privateNoteTitle" data-i18n="privateNote">Личная запись</h2><form id="privateNoteForm"><label for="privateNoteDate" data-i18n="privateNoteDate">Дата</label><input id="privateNoteDate" type="date" required /><label for="privateNoteType" data-i18n="privateNoteType">Тип записи</label><select id="privateNoteType"><option value="protected" data-i18n="protectedContact">Защищённый контакт</option><option value="unprotected" data-i18n="unprotectedContact">Незащищённый контакт</option><option value="withdrawal" data-i18n="withdrawalContact">Прерванный контакт</option></select><p class="form-message" id="privateNoteMessage" role="status" aria-live="polite"></p><div class="modal-actions"><button class="danger-button" id="deletePrivateNote" type="button" data-i18n="deletePrivateNote">Удалить отметку</button><button class="primary-button" type="submit" data-i18n="savePrivateNote">Сохранить</button></div></form></section></div>
+
   <div class="modal-backdrop" id="cycleSettingsModal" hidden>
     <section class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="cycleSettingsTitle">
       <button class="modal-close" id="closeCycleSettings" type="button" aria-label="Закрыть">×</button>
@@ -392,6 +395,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=26"></script>
+  <script src="./app.js?v=27"></script>
 </body>
 </html>

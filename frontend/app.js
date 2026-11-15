@@ -376,8 +376,8 @@ async function importBackup(event) {
       for (const period of backup.periods) await apiRequest('/api/periods', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ start_date: period.start_date, end_date: period.end_date || null, flow: period.flow || 'medium' }) });
     } else {
       setLogs(backup.logs); state.periods = backup.periods; cacheLogs(); cachePeriods();
-      state.privateNotes = backup.privateNotes && typeof backup.privateNotes === 'object' && !Array.isArray(backup.privateNotes) ? backup.privateNotes : {}; cachePrivateNotes();
     }
+    state.privateNotes = backup.privateNotes && typeof backup.privateNotes === 'object' && !Array.isArray(backup.privateNotes) ? backup.privateNotes : {}; cachePrivateNotes();
     if (backup.preferences) { state.preferences = Object.assign(readPreferences(), backup.preferences); savePreferences(); }
     await loadTrackerData(); showToast(t('backupImported'));
   } catch (error) { showToast(t('backupInvalid')); }

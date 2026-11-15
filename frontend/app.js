@@ -1906,3 +1906,175 @@ async function init() {
 }
 
 init();
+/* ===== SANA: размер малыша (фрукты и овощи) ===== */
+Object.assign(copy.ru, {
+  babySizeLabel: 'РАЗМЕР МАЛЫША',
+  babySizeTitle: 'Малыш размером с',
+  babyApprox: 'Размеры ориентировочные и у каждого малыша свои',
+  babyLength: 'Рост',
+  babyWeight: 'Вес',
+  babyWeekShort: 'неделя',
+  babyWeekBadge: '{week}-я неделя',
+  babyNow: 'сейчас'
+});
+Object.assign(copy.kk, {
+  babySizeLabel: 'БАЛАҢЫЗДЫҢ ӨЛШЕМІ',
+  babySizeTitle: 'Балаңыз мынаған ұқсайды:',
+  babyApprox: 'Өлшемдер шамамен берілген, әр баланың өз ерекшелігі бар',
+  babyLength: 'Ұзындығы',
+  babyWeight: 'Салмағы',
+  babyWeekShort: 'апта',
+  babyWeekBadge: '{week}-апта',
+  babyNow: 'қазір'
+});
+
+(function () {
+  // [апта, эмодзи, қазақша, русский, ұзындық см, салмақ г]
+  const BABY_SIZES = [
+    [4, '🌱', 'мак дәні', 'маковое зерно', 0.1, 0],
+    [5, '🌱', 'күнжіт дәні', 'кунжутное зерно', 0.2, 0],
+    [6, '🫘', 'жасымық', 'чечевица', 0.6, 0],
+    [7, '🫐', 'көкжидек', 'черника', 1.3, 1],
+    [8, '🍓', 'таңқурай', 'малина', 1.6, 1],
+    [9, '🍒', 'шие', 'вишня', 2.3, 2],
+    [10, '🍓', 'құлпынай', 'клубника', 3.1, 4],
+    [11, '🍇', 'інжір', 'инжир', 4.1, 7],
+    [12, '🍋', 'лайм', 'лайм', 5.4, 14],
+    [13, '🫛', 'бұршақ қауашағы', 'стручок гороха', 7.4, 23],
+    [14, '🍋', 'лимон', 'лимон', 8.7, 43],
+    [15, '🍎', 'алма', 'яблоко', 10.1, 70],
+    [16, '🥑', 'авокадо', 'авокадо', 11.6, 100],
+    [17, '🍐', 'алмұрт', 'груша', 13, 140],
+    [18, '🫑', 'болгар бұрышы', 'болгарский перец', 14.2, 190],
+    [19, '🥭', 'манго', 'манго', 15.3, 240],
+    [20, '🍌', 'банан', 'банан', 16.4, 300],
+    [21, '🥕', 'сәбіз', 'морковь', 26.7, 360],
+    [22, '🥭', 'папайя', 'папайя', 27.8, 430],
+    [23, '🍊', 'грейпфрут', 'грейпфрут', 28.9, 500],
+    [24, '🌽', 'жүгері', 'кукуруза', 30, 600],
+    [25, '🥦', 'түсті қырыққабат', 'цветная капуста', 34.6, 660],
+    [26, '🥬', 'салат', 'кочанный салат', 35.6, 760],
+    [27, '🥬', 'қырыққабат', 'капуста', 36.6, 875],
+    [28, '🍆', 'баклажан', 'баклажан', 37.6, 1000],
+    [29, '🎃', 'асқабақ (баттернат)', 'тыква баттернат', 38.6, 1150],
+    [30, '🥬', 'үлкен қырыққабат', 'крупный кочан капусты', 39.9, 1300],
+    [31, '🥥', 'кокос', 'кокос', 41.1, 1500],
+    [32, '🥒', 'кабачок', 'кабачок', 42.4, 1700],
+    [33, '🍍', 'ананас', 'ананас', 43.7, 1900],
+    [34, '🍈', 'қауын', 'дыня канталупа', 45, 2100],
+    [35, '🍈', 'бал қауын', 'медовая дыня', 46.2, 2400],
+    [36, '🥬', 'ромэн салаты', 'салат ромэн', 47.4, 2600],
+    [37, '🥬', 'мангольд', 'мангольд', 48.6, 2900],
+    [38, '🧅', 'порей', 'порей', 49.8, 3100],
+    [39, '🍉', 'шағын қарбыз', 'мини-арбуз', 50.7, 3300],
+    [40, '🎃', 'асқабақ', 'тыква', 51.2, 3500]
+  ];
+  const MIN_WEEK = 4;
+  const MAX_WEEK = 40;
+  const baby = { current: null, selected: null };
+
+  function clampWeek(week) {
+    return Math.min(MAX_WEEK, Math.max(MIN_WEEK, week));
+  }
+
+  function currentWeekFromInput() {
+    const value = document.querySelector('#pregnancyLastPeriod').value;
+    if (!value) return null;
+    const elapsed = Math.floor((dateFromKey(dateKey(today)) - dateFromKey(value)) / 86400000);
+    if (!Number.isFinite(elapsed) || elapsed < 0) return null;
+    return Math.floor(elapsed / 7);
+  }
+
+  function formatNumber(value) {
+    return String(value).replace('.', ',');
+  }
+
+  function formatLength(cm) {
+    return formatNumber(cm) + ' ' + (state.lang === 'kk' ? 'см' : 'см');
+  }
+
+  function formatWeight(grams) {
+    if (!grams) return '< 1 г';
+    if (grams >= 1000) return formatNumber((grams / 1000).toFixed(2).replace(/0$/, '').replace(/\.$/, '')) + ' кг';
+    return grams + ' г';
+  }
+
+  function renderBabySize() {
+    const card = document.querySelector('#pregnancyBaby');
+    if (!card) return;
+    if (baby.current === null) {
+      card.hidden = true;
+      return;
+    }
+    const currentWeek = clampWeek(baby.current);
+    const selectedWeek = clampWeek(baby.selected === null ? currentWeek : baby.selected);
+    const item = BABY_SIZES.find(function (row) { return row[0] === selectedWeek; });
+    if (!item) {
+      card.hidden = true;
+      return;
+    }
+
+    // Пять соседних недель вокруг выбранной
+    const start = Math.min(Math.max(selectedWeek - 2, MIN_WEEK), MAX_WEEK - 4);
+    const weeks = document.querySelector('#babyWeeks');
+    weeks.innerHTML = '';
+    for (let week = start; week < start + 5; week += 1) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'preg-week';
+      if (week === selectedWeek) button.classList.add('active');
+      if (week === currentWeek) button.classList.add('current');
+      button.setAttribute('aria-pressed', String(week === selectedWeek));
+      const label = document.createElement('span');
+      label.textContent = t('babyWeekShort');
+      const number = document.createElement('strong');
+      number.textContent = week;
+      button.append(label, number);
+      button.addEventListener('click', function () {
+        baby.selected = week;
+        renderBabySize();
+      });
+      weeks.appendChild(button);
+    }
+
+    document.querySelector('#babyEmoji').textContent = item[1];
+    document.querySelector('#babyFruitName').textContent = state.lang === 'kk' ? item[2] : item[3];
+    document.querySelector('#babyLength').textContent = formatLength(item[4]);
+    document.querySelector('#babyWeight').textContent = formatWeight(item[5]);
+    let badge = t('babyWeekBadge').replace('{week}', selectedWeek);
+    if (selectedWeek === currentWeek) badge += ' • ' + t('babyNow');
+    document.querySelector('#babyWeekBadge').textContent = badge;
+    card.hidden = false;
+  }
+
+  function syncBabySize() {
+    baby.current = currentWeekFromInput();
+    baby.selected = baby.current === null ? null : clampWeek(baby.current);
+    renderBabySize();
+  }
+
+  // Кнопка «Рассчитать»: наш обработчик срабатывает после старого
+  document.querySelector('#calculatePregnancy').addEventListener('click', syncBabySize);
+
+  // При открытии режима беременности: если дата уже есть, сразу считаем
+  ['#pregnancyButton', '#homePregnancyButton'].forEach(function (selector) {
+    const button = document.querySelector(selector);
+    if (!button) return;
+    button.addEventListener('click', function () {
+      setTimeout(function () {
+        if (document.querySelector('#pregnancyLastPeriod').value) {
+          document.querySelector('#calculatePregnancy').click();
+        } else {
+          baby.current = null;
+          renderBabySize();
+        }
+      }, 0);
+    });
+  });
+
+  // Смена языка: перерисовываем названия
+  document.querySelectorAll('.lang').forEach(function (button) {
+    button.addEventListener('click', renderBabySize);
+  });
+  document.querySelector('#profileLanguageButton').addEventListener('click', renderBabySize);
+})();

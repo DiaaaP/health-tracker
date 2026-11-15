@@ -1798,3 +1798,93 @@ button, textarea {
   line-height: 1.6;
   font-size: .9rem;
 }
+
+
+/* Cute fruit baby character in Pregnancy Mode */
+#pregnancyView .preg-avocado {
+  position: relative;
+  min-height: 220px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 42%, #fff 0, #fff9fd 34%, #f5eafa 100%);
+}
+#pregnancyView .baby-fruit-character {
+  position: relative;
+  width: 154px;
+  height: 154px;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  filter: drop-shadow(0 9px 7px rgba(80, 47, 94, .12));
+  animation: babyFruitFloat 3s ease-in-out infinite;
+}
+#pregnancyView .baby-fruit-character .preg-avocado-emoji {
+  position: relative;
+  z-index: 1;
+  display: block;
+  font-size: 7rem;
+  line-height: 1;
+  filter: drop-shadow(0 3px 2px rgba(60, 30, 70, .08));
+}
+#pregnancyView .baby-fruit-eye {
+  position: absolute;
+  z-index: 2;
+  top: 65px;
+  width: 7px;
+  height: 10px;
+  border-radius: 50%;
+  background: #493247;
+}
+#pregnancyView .baby-fruit-eye-left { left: 62px; }
+#pregnancyView .baby-fruit-eye-right { right: 62px; }
+#pregnancyView .baby-fruit-cheek {
+  position: absolute;
+  z-index: 2;
+  top: 80px;
+  width: 13px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(246, 133, 159, .62);
+  filter: blur(1px);
+}
+#pregnancyView .baby-fruit-cheek-left { left: 48px; }
+#pregnancyView .baby-fruit-cheek-right { right: 48px; }
+#pregnancyView .baby-fruit-mouth {
+  position: absolute;
+  z-index: 2;
+  top: 81px;
+  left: 50%;
+  width: 9px;
+  height: 6px;
+  border-bottom: 2px solid #493247;
+  border-radius: 0 0 50% 50%;
+  transform: translateX(-50%);
+}
+#pregnancyView .baby-fruit-arm {
+  position: absolute;
+  z-index: 0;
+  top: 88px;
+  width: 27px;
+  height: 9px;
+  border-radius: 999px;
+  background: #e9a1ae;
+}
+#pregnancyView .baby-fruit-arm-left { left: 2px; transform: rotate(28deg); }
+#pregnancyView .baby-fruit-arm-right { right: 2px; transform: rotate(-28deg); }
+#pregnancyView .baby-fruit-leg {
+  position: absolute;
+  z-index: 0;
+  bottom: 5px;
+  width: 10px;
+  height: 23px;
+  border-radius: 999px;
+  background: #e9a1ae;
+}
+#pregnancyView .baby-fruit-leg-left { left: 58px; transform: rotate(8deg); }
+#pregnancyView .baby-fruit-leg-right { right: 58px; transform: rotate(-8deg); }
+@keyframes babyFruitFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-7px) rotate(2deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #pregnancyView .baby-fruit-character { animation: none; }
+}

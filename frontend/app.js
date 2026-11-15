@@ -52,7 +52,11 @@ Object.assign(copy.kk, {
   chatWelcome: 'Сәлем! Мен жергілікті Ollama арқылы жұмыс істеймін. Денсаулық туралы жалпы сұрақ қоя аласыз.',
   chatOffline: 'Ollama-ға қосылу мүмкін болмады. Терминалда «ollama serve» іске қосып, модельді жүктеңіз.',
   chatError: 'Жауап алу кезінде қате шықты.',
-  backendRequired: 'Аккаунтпен жұмыс істеу үшін жергілікті FastAPI серверін іске қосыңыз'
+  backendRequired: 'Аккаунтпен жұмыс істеу үшін жергілікті FastAPI серверін іске қосыңыз',
+  privateNotes: 'Жеке белгілер', privateNote: 'Жеке жазба', privateNoteDate: 'Күні', privateNoteType: 'Жазба түрі',
+  protectedContact: 'Қорғаныспен болған қатынас', unprotectedContact: 'Қорғаныссыз болған қатынас', withdrawalContact: 'Үзілген қатынас',
+  savePrivateNote: 'Сақтау', deletePrivateNote: 'Белгіні жою', privateNoteSaved: 'Жеке жазба сақталды', privateNoteDeleted: 'Белгі жойылды',
+  lateNoticeTitle: 'Етеккір кешігіп жатыр', lateNoticeText: 'Кешігу әрдайым жүктілікті білдірмейді. Жүктілік ықтималдығы болса, тест жасауға болады.', openPregnancy: 'Жүктілік бөліміне өту'
 });
 
 Object.assign(copy.kk, {
@@ -124,7 +128,11 @@ Object.assign(copy.ru, {
   chatWelcome: 'Привет! Я работаю через локальную Ollama. Можете задать общий вопрос о самочувствии.',
   chatOffline: 'Не удалось подключиться к Ollama. Запустите «ollama serve» и загрузите выбранную модель.',
   chatError: 'Не удалось получить ответ.',
-  backendRequired: 'Для работы с аккаунтом запустите локальный FastAPI-сервер'
+  backendRequired: 'Для работы с аккаунтом запустите локальный FastAPI-сервер',
+  privateNotes: 'Личные отметки', privateNote: 'Личная запись', privateNoteDate: 'Дата', privateNoteType: 'Тип записи',
+  protectedContact: 'Защищённый контакт', unprotectedContact: 'Незащищённый контакт', withdrawalContact: 'Прерванный контакт',
+  savePrivateNote: 'Сохранить', deletePrivateNote: 'Удалить отметку', privateNoteSaved: 'Личная запись сохранена', privateNoteDeleted: 'Отметка удалена',
+  lateNoticeTitle: 'Менструация задерживается', lateNoticeText: 'Задержка не всегда означает беременность. При вероятности беременности можно сделать тест.', openPregnancy: 'Открыть раздел беременности'
 });
 
 const dataVersion = 'sana-clean-2026-09-27';
@@ -164,6 +172,7 @@ const state = {
   symptoms: ['none'],
   logs: new Map(),
   periods: [],
+  privateNotes: readPrivateNotes(),
   calendar: null,
   summary: null,
   chatMessages: [],
@@ -349,7 +358,7 @@ function downloadBlob(blob, filename) {
 function exportBackup() {
   const backup = {
     format: 'sana-backup', version: 1, exported_at: new Date().toISOString(),
-    logs: Array.from(state.logs.values()), periods: state.periods, preferences: state.preferences
+    logs: Array.from(state.logs.values()), periods: state.periods, preferences: state.preferences, privateNotes: state.privateNotes
   };
   downloadBlob(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }), 'sana-backup-' + dateKey(today) + '.json');
   showToast(t('backupExported'));
@@ -367,6 +376,7 @@ async function importBackup(event) {
       for (const period of backup.periods) await apiRequest('/api/periods', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ start_date: period.start_date, end_date: period.end_date || null, flow: period.flow || 'medium' }) });
     } else {
       setLogs(backup.logs); state.periods = backup.periods; cacheLogs(); cachePeriods();
+      state.privateNotes = backup.privateNotes && typeof backup.privateNotes === 'object' && !Array.isArray(backup.privateNotes) ? backup.privateNotes : {}; cachePrivateNotes();
     }
     if (backup.preferences) { state.preferences = Object.assign(readPreferences(), backup.preferences); savePreferences(); }
     await loadTrackerData(); showToast(t('backupImported'));
@@ -655,6 +665,10 @@ function updateSelectedDate() {
   document.querySelector('#calendarNextPeriod').textContent = state.calendar && state.calendar.next_period_start
     ? formatDate(state.calendar.next_period_start)
     : '—';
+  const privateNote = state.privateNotes[key];
+  const privateSummary = document.querySelector('#privateNoteSummary');
+  privateSummary.hidden = !privateNote;
+  document.querySelector('#privateNoteSummaryText').textContent = privateNote ? t(privateNote.type + 'Contact') : '';
   const existingPeriod = getPeriodForDate(key);
   document.querySelector('#markSelectedPeriodText').textContent = t(existingPeriod ? 'editPeriod' : 'markPeriodStart');
 }
@@ -692,6 +706,7 @@ function renderForecastSummary() {
     ? formatDate(calendar.next_fertile_start) + ' — ' + formatDate(calendar.next_fertile_end)
     : t('notEnoughData');
   document.querySelector('.cycle-card').classList.toggle('late-state', Boolean(hasData && calendar.is_late));
+  document.querySelector('#lateNotice').hidden = !(hasData && calendar.is_late);
   if (hasData && calendar.is_late) {
     document.querySelector('#nextPeriodText').textContent = t('lateDays').replace('{days}', calendar.late_days);
   } else if (hasData && calendar.next_period_start) {
@@ -737,6 +752,7 @@ function renderCalendar() {
       const key = dateKey(new Date(state.shownYear, state.shownMonth, day));
       const log = state.logs.get(key);
       if (log) button.classList.add('logged');
+      if (state.privateNotes[key]) button.classList.add('has-private-note');
       if (isPeriodDate(key)) button.classList.add('period');
       else if (isPredictedPeriodDate(key)) button.classList.add('predicted-period');
       if (isFertileDate(key)) button.classList.add('fertile');
@@ -795,6 +811,7 @@ function renderHomeCalendar(week) {
     } else {
       const key = dateKey(new Date(state.shownYear, state.shownMonth, day));
       if (state.logs.has(key)) button.classList.add('logged');
+      if (state.privateNotes[key]) button.classList.add('has-private-note');
       if (isPeriodDate(key)) button.classList.add('period');
       else if (isPredictedPeriodDate(key)) button.classList.add('predicted-period');
       if (isFertileDate(key)) button.classList.add('fertile');
@@ -896,6 +913,19 @@ function readLocalPeriods() {
 
 function cachePeriods() {
   localStorage.setItem('sana-periods', JSON.stringify(state.periods));
+}
+
+function readPrivateNotes() {
+  try {
+    const notes = JSON.parse(localStorage.getItem('sana-private-notes') || '{}');
+    return notes && typeof notes === 'object' && !Array.isArray(notes) ? notes : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function cachePrivateNotes() {
+  localStorage.setItem('sana-private-notes', JSON.stringify(state.privateNotes));
 }
 
 function setLogs(logs) {
@@ -1581,6 +1611,39 @@ function openCycleSettings() {
   setModal(cycleSettingsModal, true, '#preferredCycleLength');
 }
 
+function openPrivateNoteEditor(key) {
+  const note = state.privateNotes[key];
+  document.querySelector('#privateNoteDate').value = key;
+  document.querySelector('#privateNoteType').value = note ? note.type : 'protected';
+  document.querySelector('#deletePrivateNote').hidden = !note;
+  document.querySelector('#privateNoteMessage').textContent = '';
+  setModal(document.querySelector('#privateNoteModal'), true, '#privateNoteType');
+}
+
+function savePrivateNote(event) {
+  event.preventDefault();
+  const key = document.querySelector('#privateNoteDate').value;
+  const type = document.querySelector('#privateNoteType').value;
+  if (!datePattern.test(key) || !['protected', 'unprotected', 'withdrawal'].includes(type)) return;
+  state.privateNotes[key] = { type: type };
+  cachePrivateNotes();
+  updateSelectedDate();
+  renderCalendar();
+  setModal(document.querySelector('#privateNoteModal'), false);
+  showToast(t('privateNoteSaved'));
+}
+
+function deletePrivateNote() {
+  const key = document.querySelector('#privateNoteDate').value;
+  if (!state.privateNotes[key]) return;
+  delete state.privateNotes[key];
+  cachePrivateNotes();
+  updateSelectedDate();
+  renderCalendar();
+  setModal(document.querySelector('#privateNoteModal'), false);
+  showToast(t('privateNoteDeleted'));
+}
+
 function openPregnancyMode() {
   const input = document.querySelector('#pregnancyLastPeriod');
   const latestPeriod = state.periods.slice().sort(function (a, b) {
@@ -1672,11 +1735,12 @@ async function clearLocalData() {
   } catch (error) {
     // GitHub Pages has no backend, so local cleanup below is enough there.
   }
-  ['sana-logs', 'sana-periods', 'sana-notifications'].forEach(function (key) {
+  ['sana-logs', 'sana-periods', 'sana-notifications', 'sana-private-notes'].forEach(function (key) {
     localStorage.removeItem(key);
   });
   state.logs.clear();
   state.periods = [];
+  state.privateNotes = {};
   await loadCalendarForecast();
   await loadSummary();
   renderForecastSummary();
@@ -1826,6 +1890,11 @@ function bindEvents() {
   document.querySelector('#cycleSettingsButton').addEventListener('click', openCycleSettings);
   document.querySelector('#pregnancyButton').addEventListener('click', openPregnancyMode);
   document.querySelector('#homePregnancyButton').addEventListener('click', openPregnancyMode);
+  document.querySelector('#latePregnancyButton').addEventListener('click', openPregnancyMode);
+  document.querySelector('#privateNoteButton').addEventListener('click', function () { openPrivateNoteEditor(selectedDateKey()); });
+  document.querySelector('#closePrivateNote').addEventListener('click', function () { setModal(document.querySelector('#privateNoteModal'), false); });
+  document.querySelector('#privateNoteForm').addEventListener('submit', savePrivateNote);
+  document.querySelector('#deletePrivateNote').addEventListener('click', deletePrivateNote);
   document.querySelector('#privacyButton').addEventListener('click', togglePrivacy);
   document.querySelector('#clearData').addEventListener('click', openClearDataDialog);
   document.querySelector('#cancelClearData').addEventListener('click', closeClearDataDialog);
@@ -1865,7 +1934,7 @@ function bindEvents() {
   document.querySelector('#closePeriodModal').addEventListener('click', function () { setModal(periodModal, false); });
   document.querySelector('#closeCycleSettings').addEventListener('click', function () { setModal(cycleSettingsModal, false); });
   document.querySelector('#closePregnancy').addEventListener('click', function () { setModal(pregnancyModal, false); });
-  [registerModal, loginModal, periodModal, cycleSettingsModal, pregnancyModal].forEach(function (modal) {
+  [registerModal, loginModal, periodModal, cycleSettingsModal, pregnancyModal, document.querySelector('#privateNoteModal')].forEach(function (modal) {
     modal.addEventListener('click', function (event) {
       if (event.target === modal) setModal(modal, false);
     });
@@ -1878,6 +1947,7 @@ function bindEvents() {
       setModal(periodModal, false);
       setModal(cycleSettingsModal, false);
       setModal(pregnancyModal, false);
+      setModal(document.querySelector('#privateNoteModal'), false);
       setModal(onboardingModal, false);
     }
   });

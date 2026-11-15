@@ -14,6 +14,7 @@ const context = vm.createContext({
   },
   document: {
     addEventListener() {},
+    documentElement: { lang: 'ru' },
     querySelector: selector => {
       if (!elements.has(selector)) elements.set(selector, { textContent: '', innerHTML: '', addEventListener() {} });
       return elements.get(selector);
@@ -27,7 +28,7 @@ const context = vm.createContext({
 vm.runInContext(source.replace(/\binit\(\);\s*$/, ''), context);
 
 for (const [lang, guest, homeTitle] of [['ru', 'Гость', 'Главная'], ['kk', 'Қонақ', 'Басты']]) {
-  vm.runInContext(`state.lang = '${lang}'; state.authToken = '';`, context);
+  vm.runInContext(\`state.lang = '\${lang}'; state.authToken = '';\`, context);
   storage.set('sana-user-name', 'Старое имя');
   vm.runInContext('updateAuthUI()', context);
   assert.equal(elements.get('#pageTitle').textContent, homeTitle);

@@ -245,9 +245,9 @@ Object.assign(copy.ru, {
   periodTooLong: 'Длительность менструации — не больше 10 дней', invalidFlow: 'Выберите интенсивность',
   invalidChat: 'Вопрос: от 1 до 1000 символов',
   pregnancyMode: 'Беременность', pregnancyModeShort: 'Расчёт срока и даты родов',
-  pregnancyTitle: 'Расчёт срока беременности', pregnancyIntro: 'Укажите первый день последней менструации, чтобы получить ориентировочный срок.',
+  pregnancyTitle: 'Расчёт срока беременности', pregnancyIntro: 'Если беременность подтверждена, укажите первый день последней менструации, чтобы получить ориентировочный срок.',
   lastPeriodDate: 'Первый день последней менструации', calculatePregnancy: 'Рассчитать',
-  pregnancyDisclaimer: 'Расчёт ориентировочный и не заменяет наблюдение у врача.',
+  pregnancyDisclaimer: 'Расчёт ориентировочный, не подтверждает беременность и не заменяет наблюдение у врача.',
   pregnancyDateRequired: 'Укажите дату последней менструации.', pregnancyFutureDate: 'Дата не может быть в будущем.',
   pregnancyWeekResult: 'Ориентировочный срок: {weeks} нед. {days} дн.', estimatedDueDate: 'Предполагаемая дата родов',
   pregnancyRemaining: 'До 40 недель: около {weeks} нед.', trimester: '{number}-й триместр'
@@ -288,9 +288,9 @@ Object.assign(copy.kk, {
   periodTooLong: 'Етеккір ұзақтығы 10 күннен аспауы керек', invalidFlow: 'Қарқындылықты таңдаңыз',
   invalidChat: 'Сұрақ: 1–1000 таңба',
   pregnancyMode: 'Жүктілік', pregnancyModeShort: 'Мерзім мен босану күнін есептеу',
-  pregnancyTitle: 'Жүктілік мерзімін есептеу', pregnancyIntro: 'Болжамды мерзімді білу үшін соңғы етеккірдің бірінші күнін көрсетіңіз.',
+  pregnancyTitle: 'Жүктілік мерзімін есептеу', pregnancyIntro: 'Жүктілік расталған болса, болжамды мерзімді білу үшін соңғы етеккірдің бірінші күнін көрсетіңіз.',
   lastPeriodDate: 'Соңғы етеккірдің бірінші күні', calculatePregnancy: 'Есептеу',
-  pregnancyDisclaimer: 'Есеп шамамен беріледі және дәрігер бақылауын алмастырмайды.',
+  pregnancyDisclaimer: 'Есеп шамамен беріледі, жүктілікті растамайды және дәрігер бақылауын алмастырмайды.',
   pregnancyDateRequired: 'Соңғы етеккір күнін көрсетіңіз.', pregnancyFutureDate: 'Күн болашақта болмауы керек.',
   pregnancyWeekResult: 'Болжамды мерзім: {weeks} апта {days} күн.', estimatedDueDate: 'Болжамды босану күні',
   pregnancyRemaining: '40 аптаға дейін шамамен {weeks} апта.', trimester: '{number}-триместр'

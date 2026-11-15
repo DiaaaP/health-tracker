@@ -13,6 +13,7 @@ const context = vm.createContext({
     removeItem: key => storage.delete(key)
   },
   document: {
+    addEventListener() {},
     querySelector: selector => {
       if (!elements.has(selector)) elements.set(selector, { textContent: '', innerHTML: '', addEventListener() {} });
       return elements.get(selector);

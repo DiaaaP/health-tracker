@@ -26,7 +26,7 @@ const context = vm.createContext({
 });
 
 // Load application functions without starting network requests or event handlers.
-vm.runInContext(source.replace(/\binit\(\);\s*$/, ''), context);
+vm.runInContext(source.replace(/\binit\(\);\s*/, ''), context);
 
 for (const [lang, guest, homeTitle] of [['ru', 'Гость', 'Главная'], ['kk', 'Қонақ', 'Басты']]) {
   vm.runInContext("state.lang = '" + lang + "'; state.authToken = '';", context);

@@ -316,7 +316,7 @@
     </section>
   </div>
 
-  <div class="modal-backdrop" id="pregnancyModal" hidden>
+   <div class="modal-backdrop" id="pregnancyModal" hidden>
     <section class="auth-modal pregnancy-modal" id="pregnancyView" role="dialog" aria-modal="true" aria-labelledby="pregnancyTitle">
       <button class="modal-close" id="closePregnancy" type="button" aria-label="Закрыть">×</button>
       <div class="pregnancy-page">
@@ -337,15 +337,33 @@
           <div class="preg-progress-top"><div><span class="preg-pill" id="pregnancyTrimester">—</span><h3 id="pregnancyWeekTitle">—</h3><p id="pregnancyRemaining">—</p></div><div class="preg-circle" id="pregnancyCircle"><span id="pregnancyWeekCircle">—</span></div></div>
           <div class="preg-progress-bottom"><span data-i18n="estimatedDueDate">Предполагаемая дата родов</span><strong id="pregnancyDueDate">—</strong></div>
         </div>
+
+        <!-- НОВОЕ 1: размер малыша -->
+        <div class="preg-card pregnancy-baby-card" id="pregnancyBaby" hidden>
+          <div class="preg-baby-title">
+            <div>
+              <span class="preg-baby-label" data-i18n="babySizeLabel">РАЗМЕР МАЛЫША</span>
+              <h3><span data-i18n="babySizeTitle">Малыш размером с</span> <span id="babyFruitName">—</span></h3>
+            </div>
+            <span class="preg-pill" id="babyWeekBadge">—</span>
+          </div>
+          <div class="preg-weeks" id="babyWeeks" role="group"></div>
+          <div class="preg-avocado">
+            <span class="preg-avocado-emoji" id="babyEmoji" aria-hidden="true">🥑</span>
+            <small data-i18n="babyApprox">Размеры ориентировочные</small>
+          </div>
+          <div class="preg-measures">
+            <div class="preg-measure"><span data-i18n="babyLength">Рост</span><strong id="babyLength">—</strong></div>
+            <div class="preg-measure"><span data-i18n="babyWeight">Вес</span><strong id="babyWeight">—</strong></div>
+          </div>
+        </div>
+
+        <!-- НОВОЕ 2: что происходит на этой неделе -->
+        <div class="preg-card pregnancy-week-info" id="pregnancyWeekInfo" hidden>
+          <span class="preg-baby-label" data-i18n="weekInfoLabel">ПО НЕДЕЛЯМ</span>
+          <h3 id="weekInfoTitle">—</h3>
+          <p id="weekInfoText">—</p>
+        </div>
       </div>
     </section>
   </div>
-
-  <div class="modal-backdrop" id="onboardingModal" hidden>
-    <section class="auth-modal onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle"><span class="onboarding-icon"><svg class="ui-icon"><use href="#icon-brand"></use></svg></span><p class="eyebrow">Sana</p><h2 id="onboardingTitle" data-i18n="onboardingTitle">Начните с первой отметки</h2><p class="modal-description" data-i18n="onboardingText">Добавьте начало последней менструации. После двух циклов прогноз станет персональным.</p><div class="onboarding-steps"><span data-i18n="onboardingStep1">1. Отметьте период</span><span data-i18n="onboardingStep2">2. Ведите дневник</span><span data-i18n="onboardingStep3">3. Следите за динамикой</span></div><button class="primary-button full large" id="finishOnboarding" type="button" data-i18n="onboardingAction">Добавить первую дату</button><button class="text-button full" id="skipOnboarding" type="button" data-i18n="later">Позже</button></section>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
-  <script src="./app.js?v=24"></script>
-</body>
-</html>

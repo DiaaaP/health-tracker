@@ -1919,3 +1919,20 @@ button, textarea {
   .bottom-nav { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); }
   .bottom-nav b { font-size: .58rem; }
 }
+
+
+/* Private calendar notes and gentle cycle-delay guidance */
+.calendar-day.has-private-note::before,
+.home-calendar-day.has-private-note::before {
+  content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%;
+  top: 5px; right: 5px; background: #b18acb; box-shadow: 0 0 0 2px rgba(255,255,255,.8);
+}
+.calendar-day.selected.has-private-note::before { background: #fff; }
+.private-note-summary { display: flex; align-items: center; gap: 9px; margin: -5px 0 17px; padding: 11px 13px; border-radius: 12px; background: #f5eff9; color: #68458a; font-size: .82rem; }
+.private-note-summary[hidden], .late-notice[hidden] { display: none; }
+.private-note-dot { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: #a77ac5; }
+.late-notice { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; padding: 16px 18px; border: 1px solid #eadcf2; border-radius: 16px; background: #fbf7fd; color: var(--ink); }
+.late-notice strong { display: block; font-size: .9rem; }
+.late-notice p { margin: 5px 0 0; color: var(--muted); font-size: .78rem; line-height: 1.45; }
+.late-notice .secondary-button { flex: 0 0 auto; white-space: normal; }
+@media (max-width: 600px) { .late-notice { align-items: stretch; flex-direction: column; } }

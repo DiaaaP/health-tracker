@@ -1843,7 +1843,7 @@ function bindEvents() {
       event.preventDefault(); cancel.focus();
     }
   });
-  document.querySelector('#historyAddPeriod').addEventListener('click', function () { openPeriodEditor(todayKey()); });
+  document.querySelector('#historyAddPeriod').addEventListener('click', function () { openPeriodEditor(dateKey(today)); });
   document.querySelector('#logoutButton').addEventListener('click', logout);
 
   document.querySelectorAll('[data-open-register]').forEach(function (button) {

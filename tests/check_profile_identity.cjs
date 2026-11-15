@@ -19,7 +19,8 @@ const context = vm.createContext({
     },
     querySelectorAll: () => []
   },
-  window: { scrollTo() {} }
+  window: { scrollTo() {} },
+  MutationObserver: class { observe() {} disconnect() {} }
 });
 // Load application functions without starting network requests or event handlers.
 vm.runInContext(source.replace(/\binit\(\);\s*$/, ''), context);

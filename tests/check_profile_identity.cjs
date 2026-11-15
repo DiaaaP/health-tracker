@@ -14,7 +14,7 @@ const context = vm.createContext({
   },
   document: {
     querySelector: selector => {
-      if (!elements.has(selector)) elements.set(selector, { textContent: '', innerHTML: '' });
+      if (!elements.has(selector)) elements.set(selector, { textContent: '', innerHTML: '', addEventListener() {} });
       return elements.get(selector);
     },
     querySelectorAll: () => []

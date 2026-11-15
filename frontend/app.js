@@ -55,6 +55,25 @@ Object.assign(copy.kk, {
   backendRequired: 'Аккаунтпен жұмыс істеу үшін жергілікті FastAPI серверін іске қосыңыз'
 });
 
+Object.assign(copy.kk, {
+  navHistory: 'Тарихым', historyEyebrow: 'ДЕНСАУЛЫҒЫҢЫЗ', historyHeading: 'Менің циклдерімнің тарихы',
+  historyDescription: 'Белгіленген етеккірлеріңіздің барлығы бір жерде.', historyTotal: 'Барлық жазба',
+  historyAvgCycle: 'Орташа цикл', historyAvgPeriod: 'Орташа етеккір', historyTimeline: 'ХРОНОЛОГИЯ',
+  historyAllCycles: 'Барлық циклдер', historyNote: 'Деректер сіз белгілеген күндерге негізделген. Болжам медициналық қорытынды емес.',
+  historyEmpty: 'Әзірге циклдер белгіленбеген', historyStart: 'Басталуы', historyEnd: 'Аяқталуы',
+  historyCycleLength: 'Цикл ұзақтығы', historyPeriodLength: 'Етеккір ұзақтығы', historyPrevious: 'Алдыңғы циклден',
+  historyDays: 'күн', historyEdit: 'Өзгерту'
+});
+Object.assign(copy.ru, {
+  navHistory: 'История циклов', historyEyebrow: 'ВАШЕ ЗДОРОВЬЕ', historyHeading: 'История моих циклов',
+  historyDescription: 'Все отмеченные менструации в одном месте.', historyTotal: 'Всего записей',
+  historyAvgCycle: 'Средний цикл', historyAvgPeriod: 'Средняя менструация', historyTimeline: 'ХРОНОЛОГИЯ',
+  historyAllCycles: 'Все циклы', historyNote: 'Данные основаны на датах, которые вы отметили. Прогнозы не являются медицинским заключением.',
+  historyEmpty: 'Пока нет отмеченных циклов', historyStart: 'Начало', historyEnd: 'Окончание',
+  historyCycleLength: 'Длина цикла', historyPeriodLength: 'Длительность менструации', historyPrevious: 'От предыдущего цикла',
+  historyDays: 'дн.', historyEdit: 'Изменить'
+});
+
 Object.assign(copy.ru, {
   guestName: 'Гость', namePlaceholder: 'Ваше имя',
   navChat: 'AI-чат',
@@ -565,7 +584,8 @@ function setView(view) {
     insights: t('navInsights'),
     chat: t('navChat'),
     profile: t('navProfile'),
-    log: t('dailyLog')
+    log: t('dailyLog'),
+    history: t('navHistory')
   };
   document.querySelector('#pageTitle').textContent = titles[view];
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1198,6 +1218,70 @@ async function deleteEditedPeriod() {
   showToast(t('periodRemoved'));
 }
 
+
+function renderFullCycleHistory() {
+  const container = document.querySelector('#fullPeriodHistory');
+  if (!container) return;
+  const periods = state.periods.slice().filter(function (period) { return period.start_date; })
+    .sort(function (a, b) { return b.start_date.localeCompare(a.start_date); });
+  const starts = periods.map(function (period) { return period.start_date; }).sort();
+  const cycleLengths = [];
+  for (let index = 1; index < starts.length; index += 1) {
+    const gap = daysBetween(starts[index - 1], starts[index]);
+    if (gap >= 1 && gap <= 90) cycleLengths.push(gap);
+  }
+  const periodLengths = periods.filter(function (period) { return period.end_date; }).map(function (period) {
+    return daysBetween(period.start_date, period.end_date) + 1;
+  }).filter(function (length) { return length >= 1 && length <= 15; });
+  const average = function (values) {
+    return values.length ? Math.round(values.reduce(function (sum, value) { return sum + value; }, 0) / values.length) : '—';
+  };
+  document.querySelector('#historyTotal').textContent = periods.length;
+  document.querySelector('#historyAvgCycle').textContent = cycleLengths.length ? average(cycleLengths) + ' ' + t('historyDays') : '—';
+  document.querySelector('#historyAvgPeriod').textContent = periodLengths.length ? average(periodLengths) + ' ' + t('historyDays') : '—';
+  container.innerHTML = '';
+  if (!periods.length) {
+    const empty = document.createElement('p');
+    empty.className = 'history-empty';
+    empty.textContent = t('historyEmpty');
+    container.appendChild(empty);
+    return;
+  }
+  periods.forEach(function (period, index) {
+    const card = document.createElement('article');
+    card.className = 'history-cycle-item';
+    const top = document.createElement('div');
+    top.className = 'history-cycle-top';
+    const heading = document.createElement('h3');
+    heading.textContent = formatDate(period.start_date);
+    const edit = document.createElement('button');
+    edit.type = 'button';
+    edit.className = 'text-button';
+    edit.textContent = t('historyEdit');
+    edit.addEventListener('click', function () { openPeriodEditor(period.start_date, period); });
+    top.append(heading, edit);
+    const details = document.createElement('div');
+    details.className = 'history-cycle-details';
+    const end = document.createElement('span');
+    end.textContent = t('historyEnd') + ': ' + (period.end_date ? formatDate(period.end_date) : t('notMarked'));
+    const duration = document.createElement('span');
+    duration.textContent = t('historyPeriodLength') + ': ' + (period.end_date ? (daysBetween(period.start_date, period.end_date) + 1) + ' ' + t('historyDays') : t('notMarked'));
+    const flow = document.createElement('span');
+    flow.textContent = t('flow' + (period.flow || 'medium').charAt(0).toUpperCase() + (period.flow || 'medium').slice(1));
+    details.append(end, duration, flow);
+    if (index < periods.length - 1) {
+      const previous = daysBetween(periods[index + 1].start_date, period.start_date);
+      if (previous > 0 && previous <= 90) {
+        const cycle = document.createElement('p');
+        cycle.className = 'history-cycle-gap';
+        cycle.textContent = t('historyPrevious') + ': ' + previous + ' ' + t('historyDays');
+        card.append(top, details, cycle);
+      } else card.append(top, details);
+    } else card.append(top, details);
+    container.appendChild(card);
+  });
+}
+
 function renderPeriodHistory() {
   const container = document.querySelector('#periodHistory');
   if (!container) return;
@@ -1224,6 +1308,7 @@ function renderCharts() {
   renderAnalytics();
   renderServerSummary();
   renderPeriodHistory();
+  renderFullCycleHistory();
 }
 
 function renderAnalytics() {
@@ -1758,6 +1843,7 @@ function bindEvents() {
       event.preventDefault(); cancel.focus();
     }
   });
+  document.querySelector('#historyAddPeriod').addEventListener('click', function () { openPeriodEditor(todayKey()); });
   document.querySelector('#logoutButton').addEventListener('click', logout);
 
   document.querySelectorAll('[data-open-register]').forEach(function (button) {

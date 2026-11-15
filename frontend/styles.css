@@ -1783,3 +1783,18 @@ button, textarea {
 #pregnancyView .preg-avocado { transition: background .25s; }
 #pregnancyView .preg-avocado-emoji { transition: transform .25s; }
 #pregnancyView .preg-avocado:hover .preg-avocado-emoji { transform: scale(1.08) rotate(-4deg); }
+/* ВСТАВИТЬ в самый конец styles.css (после baby-size.css) */
+#pregnancyView .pregnancy-week-info {
+  margin-top: 16px;
+  border-left: 4px solid #9d70c6;
+}
+#pregnancyView .pregnancy-week-info h3 {
+  margin: 6px 0 8px;
+  font-size: 1.05rem;
+}
+#pregnancyView .pregnancy-week-info p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: .9rem;
+}

@@ -7,7 +7,7 @@
   <meta name="description" content="Sana — қазақ және орыс тілдеріндегі жеке цикл күнделігі." />
   <title>Sana — цикл күнделігі</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./styles.css?v=28" />
+  <link rel="stylesheet" href="./styles.css?v=29" />
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true">
@@ -357,6 +357,12 @@
           <h2 id="pregnancyTitle" data-i18n="pregnancyTitle">Расчёт срока беременности</h2>
           <p data-i18n="pregnancyIntro">Укажите первый день последней менструации, чтобы получить ориентировочный срок.</p>
         </div>
+        <div class="pregnancy-tabs" role="tablist" aria-label="Разделы беременности">
+          <button class="pregnancy-tab active" type="button" role="tab" aria-selected="true" data-pregnancy-tab="my" data-i18n="pregnancyTabMy">Моя беременность</button>
+          <button class="pregnancy-tab" type="button" role="tab" aria-selected="false" data-pregnancy-tab="hospitals" data-i18n="pregnancyTabHospitals">Роддома Алматы</button>
+          <button class="pregnancy-tab" type="button" role="tab" aria-selected="false" data-pregnancy-tab="prepare" data-i18n="pregnancyTabPrepare">Подготовка к родам</button>
+        </div>
+        <div class="pregnancy-tab-panel" id="pregnancyTabMy" role="tabpanel">
         <div class="preg-card pregnancy-card">
           <label for="pregnancyLastPeriod" data-i18n="lastPeriodDate">Первый день последней менструации</label>
           <input id="pregnancyLastPeriod" type="date" />
@@ -399,6 +405,45 @@
           <h3 id="weekInfoTitle">—</h3>
           <p id="weekInfoText">—</p>
         </div>
+        </div>
+        <div class="pregnancy-tab-panel" id="pregnancyTabHospitals" role="tabpanel" hidden>
+          <div class="pregnancy-section-intro">
+            <p class="eyebrow" data-i18n="hospitalsEyebrow">АЛМАТЫ</p>
+            <h3 data-i18n="hospitalsHeading">Родильные дома и перинатальные центры</h3>
+            <p data-i18n="hospitalsIntro">Контакты государственных учреждений. Перед поездкой уточните условия приёма и доступность услуг по телефону.</p>
+          </div>
+          <div class="hospital-list">
+            <article class="hospital-card"><div><span class="hospital-type" data-i18n="publicMaternity">Государственный роддом</span><h3 data-i18n="hospital1">Городской родильный дом №1</h3><p>пр. Сейфуллина, 492</p><a href="tel:+77272935718">+7 (727) 293-57-18</a></div><a class="hospital-map-link" href="https://www.google.com/maps/search/?api=1&query=City+Maternity+Hospital+1+Seifullin+492+Almaty" target="_blank" rel="noopener" data-i18n="openMap">На карте</a></article>
+            <article class="hospital-card"><div><span class="hospital-type" data-i18n="publicMaternity">Государственный роддом</span><h3 data-i18n="hospital2">Городской родильный дом №2</h3><p>ул. Жангельдина, 28/20</p><a href="tel:+77273976359">+7 (727) 397-63-59</a></div><a class="hospital-map-link" href="https://www.google.com/maps/search/?api=1&query=City+Maternity+Hospital+2+Zhangeldin+28+Almaty" target="_blank" rel="noopener" data-i18n="openMap">На карте</a></article>
+            <article class="hospital-card"><div><span class="hospital-type" data-i18n="publicMaternity">Государственный роддом</span><h3 data-i18n="hospital4">Городской родильный дом №4</h3><p>ул. Станкевича, 6/3</p><a href="tel:+77272259020">+7 (727) 225-90-20</a></div><a class="hospital-map-link" href="https://www.google.com/maps/search/?api=1&query=City+Maternity+Hospital+4+Stankevich+6+Almaty" target="_blank" rel="noopener" data-i18n="openMap">На карте</a></article>
+            <article class="hospital-card"><div><span class="hospital-type" data-i18n="publicMaternity">Государственный роддом</span><h3 data-i18n="hospital5">Городской родильный дом №5</h3><p>ул. Кабдолова, 28</p><a href="tel:+77272301642">+7 (727) 230-16-42</a></div><a class="hospital-map-link" href="https://www.google.com/maps/search/?api=1&query=City+Maternity+Hospital+5+Kabdolova+28+Almaty" target="_blank" rel="noopener" data-i18n="openMap">На карте</a></article>
+            <article class="hospital-card"><div><span class="hospital-type" data-i18n="perinatalCenter">Перинатальный центр</span><h3 data-i18n="hospitalPerinatal">Городской перинатальный центр №1</h3><p>ул. Жубанова, 11</p><a href="tel:+77272301791">+7 (727) 230-17-91</a><a class="hospital-extra-phone" href="tel:+77272680050" data-i18n="admissionPhone">Приёмное отделение: +7 (727) 268-00-50</a><a class="hospital-site" href="https://almaty-perinatal.kz/" target="_blank" rel="noopener" data-i18n="officialSite">Официальный сайт</a></div><a class="hospital-map-link" href="https://www.google.com/maps/search/?api=1&query=City+Perinatal+Center+Zhubanov+11+Almaty" target="_blank" rel="noopener" data-i18n="openMap">На карте</a></article>
+            <article class="hospital-card"><div><span class="hospital-type" data-i18n="perinatalCenter">Перинатальный центр</span><h3 data-i18n="hospitalCardio">Центр перинатологии и детской кардиохирургии</h3><p>ул. Басенова, 2</p><a href="tel:+77273378784">+7 (727) 337-87-84</a></div><a class="hospital-map-link" href="https://www.google.com/maps/search/?api=1&query=Center+for+Perinatology+and+Pediatric+Cardiac+Surgery+Basenov+2+Almaty" target="_blank" rel="noopener" data-i18n="openMap">На карте</a></article>
+          </div>
+          <p class="pregnancy-disclaimer" data-i18n="hospitalDisclaimer">Список не является рейтингом или медицинской рекомендацией. Телефоны и условия приёма могут меняться — уточняйте информацию напрямую в учреждении.</p>
+        </div>
+        <div class="pregnancy-tab-panel" id="pregnancyTabPrepare" role="tabpanel" hidden>
+          <div class="pregnancy-section-intro">
+            <p class="eyebrow" data-i18n="prepareEyebrow">СПОКОЙНАЯ ПОДГОТОВКА</p>
+            <h3 data-i18n="prepareHeading">Чек-лист перед родами</h3>
+            <p data-i18n="prepareIntro">Отмечайте пункты по мере подготовки. Список можно изменить под рекомендации выбранного роддома.</p>
+          </div>
+          <div class="prep-checklist">
+            <h4 data-i18n="prepDocuments">Документы</h4>
+            <label><input type="checkbox" data-prep-check="id"><span data-i18n="prepId">Удостоверение личности</span></label>
+            <label><input type="checkbox" data-prep-check="exchange"><span data-i18n="prepExchange">Обменная карта и документы по беременности</span></label>
+            <label><input type="checkbox" data-prep-check="tests"><span data-i18n="prepTests">Результаты анализов и обследований</span></label>
+            <h4 data-i18n="prepMotherBag">Сумка для мамы</h4>
+            <label><input type="checkbox" data-prep-check="clothes"><span data-i18n="prepClothes">Удобная одежда и бельё</span></label>
+            <label><input type="checkbox" data-prep-check="hygiene"><span data-i18n="prepHygiene">Средства личной гигиены</span></label>
+            <label><input type="checkbox" data-prep-check="charger"><span data-i18n="prepCharger">Телефон и зарядное устройство</span></label>
+            <h4 data-i18n="prepBabyBag">Для малыша</h4>
+            <label><input type="checkbox" data-prep-check="babyClothes"><span data-i18n="prepBabyClothes">Одежда для новорождённого</span></label>
+            <label><input type="checkbox" data-prep-check="diapers"><span data-i18n="prepDiapers">Подгузники и пелёнки</span></label>
+            <label><input type="checkbox" data-prep-check="blanket"><span data-i18n="prepBlanket">Плед или конверт для выписки</span></label>
+          </div>
+          <p class="pregnancy-disclaimer" data-i18n="prepDisclaimer">Уточните у выбранного роддома, что именно нужно взять с собой: требования могут отличаться.</p>
+        </div>
       </div>
     </section>
   </div>
@@ -409,6 +454,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite">Сақталды</div>
   <script src="./tracking.js?v=1"></script>
-  <script src="./app.js?v=28"></script>
+  <script src="./app.js?v=29"></script>
 </body>
 </html>

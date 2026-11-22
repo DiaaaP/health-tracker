@@ -15,11 +15,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
+    outputs:
+      artifact_name: ${{ steps.artifact-name.outputs.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,10 +36,24 @@ jobs:
         run: node tests/check_hci_ux.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Choose a unique artifact name
+        id: artifact-name
+        run: echo "name=github-pages-${{ github.run_id }}-${{ github.run_attempt }}" >> "$GITHUB_OUTPUT"
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
           path: frontend
+          name: ${{ steps.artifact-name.outputs.name }}
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: ${{ needs.build.outputs.artifact_name }}

@@ -1989,7 +1989,7 @@ button, textarea {
 }
 #pregnancyView .pregnancy-tab {
   min-height: 42px; padding: 9px 10px; border: 0; border-radius: 11px;
-  background: transparent; color: #766b80; font: 700 .78rem/1.25 inherit; cursor: pointer;
+  background: transparent; color: #766b80; font-family: inherit; font-size: .78rem; font-weight: 700; line-height: 1.25; cursor: pointer;
 }
 #pregnancyView .pregnancy-tab.active { background: #35105c; color: #fff; box-shadow: 0 4px 12px rgba(53,16,92,.14); }
 #pregnancyView .pregnancy-tab:focus-visible { outline: 3px solid #c8a9df; outline-offset: 2px; }

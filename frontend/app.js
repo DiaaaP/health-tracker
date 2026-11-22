@@ -2068,12 +2068,13 @@ async function clearLocalData() {
     if (state.authToken || state.trackerOnline) { showToast(t('trackingSaveError')); return; }
     // GitHub Pages has no backend, so local cleanup below is enough there.
   }
-  ['sana-logs', 'sana-periods', 'sana-notifications', 'sana-private-notes'].forEach(function (key) {
+  ['sana-logs', 'sana-periods', 'sana-notifications', 'sana-private-notes', 'sana-pregnancy-checklist'].forEach(function (key) {
     localStorage.removeItem(key);
   });
   state.logs.clear();
   state.periods = [];
   state.privateNotes = {};
+  restorePregnancyChecklist();
   localStorage.removeItem(trackingCacheKey());
   state.tracking = SanaTracking.normalize(null);
   if (!clearedOnServer) cacheTracking(true);
@@ -2220,6 +2221,9 @@ function restorePregnancyChecklist() {
 }
 
 Object.assign(copy.ru, {
+  hospitalAddress1: 'пр. Сейфуллина, 492', hospitalAddress2: 'ул. Жангельдина, 28/20',
+  hospitalAddress4: 'ул. Станкевича, 6/3', hospitalAddress5: 'ул. Кабдолова, 28',
+  hospitalAddressPerinatal: 'ул. Жубанова, 11', hospitalAddressCardio: 'ул. Басенова, 2',
   pregnancyTabMy: 'Моя беременность', pregnancyTabHospitals: 'Роддома Алматы', pregnancyTabPrepare: 'Подготовка к родам',
   hospitalsEyebrow: 'АЛМАТЫ', hospitalsHeading: 'Родильные дома и перинатальные центры',
   hospitalsIntro: 'Контакты государственных учреждений. Перед поездкой уточните условия приёма и доступность услуг по телефону.',
@@ -2242,6 +2246,9 @@ Object.assign(copy.ru, {
   prepDisclaimer: 'Уточните у выбранного роддома, что именно нужно взять с собой: требования могут отличаться.'
 });
 Object.assign(copy.kk, {
+  hospitalAddress1: 'Сейфуллин даңғылы, 492', hospitalAddress2: 'Жангельдин көшесі, 28/20',
+  hospitalAddress4: 'Станкевич көшесі, 6/3', hospitalAddress5: 'Қабдолов көшесі, 28',
+  hospitalAddressPerinatal: 'Жұбанов көшесі, 11', hospitalAddressCardio: 'Басенов көшесі, 2',
   pregnancyTabMy: 'Менің жүктілігім', pregnancyTabHospitals: 'Алматы перзентханалары', pregnancyTabPrepare: 'Босануға дайындық',
   hospitalsEyebrow: 'АЛМАТЫ', hospitalsHeading: 'Перзентханалар мен перинаталдық орталықтар',
   hospitalsIntro: 'Мемлекеттік мекемелердің байланыс деректері. Бармас бұрын қабылдау тәртібі мен қызметтерді телефон арқылы нақтылаңыз.',

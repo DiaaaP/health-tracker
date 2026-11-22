@@ -35,6 +35,7 @@ const context = vm.createContext({
   }
 });
 const run = code => vm.runInContext(code, context);
+run(fs.readFileSync(path.join(__dirname, '../frontend/tracking.js'), 'utf8'));
 const source = fs.readFileSync(path.join(__dirname, '../frontend/app.js'), 'utf8');
 run(source.replace(/\binit\(\);\s*/, ''));
 run('bindEvents()');

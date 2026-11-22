@@ -135,6 +135,65 @@ Object.assign(copy.ru, {
   lateNoticeTitle: 'Менструация задерживается', lateNoticeText: 'Задержка не всегда означает беременность. При вероятности беременности можно сделать тест.', openPregnancy: 'Открыть раздел беременности'
 });
 
+Object.assign(copy.ru, {
+  changeTrackingMode: 'Сменить режим', pregnancySettings: 'Настройки беременности',
+  trackingCycle: 'Отслеживание цикла', trackingCycleDescription: 'Календарь, прогнозы и ваш дневник самочувствия.',
+  pregnancyCalendar: 'Календарь беременности', trackingPregnancy: 'Режим беременности',
+  periodsPaused: 'Прогнозы и отметки менструации приостановлены. Дневник самочувствия доступен.',
+  historyPreserved: 'История цикла сохранена. Пока включён режим беременности, её можно просматривать без изменения дат.',
+  pregnancyConfirmed: 'Беременность подтверждена, я хочу включить её отслеживание.',
+  pregnancyActivationNote: 'Расчёт сам по себе не меняет режим. После включения прогнозы менструации и овуляции будут приостановлены, история сохранится.',
+  activatePregnancy: 'Включить режим беременности', updatePregnancy: 'Сохранить дату беременности',
+  confirmPregnancyFirst: 'Для включения режима подтвердите, что беременность уже установлена.',
+  pregnancyDateTooOld: 'Проверьте дату: она должна быть в пределах последних 43 недель.',
+  returnToCycle: 'Вернуться к отслеживанию цикла', endPregnancyTitle: 'Вернуться к отслеживанию цикла?',
+  endPregnancyDescription: 'Записи и история останутся. Новый прогноз появится после первой новой отметки менструации; перерыв не будет считаться задержкой.',
+  confirmReturnToCycle: 'Вернуться к циклу', cancelAction: 'Отмена', trackingSaved: 'Режим сохранён',
+  trackingSaveError: 'Не удалось сохранить режим. Проверьте подключение и повторите.',
+  trackingLocal: 'Сохранено на этом устройстве', trackingSaving: 'Сохраняем…',
+  weeksUnit: 'недель', ageShort: '{weeks} нед. {days} дн.', gestationalAge: 'Ориентировочный срок',
+  daysRemaining: 'До предполагаемой даты родов', logWellbeing: 'Записать самочувствие',
+  beforePregnancy: 'До начала отсчёта беременности', pregnancyDay: 'День беременности',
+  dueDateDay: 'Предполагаемая дата родов', afterDueDate: 'После предполагаемой даты родов',
+  pregnancyDateNote: 'Срок и дата родов ориентировочные. Их можно уточнить с врачом.',
+  resumeCycleNote: 'Отметьте первую новую менструацию. Перерыв отслеживания не считается задержкой.',
+  selectPeriodDays: 'Отметить дни менструации', selectPeriodStart: 'Выберите первый день менструации.',
+  selectPeriodEnd: 'Теперь выберите последний день или оставьте один день.', continueSelection: 'Продолжить',
+  periodFuture: 'Будущие даты — прогноз. Отмечайте только прошедшие дни и сегодня.',
+  periodOverlap: 'Эти дни уже относятся к другой записи. Откройте её из истории для изменения.',
+  calendarForecastNote: 'Заливка — ваши отметки, пунктир — прогноз. Прогноз не подтверждает овуляцию и не подходит для контрацепции.',
+  ovulationDay: 'Прогноз овуляции', diaryEntry: 'Запись дневника', previousMonth: 'Предыдущий месяц', nextMonth: 'Следующий месяц'
+});
+Object.assign(copy.kk, {
+  changeTrackingMode: 'Режимді өзгерту', pregnancySettings: 'Жүктілік баптаулары',
+  trackingCycle: 'Циклді бақылау', trackingCycleDescription: 'Күнтізбе, болжамдар және хал-жағдай күнделігі.',
+  pregnancyCalendar: 'Жүктілік күнтізбесі', trackingPregnancy: 'Жүктілік режимі',
+  periodsPaused: 'Етеккір болжамдары мен белгілері тоқтатылды. Хал-жағдай күнделігі қолжетімді.',
+  historyPreserved: 'Цикл тарихы сақталды. Жүктілік режимінде оны күндерін өзгертпей қарауға болады.',
+  pregnancyConfirmed: 'Жүктілік расталған, оны бақылау режимін қосқым келеді.',
+  pregnancyActivationNote: 'Есептеу режимді өзгертпейді. Режим қосылғанда етеккір мен овуляция болжамдары тоқтатылып, тарих сақталады.',
+  activatePregnancy: 'Жүктілік режимін қосу', updatePregnancy: 'Жүктілік күнін сақтау',
+  confirmPregnancyFirst: 'Режимді қосу үшін жүктіліктің расталғанын белгілеңіз.',
+  pregnancyDateTooOld: 'Күнді тексеріңіз: соңғы 43 апта шегінде болуы керек.',
+  returnToCycle: 'Циклді бақылауға оралу', endPregnancyTitle: 'Циклді бақылауға ораласыз ба?',
+  endPregnancyDescription: 'Жазбалар мен тарих сақталады. Болжам жаңа етеккір белгісінен кейін пайда болады; үзіліс кешігу болып есептелмейді.',
+  confirmReturnToCycle: 'Циклге оралу', cancelAction: 'Бас тарту', trackingSaved: 'Режим сақталды',
+  trackingSaveError: 'Режим сақталмады. Қосылымды тексеріп, қайталаңыз.',
+  trackingLocal: 'Осы құрылғыда сақталды', trackingSaving: 'Сақталуда…',
+  weeksUnit: 'апта', ageShort: '{weeks} апта {days} күн', gestationalAge: 'Болжамды мерзім',
+  daysRemaining: 'Болжамды босану күніне дейін', logWellbeing: 'Хал-жағдайды белгілеу',
+  beforePregnancy: 'Жүктілік есебі басталғанға дейін', pregnancyDay: 'Жүктілік күні',
+  dueDateDay: 'Болжамды босану күні', afterDueDate: 'Болжамды босану күнінен кейін',
+  pregnancyDateNote: 'Мерзім мен босану күні шамамен берілген. Дәрігермен нақтылауға болады.',
+  resumeCycleNote: 'Алғашқы жаңа етеккірді белгілеңіз. Бақылау үзілісі кешігу болып саналмайды.',
+  selectPeriodDays: 'Етеккір күндерін белгілеу', selectPeriodStart: 'Етеккірдің бірінші күнін таңдаңыз.',
+  selectPeriodEnd: 'Енді соңғы күнді таңдаңыз немесе бір күн қалдырыңыз.', continueSelection: 'Жалғастыру',
+  periodFuture: 'Болашақ күндер — болжам. Тек өткен күндерді және бүгінді белгілеңіз.',
+  periodOverlap: 'Бұл күндер басқа жазбада бар. Өзгерту үшін оны тарихтан ашыңыз.',
+  calendarForecastNote: 'Боялған күндер — белгілеріңіз, үзік сызық — болжам. Болжам овуляцияны растамайды және контрацепцияға жарамайды.',
+  ovulationDay: 'Овуляция болжамы', diaryEntry: 'Күнделік жазбасы', previousMonth: 'Алдыңғы ай', nextMonth: 'Келесі ай'
+});
+
 const dataVersion = 'sana-clean-2026-09-27';
 if (localStorage.getItem('sana-data-version') !== dataVersion) {
   [
@@ -179,6 +238,10 @@ const state = {
   preferences: readPreferences(),
   authToken: localStorage.getItem('sana-auth-token') || ''
 };
+state.tracking = readTrackingCache();
+state.trackerOnline = false;
+state.periodSelection = null;
+let calendarRequestId = 0;
 
 const registerModal = document.querySelector('#registerModal');
 const loginModal = document.querySelector('#loginModal');
@@ -357,8 +420,9 @@ function downloadBlob(blob, filename) {
 
 function exportBackup() {
   const backup = {
-    format: 'sana-backup', version: 1, exported_at: new Date().toISOString(),
-    logs: Array.from(state.logs.values()), periods: state.periods, preferences: state.preferences, privateNotes: state.privateNotes
+    format: 'sana-backup', version: 2, exported_at: new Date().toISOString(),
+    logs: Array.from(state.logs.values()), periods: state.periods, preferences: state.preferences, privateNotes: state.privateNotes,
+    tracking: state.tracking
   };
   downloadBlob(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }), 'sana-backup-' + dateKey(today) + '.json');
   showToast(t('backupExported'));
@@ -379,9 +443,180 @@ async function importBackup(event) {
     }
     state.privateNotes = backup.privateNotes && typeof backup.privateNotes === 'object' && !Array.isArray(backup.privateNotes) ? backup.privateNotes : {}; cachePrivateNotes();
     if (backup.preferences) { state.preferences = Object.assign(readPreferences(), backup.preferences); savePreferences(); }
+    await persistTracking(SanaTracking.normalize(backup.tracking));
     await loadTrackerData(); showToast(t('backupImported'));
   } catch (error) { showToast(t('backupInvalid')); }
   event.target.value = '';
+}
+
+function trackingCacheKey() {
+  const id = localStorage.getItem('sana-user-id');
+  return 'sana-tracking:' + (state.authToken ? 'user:' + (id || 'unknown') : 'guest');
+}
+
+function readTrackingCache() {
+  try { return SanaTracking.normalize(JSON.parse(localStorage.getItem(trackingCacheKey()) || '{}')); }
+  catch (error) { return SanaTracking.normalize(null); }
+}
+
+function cacheTracking(pending) {
+  localStorage.setItem(trackingCacheKey(), JSON.stringify(Object.assign({}, state.tracking, { pending: Boolean(pending) })));
+}
+
+function isPregnancyMode() { return state.tracking.mode === 'pregnancy'; }
+function isPregnancyDate(key) { return isPregnancyMode() && key >= state.tracking.last_period_date && key <= SanaTracking.add(state.tracking.last_period_date, 280); }
+
+async function loadTrackingSettings() {
+  const token = state.authToken;
+  state.tracking = readTrackingCache();
+  try {
+    const cached = JSON.parse(localStorage.getItem(trackingCacheKey()) || '{}');
+    const result = cached.pending && !token
+      ? await apiRequest('/api/tracking', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({}, state.tracking, { confirmed: true })) })
+      : await apiRequest('/api/tracking');
+    if (token !== state.authToken) return;
+    state.tracking = SanaTracking.normalize(result);
+    cacheTracking(false);
+  } catch (error) { /* A static deployment keeps the explicitly selected device mode. */ }
+}
+
+async function persistTracking(settings) {
+  const token = state.authToken;
+  let saved = settings;
+  let local = false;
+  try {
+    saved = await apiRequest('/api/tracking', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({}, settings, { confirmed: true })) });
+  } catch (error) {
+    if (token || (error.status && error.status !== 404 && error.status !== 405)) throw error;
+    local = true;
+  }
+  if (token !== state.authToken) throw new Error('Account changed');
+  state.tracking = SanaTracking.normalize(saved);
+  state.periodSelection = null;
+  cacheTracking(local);
+  await loadCalendarForecast();
+  await loadSummary();
+  renderForecastSummary(); updateSelectedDate(); renderCalendar(); renderCharts();
+  return local;
+}
+
+function pregnancyInputError() {
+  const value = document.querySelector('#pregnancyLastPeriod').value;
+  if (!SanaTracking.parse(value)) return t('pregnancyDateRequired');
+  const elapsed = SanaTracking.difference(value, dateKey(today));
+  if (elapsed < 0) return t('pregnancyFutureDate');
+  if (elapsed > 301) return t('pregnancyDateTooOld');
+  return '';
+}
+
+async function activatePregnancyMode() {
+  const message = document.querySelector('#trackingMessage');
+  const error = pregnancyInputError() || (!isPregnancyMode() && !document.querySelector('#pregnancyConfirmed').checked ? t('confirmPregnancyFirst') : '');
+  showFormError(message, error);
+  if (error) return;
+  const button = document.querySelector('#activatePregnancy'); button.disabled = true;
+  try {
+    const local = await persistTracking({ mode: 'pregnancy', last_period_date: document.querySelector('#pregnancyLastPeriod').value, cycle_resume_date: state.tracking.cycle_resume_date });
+    setModal(pregnancyModal, false); showToast(t(local ? 'trackingLocal' : 'trackingSaved'));
+  } catch (failure) { showFormError(message, t('trackingSaveError')); }
+  finally { button.disabled = false; }
+}
+
+async function finishPregnancyMode() {
+  const button = document.querySelector('#confirmEndPregnancy'); button.disabled = true;
+  try {
+    const local = await persistTracking({ mode: 'cycle', last_period_date: state.tracking.last_period_date, cycle_resume_date: dateKey(today) });
+    setModal(pregnancyModal, false); showToast(t(local ? 'trackingLocal' : 'trackingSaved'));
+  } catch (failure) { showFormError(document.querySelector('#trackingMessage'), t('trackingSaveError')); }
+  finally { button.disabled = false; }
+}
+
+function ageText(details) { return t('ageShort').replace('{weeks}', details.weeks).replace('{days}', details.days); }
+
+function renderTrackingUI() {
+  const pregnant = isPregnancyMode();
+  const details = pregnant ? SanaTracking.pregnancy(state.tracking.last_period_date, dateKey(today)) : null;
+  document.body.classList.toggle('pregnancy-active', pregnant);
+  const text = function (selector, key) { document.querySelectorAll(selector).forEach(function (node) { node.textContent = t(key); }); };
+  document.querySelector('#trackingModeLabel').textContent = t(pregnant ? 'trackingPregnancy' : 'trackingCycle');
+  document.querySelector('#pregnancyTitle').textContent = t(pregnant ? 'pregnancySettings' : 'pregnancyTitle');
+  document.querySelector('#activatePregnancy').textContent = t(pregnant ? 'updatePregnancy' : 'activatePregnancy');
+  document.querySelector('#trackingModeDescription').textContent = pregnant ? ageText(details) + ' · ' + t('pregnancyDateNote') : t(state.tracking.cycle_resume_date ? 'resumeCycleNote' : 'trackingCycleDescription');
+  document.querySelector('#calendarModeNotice').hidden = !pregnant;
+  document.querySelector('#periodLockExplanation').hidden = !pregnant;
+  document.querySelector('#ovulationLegend').hidden = pregnant;
+  ['#markSelectedPeriodButton', '#addPeriodButton', '#historyAddPeriod', '#selectPeriodDays'].forEach(function (selector) { document.querySelector(selector).hidden = pregnant; });
+  document.querySelector('#cycleSettingsButton').disabled = pregnant;
+  document.querySelector('#cycleSettingsButton').title = pregnant ? t('periodsPaused') : '';
+  text('.profile-hero [data-i18n="cycleMode"]', pregnant ? 'trackingPregnancy' : 'cycleMode');
+  text('[data-i18n="cycleCalendar"]', pregnant ? 'pregnancyCalendar' : 'cycleCalendar');
+  text('.cycle-card [data-i18n="currentCycle"]', pregnant ? 'trackingPregnancy' : 'currentCycle');
+  text('.cycle-card [data-i18n="cycleStatus"]', pregnant ? 'gestationalAge' : 'cycleStatus');
+  text('.ring-copy [data-i18n="dayOfCycle"]', pregnant ? 'weeksUnit' : 'dayOfCycle');
+  text('.cycle-side [data-i18n="fertility"]', pregnant ? 'pregnancyMode' : 'fertility');
+  text('.cycle-side [data-i18n="fertileWindow"]', pregnant ? 'estimatedDueDate' : 'fertileWindow');
+  text('.cycle-side [data-i18n="cycleLength"]', pregnant ? 'daysRemaining' : 'cycleLength');
+  text('#logPeriodButton span', pregnant ? 'logWellbeing' : 'markPeriodStart');
+  text('.overview-stats [data-i18n="cycleLength"]', pregnant ? 'gestationalAge' : 'cycleLength');
+  text('.overview-stats [data-i18n="periodLength"]', pregnant ? 'daysRemaining' : 'periodLength');
+  text('.overview-stats .overview-stat:first-child [data-i18n="days"]', pregnant ? 'weeksUnit' : 'days');
+  text('.day-summary .data-list [data-i18n="prediction"]', pregnant ? 'estimatedDueDate' : 'prediction');
+  document.querySelector('#calendarExplainer').textContent = pregnant ? t('pregnancyDateNote') :
+    (state.tracking.cycle_resume_date && !(state.calendar && state.calendar.has_data) ? t('resumeCycleNote') + ' ' : '') + t('calendarForecastNote');
+  document.querySelector('#prevMonth').setAttribute('aria-label', t('previousMonth'));
+  document.querySelector('#nextMonth').setAttribute('aria-label', t('nextMonth'));
+  document.querySelector('.cycle-ring').setAttribute('aria-label', pregnant ? ageText(details) : t('cycleMode'));
+  if (pregnant) {
+    document.querySelector('#cyclePhase').textContent = t('trimester').replace('{number}', details.trimester);
+    document.querySelector('#cycleDayValue').textContent = details.weeks;
+    document.querySelector('#nextPeriodText').textContent = ageText(details);
+    document.querySelector('#fertileRange').textContent = formatDate(details.due_date);
+    const remaining = Math.max(0, SanaTracking.difference(dateKey(today), details.due_date));
+    document.querySelector('#cycleLengthValue').textContent = remaining;
+    document.querySelector('#overviewCycleLength').textContent = details.weeks;
+    document.querySelector('#overviewPeriodLength').textContent = remaining;
+    document.querySelector('#cycleDataStatus').textContent = t('pregnancyDateNote');
+    document.querySelector('#lateNotice').hidden = true;
+    document.querySelector('.cycle-card').classList.remove('late-state');
+    document.querySelector('.ring-progress').style.strokeDashoffset = String(616 * (1 - Math.min(1, details.elapsed_days / 280)));
+  } else if (state.tracking.cycle_resume_date && !(state.calendar && state.calendar.has_data)) {
+    document.querySelector('#nextPeriodText').textContent = t('resumeCycleNote');
+  }
+  const unit = pregnant ? 'pregnancyDay' : 'period';
+  document.querySelectorAll('.legend .period-dot, .home-calendar-legend .period-dot').forEach(function (node) {
+    node.classList.toggle('pregnancy-dot', pregnant); node.nextElementSibling.textContent = t(unit);
+  });
+  document.querySelectorAll('.legend .predicted-period-dot, .legend .fertile-dot').forEach(function (node) { node.parentElement.hidden = pregnant; });
+}
+
+function selectCalendarDate(key) {
+  if (state.periodSelection) {
+    if (key > dateKey(today)) { showToast(t('periodFuture')); return; }
+    const selection = state.periodSelection;
+    if (!selection.start || selection.end) { selection.start = key; selection.end = null; }
+    else {
+      const start = key < selection.start ? key : selection.start;
+      const end = key > selection.start ? key : selection.start;
+      if (daysBetween(start, end) >= 10) { showToast(t('periodTooLong')); return; }
+      selection.start = start; selection.end = end;
+    }
+  }
+  state.selectedDay = Number(key.slice(-2));
+  updateSelectedDate(); renderCalendar();
+}
+
+function renderPeriodSelection() {
+  const selection = state.periodSelection;
+  document.querySelector('#periodSelectionBar').hidden = !selection;
+  document.querySelector('#continuePeriodSelection').disabled = !(selection && selection.start);
+  if (!selection) return;
+  document.querySelector('#periodSelectionText').textContent = !selection.start ? t('selectPeriodStart') :
+    formatDate(selection.start) + (selection.end ? ' — ' + formatDate(selection.end) : '. ' + t('selectPeriodEnd'));
+}
+
+async function goToToday() {
+  state.shownMonth = today.getMonth(); state.shownYear = today.getFullYear(); state.selectedDay = today.getDate();
+  await loadCalendarForecast(); renderForecastSummary(); updateSelectedDate(); renderCalendar();
 }
 
 function t(key) {
@@ -455,7 +690,8 @@ function buildLocalCalendarForecast(year, month) {
   }).sort(function (first, second) {
     return first.start - second.start;
   });
-  const starts = Array.from(new Set(periods.map(function (period) {
+  const activePeriods = periods.filter(function (period) { return !state.tracking.cycle_resume_date || dateKey(period.start) >= state.tracking.cycle_resume_date; });
+  const starts = Array.from(new Set(activePeriods.map(function (period) {
     return dateKey(period.start);
   }))).map(dateFromKey);
   const gaps = [];
@@ -463,7 +699,7 @@ function buildLocalCalendarForecast(year, month) {
     const gap = Math.round((starts[index] - starts[index - 1]) / 86400000);
     if (gap >= 21 && gap <= 45) gaps.push(gap);
   }
-  const lengths = periods.filter(function (period) {
+  const lengths = activePeriods.filter(function (period) {
     return period.complete;
   }).map(function (period) {
     return Math.round((period.end - period.start) / 86400000) + 1;
@@ -504,12 +740,12 @@ function buildLocalCalendarForecast(year, month) {
     fertile_dates: [],
     ovulation_dates: []
   };
-  if (!starts.length) return result;
+  if (isPregnancyMode() || !starts.length) return SanaTracking.calendar(result, state.tracking, year, month, dateKey(today));
 
   const anchor = starts[starts.length - 1];
   const nextPeriod = addDays(anchor, cycleLength);
-  const lateDays = Math.max(0, Math.floor((today - nextPeriod) / 86400000));
-  const elapsed = Math.floor((today - anchor) / 86400000);
+  const lateDays = Math.max(0, daysBetween(dateKey(nextPeriod), dateKey(today)));
+  const elapsed = daysBetween(dateKey(anchor), dateKey(today));
   if (elapsed >= 0) {
     const currentDay = elapsed + 1;
     const ovulation = addDays(anchor, Math.max(0, cycleLength - 14));
@@ -536,8 +772,8 @@ function buildLocalCalendarForecast(year, month) {
   result.expected_period_start = dateKey(nextPeriod);
   result.late_days = lateDays;
   result.is_late = Boolean(lateDays);
-  result.next_fertile_start = dateKey(nextFertileStart);
-  result.next_fertile_end = dateKey(nextFertileEnd);
+  result.next_fertile_start = lateDays ? null : dateKey(nextFertileStart);
+  result.next_fertile_end = lateDays ? null : dateKey(nextFertileEnd);
 
   const predicted = new Set();
   const fertile = new Set();
@@ -559,13 +795,18 @@ function buildLocalCalendarForecast(year, month) {
     if (ovulation >= monthStart && ovulation <= monthEnd) ovulations.add(dateKey(ovulation));
     cycleStart = addDays(cycleStart, cycleLength);
   }
-  result.predicted_period_dates = Array.from(predicted).sort();
-  result.fertile_dates = Array.from(fertile).sort();
-  result.ovulation_dates = Array.from(ovulations).sort();
-  return result;
+  const visible = function (key) { return !lateDays || key <= dateKey(today); };
+  result.predicted_period_dates = Array.from(predicted).filter(visible).sort();
+  result.fertile_dates = Array.from(fertile).filter(function (key) { return visible(key) && !recorded.has(key); }).sort();
+  result.ovulation_dates = Array.from(ovulations).filter(function (key) { return visible(key) && !recorded.has(key); }).sort();
+  return SanaTracking.calendar(result, state.tracking, year, month, dateKey(today));
 }
 
 function formatDate(key) {
+  if (state.lang === 'kk') {
+    const value = dateFromKey(key);
+    return value.getDate() + ' ' + months.kk[value.getMonth()].toLowerCase();
+  }
   const locale = state.lang === 'kk' ? 'kk-KZ' : 'ru-RU';
   return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(dateFromKey(key));
 }
@@ -598,6 +839,9 @@ function setView(view) {
     history: t('navHistory')
   };
   document.querySelector('#pageTitle').textContent = titles[view];
+  document.querySelectorAll('[data-view]').forEach(function (button) {
+    button.setAttribute('aria-label', titles[button.dataset.view] || button.dataset.view);
+  });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -637,7 +881,7 @@ function applyLanguage(lang) {
 
   document.querySelector('#languageValue').textContent = lang === 'kk' ? 'Қазақша' : 'Русский';
   const locale = lang === 'kk' ? 'kk-KZ' : 'ru-RU';
-  const todayText = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(today);
+  const todayText = formatDate(dateKey(today));
   document.querySelector('#todayLabel').textContent = (lang === 'kk' ? 'Бүгін • ' : 'Сегодня • ') + todayText;
   updateNotificationsText();
   savePreferences();
@@ -671,6 +915,12 @@ function updateSelectedDate() {
   document.querySelector('#privateNoteSummaryText').textContent = privateNote ? t(privateNote.type + 'Contact') : '';
   const existingPeriod = getPeriodForDate(key);
   document.querySelector('#markSelectedPeriodText').textContent = t(existingPeriod ? 'editPeriod' : 'markPeriodStart');
+  if (isPregnancyMode()) {
+    const details = SanaTracking.pregnancy(state.tracking.last_period_date, key);
+    document.querySelector('#calendarPhaseTitle').textContent = details.elapsed_days < 0 ? t('beforePregnancy') : key > details.due_date ? t('afterDueDate') : ageText(details);
+    document.querySelector('#calendarPhaseDetail').textContent = key === details.due_date ? t('dueDateDay') : t('pregnancyDateNote');
+    document.querySelector('#calendarNextPeriod').textContent = formatDate(details.due_date);
+  }
 }
 
 function phaseForDate(key) {
@@ -719,6 +969,7 @@ function renderForecastSummary() {
     ? Math.min(1, calendar.current_cycle_day / calendar.cycle_length)
     : 0;
   document.querySelector('.ring-progress').style.strokeDashoffset = String(616 * (1 - progress));
+  renderTrackingUI();
 }
 
 function renderCalendar() {
@@ -748,20 +999,27 @@ function renderCalendar() {
 
     if (muted) {
       button.classList.add('muted');
+      button.disabled = true;
     } else {
       const key = dateKey(new Date(state.shownYear, state.shownMonth, day));
       const log = state.logs.get(key);
       if (log) button.classList.add('logged');
       if (state.privateNotes[key]) button.classList.add('has-private-note');
-      if (isPeriodDate(key)) button.classList.add('period');
+      const pregnancyDate = isPregnancyDate(key);
+      if (pregnancyDate) button.classList.add('pregnancy-day');
+      else if (isPeriodDate(key)) button.classList.add('period');
       else if (isPredictedPeriodDate(key)) button.classList.add('predicted-period');
       if (isFertileDate(key)) button.classList.add('fertile');
+      if (!pregnancyDate && state.calendar && state.calendar.ovulation_dates.includes(key)) button.classList.add('ovulation');
+      if (pregnancyDate && key === SanaTracking.add(state.tracking.last_period_date, 280)) button.classList.add('due-date');
+      const selection = state.periodSelection;
+      if (selection && selection.start && key >= selection.start && key <= (selection.end || selection.start)) button.classList.add('range-preview');
       if (key === dateKey(today)) button.classList.add('today');
       if (day === state.selectedDay) button.classList.add('selected');
+      button.setAttribute('aria-pressed', String(day === state.selectedDay));
+      button.setAttribute('aria-label', calendarDayLabel(key));
       button.addEventListener('click', function () {
-        state.selectedDay = day;
-        updateSelectedDate();
-        renderCalendar();
+        selectCalendarDate(key);
       });
     }
     grid.appendChild(button);
@@ -774,6 +1032,8 @@ function renderCalendar() {
     element.textContent = week[index];
   });
   renderHomeCalendar(week);
+  renderPeriodSelection();
+  renderTrackingUI();
 }
 
 function renderHomeCalendar(week) {
@@ -812,9 +1072,11 @@ function renderHomeCalendar(week) {
       const key = dateKey(new Date(state.shownYear, state.shownMonth, day));
       if (state.logs.has(key)) button.classList.add('logged');
       if (state.privateNotes[key]) button.classList.add('has-private-note');
-      if (isPeriodDate(key)) button.classList.add('period');
+      if (isPregnancyDate(key)) button.classList.add('pregnancy-day');
+      else if (isPeriodDate(key)) button.classList.add('period');
       else if (isPredictedPeriodDate(key)) button.classList.add('predicted-period');
       if (isFertileDate(key)) button.classList.add('fertile');
+      button.setAttribute('aria-label', calendarDayLabel(key));
       if (key === dateKey(today)) button.classList.add('today');
       button.addEventListener('click', function () {
         state.selectedDay = day;
@@ -846,11 +1108,22 @@ function getPeriodForDate(key) {
 }
 
 function isPredictedPeriodDate(key) {
-  return Boolean(state.calendar && state.calendar.predicted_period_dates.includes(key));
+  return !isPregnancyMode() && Boolean(state.calendar && state.calendar.predicted_period_dates.includes(key));
 }
 
 function isFertileDate(key) {
-  return Boolean(state.calendar && state.calendar.fertile_dates.includes(key));
+  return !isPregnancyMode() && Boolean(state.calendar && state.calendar.fertile_dates.includes(key));
+}
+
+function calendarDayLabel(key) {
+  const labels = [formatDate(key)];
+  if (isPregnancyMode() && key >= state.tracking.last_period_date) labels.push(ageText(SanaTracking.pregnancy(state.tracking.last_period_date, key)));
+  else if (isPeriodDate(key)) labels.push(t('recordedDay'));
+  else if (isPredictedPeriodDate(key)) labels.push(t('predictedPeriod'));
+  if (isFertileDate(key)) labels.push(t('fertileWindow'));
+  if (state.logs.has(key)) labels.push(t('diaryEntry'));
+  if (key === dateKey(today)) labels.push(t('today'));
+  return labels.join(', ');
 }
 
 function updateLoggerDate() {
@@ -953,6 +1226,7 @@ async function apiRequest(path, options) {
 }
 
 async function loadTrackerData() {
+  await loadTrackingSettings();
   try {
     const responses = await Promise.all([
       apiRequest('/api/logs?limit=100'),
@@ -960,9 +1234,11 @@ async function loadTrackerData() {
     ]);
     setLogs(responses[0]);
     state.periods = responses[1];
+    state.trackerOnline = true;
     cacheLogs();
     cachePeriods();
   } catch (error) {
+    state.trackerOnline = false;
     setLogs(readLocalLogs());
     state.periods = readLocalPeriods();
   }
@@ -975,16 +1251,27 @@ async function loadTrackerData() {
 }
 
 async function loadCalendarForecast() {
+  const request = ++calendarRequestId;
+  const year = state.shownYear; const month = state.shownMonth;
+  const token = state.authToken;
+  let calendar;
   try {
     const custom = state.preferences.useCustom
       ? '&cycle_length=' + state.preferences.cycleLength + '&period_length=' + state.preferences.periodLength
       : '';
-    state.calendar = await apiRequest(
-      '/api/calendar?year=' + state.shownYear + '&month=' + (state.shownMonth + 1) + custom
+    calendar = await apiRequest(
+      '/api/calendar?year=' + year + '&month=' + (month + 1) + custom
     );
+    if (!calendar || !Object.prototype.hasOwnProperty.call(calendar, 'tracking_mode')) calendar = buildLocalCalendarForecast(year, month);
   } catch (error) {
-    state.calendar = buildLocalCalendarForecast(state.shownYear, state.shownMonth);
+    calendar = buildLocalCalendarForecast(year, month);
   }
+  if (request !== calendarRequestId || token !== state.authToken) return;
+  if (calendar.tracking_mode && calendar.tracking_mode !== state.tracking.mode) {
+    await loadTrackingSettings();
+    if (request !== calendarRequestId || token !== state.authToken) return;
+  }
+  state.calendar = SanaTracking.calendar(calendar, state.tracking, year, month, dateKey(today));
 }
 
 const allowedMoods = ['happy', 'calm', 'sensitive', 'sad', 'angry'];
@@ -1028,8 +1315,9 @@ function validateLog(payload) {
 }
 
 function validatePeriod(payload) {
-  if (!datePattern.test(payload.start_date)) return t('invalidDate');
-  if (payload.end_date && !datePattern.test(payload.end_date)) return t('invalidDate');
+  if (!SanaTracking.parse(payload.start_date)) return t('invalidDate');
+  if (payload.end_date && !SanaTracking.parse(payload.end_date)) return t('invalidDate');
+  if (payload.start_date > dateKey(today) || payload.end_date > dateKey(today)) return t('periodFuture');
   if (payload.end_date && payload.end_date < payload.start_date) return t('invalidPeriodDates');
   if (payload.end_date && daysBetween(payload.start_date, payload.end_date) + 1 > 10) return t('periodTooLong');
   if (!allowedFlows.includes(payload.flow)) return t('invalidFlow');
@@ -1102,7 +1390,7 @@ function localSummary() {
     period_length: state.calendar && state.calendar.has_data ? state.calendar.period_length : null,
     first_log_date: first,
     latest_log_date: latest,
-    status: state.logs.size && state.periods.length ? 'ready' : 'needs_more_data',
+    status: state.logs.size && (state.periods.length || isPregnancyMode()) ? 'ready' : 'needs_more_data',
     offline: true
   };
 }
@@ -1141,6 +1429,7 @@ function renderServerSummary() {
   note.textContent = summary.cycle_length
     ? t('summaryCycle').replace('{cycle}', summary.cycle_length).replace('{period}', summary.period_length || '—')
     : t('summaryNeedsDataText');
+  if (isPregnancyMode()) note.textContent = t('periodsPaused');
 }
 
 async function saveLog() {
@@ -1186,10 +1475,13 @@ async function saveLog() {
 }
 
 function openPeriodEditor(key, period) {
+  if (isPregnancyMode()) { showToast(t('periodsPaused')); return; }
   const existing = period || getPeriodForDate(key);
   document.querySelector('#periodId').value = existing ? existing.id : '';
   document.querySelector('#periodStart').value = existing ? existing.start_date : key;
   document.querySelector('#periodEnd').value = existing && existing.end_date ? existing.end_date : '';
+  document.querySelector('#periodStart').max = dateKey(today);
+  document.querySelector('#periodEnd').max = dateKey(today);
   document.querySelector('#periodFlow').value = existing && existing.flow ? existing.flow : 'medium';
   document.querySelector('#deletePeriodButton').hidden = !existing;
   document.querySelector('#periodMessage').textContent = '';
@@ -1210,6 +1502,7 @@ async function refreshPeriodViews() {
 
 async function savePeriodDetails(event) {
   event.preventDefault();
+  if (isPregnancyMode()) { showToast(t('periodsPaused')); return; }
   const id = document.querySelector('#periodId').value;
   const payload = {
     start_date: document.querySelector('#periodStart').value,
@@ -1222,13 +1515,25 @@ async function savePeriodDetails(event) {
   markInvalid(document.querySelector('#periodStart'), !datePattern.test(payload.start_date));
   markInvalid(document.querySelector('#periodEnd'), Boolean(periodError) && Boolean(payload.end_date));
   if (periodError) return;
+  const overlaps = state.periods.some(function (period) {
+    return String(period.id) !== String(id) && !(period.start_date === payload.start_date && !id) &&
+      period.start_date <= (payload.end_date || payload.start_date) && (period.end_date || period.start_date) >= payload.start_date;
+  });
+  if (overlaps) { showFormError(message, t('periodOverlap')); return; }
   let saved;
   try {
     saved = await apiRequest(id ? '/api/periods/' + id : '/api/periods', {
       method: id ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
     });
   } catch (error) {
+    if (state.authToken || state.trackerOnline || (error.status && ![404, 405].includes(error.status))) {
+      showFormError(message, t(error.message === 'pregnancy_mode' ? 'periodsPaused' : error.message === 'period_overlap' ? 'periodOverlap' : 'trackingSaveError')); return;
+    }
     saved = Object.assign({ id: id ? Number(id) : Date.now(), created_at: new Date().toISOString() }, payload);
+  }
+  if (!id) {
+    const duplicate = state.periods.find(function (period) { return period.start_date === saved.start_date; });
+    if (duplicate) saved.id = duplicate.id;
   }
   const index = state.periods.findIndex(function (period) { return String(period.id) === String(saved.id); });
   if (index >= 0) state.periods[index] = saved;
@@ -1239,9 +1544,11 @@ async function savePeriodDetails(event) {
 }
 
 async function deleteEditedPeriod() {
+  if (isPregnancyMode()) { showToast(t('periodsPaused')); return; }
   const id = document.querySelector('#periodId').value;
   if (!id || !window.confirm(t('confirmDeletePeriod'))) return;
-  try { await apiRequest('/api/periods/' + id, { method: 'DELETE' }); } catch (error) {}
+  try { await apiRequest('/api/periods/' + id, { method: 'DELETE' }); }
+  catch (error) { if (state.authToken || state.trackerOnline) { showToast(t('trackingSaveError')); return; } }
   state.periods = state.periods.filter(function (period) { return String(period.id) !== String(id); });
   await refreshPeriodViews();
   setModal(periodModal, false);
@@ -1288,6 +1595,7 @@ function renderFullCycleHistory() {
     edit.type = 'button';
     edit.className = 'text-button';
     edit.textContent = t('historyEdit');
+    edit.hidden = isPregnancyMode();
     edit.addEventListener('click', function () { openPeriodEditor(period.start_date, period); });
     top.append(heading, edit);
     const details = document.createElement('div');
@@ -1327,6 +1635,7 @@ function renderPeriodHistory() {
     const length = document.createElement('small'); length.textContent = period.end_date ? (daysBetween(period.start_date, period.end_date) + 1) + ' ' + t('days') : t('notMarked');
     dates.append(title, length);
     const flow = document.createElement('i'); flow.className = 'period-flow'; flow.textContent = t('flow' + (period.flow || 'medium').charAt(0).toUpperCase() + (period.flow || 'medium').slice(1));
+    button.disabled = isPregnancyMode();
     button.append(dates, flow); button.addEventListener('click', function () { openPeriodEditor(period.start_date, period); }); container.appendChild(button);
   });
 }
@@ -1342,13 +1651,14 @@ function renderCharts() {
 }
 
 function renderAnalytics() {
-  const starts = state.periods.map(function (period) { return period.start_date; }).filter(Boolean).sort();
+  const activePeriods = state.periods.filter(function (period) { return !state.tracking.cycle_resume_date || period.start_date >= state.tracking.cycle_resume_date; });
+  const starts = activePeriods.map(function (period) { return period.start_date; }).filter(Boolean).sort();
   const gaps = [];
   for (let index = 1; index < starts.length; index += 1) {
     const gap = daysBetween(starts[index - 1], starts[index]);
     if (gap >= 21 && gap <= 45) gaps.push(gap);
   }
-  const lengths = state.periods.filter(function (period) { return period.end_date; }).map(function (period) {
+  const lengths = activePeriods.filter(function (period) { return period.end_date; }).map(function (period) {
     return daysBetween(period.start_date, period.end_date) + 1;
   }).filter(function (length) { return length >= 1 && length <= 10; });
   const average = function (values) { return values.length ? Math.round(values.reduce(function (sum, value) { return sum + value; }, 0) / values.length) : null; };
@@ -1374,6 +1684,12 @@ function renderAnalytics() {
   const top = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; })[0];
   document.querySelector('#insightObservationTitle').textContent = top ? t('observationFound').replace('{symptom}', symptomLabel(top)) : t('observationEmpty');
   document.querySelector('#insightObservationText').textContent = top ? t('observationFoundText').replace('{count}', counts[top]) : t('observationEmptyText');
+  document.querySelector('.insight-lead > .insight-stats').hidden = isPregnancyMode();
+  document.querySelector('.insight-lead > .eyebrow').textContent = t(isPregnancyMode() ? 'trackingPregnancy' : 'cycleAnalysis');
+  if (isPregnancyMode()) {
+    document.querySelector('#insightTitle').textContent = ageText(SanaTracking.pregnancy(state.tracking.last_period_date, dateKey(today)));
+    document.querySelector('#insightSummary').textContent = t('periodsPaused');
+  }
 }
 
 function renderWeeklyChart() {
@@ -1395,7 +1711,9 @@ function renderWeeklyChart() {
     bar.style.setProperty('--h', score ? (18 + score * 24) + '%' : '8%');
     bar.classList.toggle('empty', !score);
     bar.classList.toggle('today', dateKey(date) === dateKey(today));
-    bar.querySelector('small').textContent = new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date);
+    bar.querySelector('small').textContent = state.lang === 'kk'
+      ? ['Жс', 'Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб'][date.getDay()]
+      : new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date);
   });
 
   const available = scores.filter(Boolean);
@@ -1467,6 +1785,7 @@ async function handleAuthSuccess(result, message, modal, form) {
   localStorage.setItem('sana-auth-token', result.token);
   localStorage.setItem('sana-auth-expires', result.expires_at);
   localStorage.setItem('sana-user-name', result.user.name);
+  localStorage.setItem('sana-user-id', String(result.user.id));
   updateAuthUI();
   await loadTrackerData();
   message.classList.add('success');
@@ -1554,7 +1873,7 @@ async function logout() {
     // A missing/expired server session can still be cleared locally.
   }
   state.authToken = '';
-  ['sana-auth-token', 'sana-auth-expires', 'sana-user-name'].forEach(function (key) {
+  ['sana-auth-token', 'sana-auth-expires', 'sana-user-name', 'sana-user-id'].forEach(function (key) {
     localStorage.removeItem(key);
   });
   updateAuthUI();
@@ -1583,6 +1902,7 @@ async function toggleNotifications() {
 }
 
 function maybeSendCycleNotification(force) {
+  if (isPregnancyMode()) return;
   if (localStorage.getItem('sana-notifications') !== 'true' || !state.calendar || !state.calendar.has_data) return;
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
   const key = dateKey(today); const last = localStorage.getItem('sana-last-notification');
@@ -1605,6 +1925,7 @@ function togglePrivacy() {
 }
 
 function openCycleSettings() {
+  if (isPregnancyMode()) { showToast(t('periodsPaused')); return; }
   document.querySelector('#preferredCycleLength').value = state.preferences.cycleLength;
   document.querySelector('#preferredPeriodLength').value = state.preferences.periodLength;
   document.querySelector('#reminderDays').value = state.preferences.reminderDays;
@@ -1649,18 +1970,28 @@ function openPregnancyMode() {
   const latestPeriod = state.periods.slice().sort(function (a, b) {
     return b.start_date.localeCompare(a.start_date);
   })[0];
-  input.value = localStorage.getItem('sana-pregnancy-lmp') || (latestPeriod ? latestPeriod.start_date : '');
+  input.value = state.tracking.last_period_date || (latestPeriod ? latestPeriod.start_date : '');
+  input.max = dateKey(today); input.min = SanaTracking.add(dateKey(today), -301);
+  document.querySelector('#pregnancyConfirmed').checked = isPregnancyMode();
+  document.querySelector('#pregnancyConfirmationLabel').hidden = isPregnancyMode();
+  document.querySelector('#endPregnancy').hidden = !isPregnancyMode();
+  document.querySelector('#endPregnancyConfirm').hidden = true;
+  document.querySelector('#activatePregnancy').textContent = t(isPregnancyMode() ? 'updatePregnancy' : 'activatePregnancy');
+  document.querySelector('#trackingMessage').textContent = '';
   document.querySelector('#pregnancyResult').hidden = true;
   document.querySelector('#pregnancyProgress').hidden = true;
+  document.querySelector('#pregnancyBaby').hidden = true;
   setModal(pregnancyModal, true, '#pregnancyLastPeriod');
+  if (input.value) document.querySelector('#calculatePregnancy').click();
 }
 
 function calculatePregnancy() {
   const input = document.querySelector('#pregnancyLastPeriod');
   const result = document.querySelector('#pregnancyResult');
   result.hidden = false;
-  if (!input.value) {
-    result.textContent = t('pregnancyDateRequired');
+  const validationError = pregnancyInputError();
+  if (validationError) {
+    result.textContent = validationError;
     document.querySelector('#pregnancyProgress').hidden = true;
     return;
   }
@@ -1672,7 +2003,6 @@ function calculatePregnancy() {
     document.querySelector('#pregnancyProgress').hidden = true;
     return;
   }
-  localStorage.setItem('sana-pregnancy-lmp', input.value);
   const weeks = Math.floor(elapsedDays / 7);
   const extraDays = elapsedDays % 7;
   const trimester = weeks <= 13 ? 1 : weeks <= 27 ? 2 : 3;
@@ -1684,7 +2014,7 @@ function calculatePregnancy() {
   document.querySelector('#pregnancyWeekTitle').textContent = t('pregnancyWeekResult').replace('{weeks}', weeks).replace('{days}', extraDays);
   document.querySelector('#pregnancyRemaining').textContent = t('pregnancyRemaining').replace('{weeks}', remainingWeeks);
   document.querySelector('#pregnancyWeekCircle').textContent = weeks + '/40';
-  document.querySelector('#pregnancyDueDate').textContent = new Intl.DateTimeFormat(state.lang === 'kk' ? 'kk-KZ' : 'ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).format(dueDate);
+  document.querySelector('#pregnancyDueDate').textContent = formatDate(dateKey(dueDate)) + ' ' + dueDate.getFullYear();
   document.querySelector('#pregnancyCircle').style.setProperty('--pregnancy-progress', progress + '%');
   document.querySelector('#pregnancyProgress').hidden = false;
 }
@@ -1730,9 +2060,12 @@ async function confirmClearData() {
 }
 
 async function clearLocalData() {
+  let clearedOnServer = false;
   try {
     await apiRequest('/api/data', { method: 'DELETE' });
+    clearedOnServer = true;
   } catch (error) {
+    if (state.authToken || state.trackerOnline) { showToast(t('trackingSaveError')); return; }
     // GitHub Pages has no backend, so local cleanup below is enough there.
   }
   ['sana-logs', 'sana-periods', 'sana-notifications', 'sana-private-notes'].forEach(function (key) {
@@ -1741,6 +2074,9 @@ async function clearLocalData() {
   state.logs.clear();
   state.periods = [];
   state.privateNotes = {};
+  localStorage.removeItem(trackingCacheKey());
+  state.tracking = SanaTracking.normalize(null);
+  if (!clearedOnServer) cacheTracking(true);
   await loadCalendarForecast();
   await loadSummary();
   renderForecastSummary();
@@ -1861,6 +2197,42 @@ async function sendChatMessage(event) {
 }
 
 function bindEvents() {
+  document.querySelector('#trackingModeButton').addEventListener('click', openPregnancyMode);
+  document.querySelector('#calendarPregnancySettings').addEventListener('click', openPregnancyMode);
+  document.querySelector('#activatePregnancy').addEventListener('click', activatePregnancyMode);
+  document.querySelector('#endPregnancy').addEventListener('click', function () {
+    document.querySelector('#endPregnancyConfirm').hidden = false;
+    document.querySelector('#cancelEndPregnancy').focus();
+  });
+  document.querySelector('#cancelEndPregnancy').addEventListener('click', function () {
+    document.querySelector('#endPregnancyConfirm').hidden = true;
+    document.querySelector('#endPregnancy').focus();
+  });
+  document.querySelector('#confirmEndPregnancy').addEventListener('click', finishPregnancyMode);
+  document.querySelector('#pregnancyLastPeriod').addEventListener('change', function () {
+    document.querySelector('#trackingMessage').textContent = '';
+    document.querySelector('#calculatePregnancy').click();
+  });
+  document.querySelector('#calendarToday').addEventListener('click', goToToday);
+  document.querySelector('#selectPeriodDays').addEventListener('click', function () {
+    if (isPregnancyMode()) return;
+    state.periodSelection = { start: null, end: null }; renderCalendar();
+  });
+  document.querySelector('#cancelPeriodSelection').addEventListener('click', function () { state.periodSelection = null; renderCalendar(); });
+  document.querySelector('#continuePeriodSelection').addEventListener('click', function () {
+    const selection = state.periodSelection;
+    if (!selection || !selection.start || isPregnancyMode()) return;
+    openPeriodEditor(selection.start);
+    document.querySelector('#periodEnd').value = selection.end || selection.start;
+    state.periodSelection = null; renderCalendar();
+  });
+  pregnancyModal.addEventListener('keydown', function (event) {
+    if (event.key !== 'Tab') return;
+    const fields = Array.from(pregnancyModal.querySelectorAll('button:not([disabled]), input:not([disabled])')).filter(function (node) { return node.getClientRects().length; });
+    const first = fields[0]; const last = fields[fields.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
   document.querySelectorAll('[data-view]').forEach(function (button) {
     button.addEventListener('click', function () {
       setView(button.dataset.view);
@@ -1960,7 +2332,8 @@ function bindEvents() {
   document.querySelector('#calculatePregnancy').addEventListener('click', calculatePregnancy);
   document.querySelector('#saveLog').addEventListener('click', saveLog);
   document.querySelector('#logPeriodButton').addEventListener('click', function () {
-    openPeriodEditor(dateKey(today));
+    if (isPregnancyMode()) { state.logDate = dateKey(today); fillLogForm(state.logDate); setView('log'); }
+    else openPeriodEditor(dateKey(today));
   });
   document.querySelector('#markSelectedPeriodButton').addEventListener('click', function () {
     openPeriodEditor(selectedDateKey());
@@ -2048,6 +2421,18 @@ function bindEvents() {
 
 async function init() {
   bindEvents();
+  if (state.authToken) {
+    try {
+      const user = await apiRequest('/api/auth/me');
+      localStorage.setItem('sana-user-id', String(user.id));
+      localStorage.setItem('sana-user-name', user.name);
+    } catch (error) {
+      if (error.status === 401) {
+        state.authToken = '';
+        ['sana-auth-token', 'sana-user-id', 'sana-user-name', 'sana-auth-expires'].forEach(function (key) { localStorage.removeItem(key); });
+      }
+    }
+  }
   const savedModel = localStorage.getItem('sana-ollama-model');
   if (savedModel) document.querySelector('#ollamaModel').value = savedModel;
   savePreferences();
@@ -2057,7 +2442,7 @@ async function init() {
   await loadTrackerData();
   await loadChatHistory();
   maybeSendCycleNotification();
-  if (!localStorage.getItem('sana-onboarding-done') && !state.periods.length) setModal(onboardingModal, true);
+  if (!localStorage.getItem('sana-onboarding-done') && !state.periods.length && !isPregnancyMode()) setModal(onboardingModal, true);
   checkOllama();
 }
 
@@ -2135,10 +2520,11 @@ Object.assign(copy.kk, {
 
   function currentWeekFromInput() {
     const value = document.querySelector('#pregnancyLastPeriod').value;
-    if (!value) return null;
+    if (!value || pregnancyInputError()) return null;
     const elapsed = Math.floor((dateFromKey(dateKey(today)) - dateFromKey(value)) / 86400000);
     if (!Number.isFinite(elapsed) || elapsed < 0) return null;
-    return Math.floor(elapsed / 7);
+    const week = Math.floor(elapsed / 7);
+    return week >= MIN_WEEK && week <= MAX_WEEK ? week : null;
   }
 
   function formatNumber(value) {
@@ -2211,22 +2597,6 @@ Object.assign(copy.kk, {
 
   // Кнопка «Рассчитать»: наш обработчик срабатывает после старого
   document.querySelector('#calculatePregnancy').addEventListener('click', syncBabySize);
-
-  // При открытии режима беременности: если дата уже есть, сразу считаем
-  ['#pregnancyButton', '#homePregnancyButton'].forEach(function (selector) {
-    const button = document.querySelector(selector);
-    if (!button) return;
-    button.addEventListener('click', function () {
-      setTimeout(function () {
-        if (document.querySelector('#pregnancyLastPeriod').value) {
-          document.querySelector('#calculatePregnancy').click();
-        } else {
-          baby.current = null;
-          renderBabySize();
-        }
-      }, 0);
-    });
-  });
 
   // Смена языка: перерисовываем названия
   document.querySelectorAll('.lang').forEach(function (button) {

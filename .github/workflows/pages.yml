@@ -26,7 +26,11 @@ jobs:
       - name: Validate HTML and static assets
         run: python3 tests/check_frontend.py
       - name: Validate JavaScript syntax
-        run: node --check frontend/app.js
+        run: |
+          node --check frontend/app.js
+          node --check frontend/tracking.js
+      - name: Check tracking modes and offline calendar
+        run: node tests/check_tracking.cjs
       - name: Check guest and account identity
         run: node tests/check_profile_identity.cjs
       - name: Check deletion confirmation and analytics actions

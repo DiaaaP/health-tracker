@@ -26,6 +26,7 @@ const context = vm.createContext({
 });
 
 // Load application functions without starting network requests or event handlers.
+vm.runInContext(fs.readFileSync(path.join(__dirname, '../frontend/tracking.js'), 'utf8'), context);
 vm.runInContext(source.replace(/\binit\(\);\s*/, ''), context);
 
 for (const [lang, guest, homeTitle] of [['ru', 'Гость', 'Главная'], ['kk', 'Қонақ', 'Басты']]) {

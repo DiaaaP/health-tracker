@@ -2196,7 +2196,87 @@ async function sendChatMessage(event) {
   }
 }
 
+function setPregnancyTab(tab) {
+  const allowed = ['my', 'hospitals', 'prepare'];
+  const selected = allowed.includes(tab) ? tab : 'my';
+  document.querySelectorAll('[data-pregnancy-tab]').forEach(function (button) {
+    const active = button.dataset.pregnancyTab === selected;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  allowed.forEach(function (name) {
+    const panel = document.querySelector('#pregnancyTab' + name.charAt(0).toUpperCase() + name.slice(1));
+    if (panel) panel.hidden = name !== selected;
+  });
+  localStorage.setItem('sana-pregnancy-tab', selected);
+}
+
+function restorePregnancyChecklist() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem('sana-pregnancy-checklist') || '{}') || {}; } catch (error) { saved = {}; }
+  document.querySelectorAll('[data-prep-check]').forEach(function (checkbox) {
+    checkbox.checked = Boolean(saved[checkbox.dataset.prepCheck]);
+  });
+}
+
+Object.assign(copy.ru, {
+  pregnancyTabMy: 'Моя беременность', pregnancyTabHospitals: 'Роддома Алматы', pregnancyTabPrepare: 'Подготовка к родам',
+  hospitalsEyebrow: 'АЛМАТЫ', hospitalsHeading: 'Родильные дома и перинатальные центры',
+  hospitalsIntro: 'Контакты государственных учреждений. Перед поездкой уточните условия приёма и доступность услуг по телефону.',
+  publicMaternity: 'Государственный роддом', perinatalCenter: 'Перинатальный центр',
+  hospital1: 'Городской родильный дом №1', hospital2: 'Городской родильный дом №2',
+  hospital4: 'Городской родильный дом №4', hospital5: 'Городской родильный дом №5',
+  hospitalPerinatal: 'Городской перинатальный центр №1',
+  hospitalCardio: 'Центр перинатологии и детской кардиохирургии',
+  openMap: 'На карте', admissionPhone: 'Приёмное отделение: +7 (727) 268-00-50',
+  officialSite: 'Официальный сайт',
+  hospitalDisclaimer: 'Список не является рейтингом или медицинской рекомендацией. Телефоны и условия приёма могут меняться — уточняйте информацию напрямую в учреждении.',
+  prepareEyebrow: 'СПОКОЙНАЯ ПОДГОТОВКА', prepareHeading: 'Чек-лист перед родами',
+  prepareIntro: 'Отмечайте пункты по мере подготовки. Список можно изменить под рекомендации выбранного роддома.',
+  prepDocuments: 'Документы', prepId: 'Удостоверение личности',
+  prepExchange: 'Обменная карта и документы по беременности', prepTests: 'Результаты анализов и обследований',
+  prepMotherBag: 'Сумка для мамы', prepClothes: 'Удобная одежда и бельё',
+  prepHygiene: 'Средства личной гигиены', prepCharger: 'Телефон и зарядное устройство',
+  prepBabyBag: 'Для малыша', prepBabyClothes: 'Одежда для новорождённого',
+  prepDiapers: 'Подгузники и пелёнки', prepBlanket: 'Плед или конверт для выписки',
+  prepDisclaimer: 'Уточните у выбранного роддома, что именно нужно взять с собой: требования могут отличаться.'
+});
+Object.assign(copy.kk, {
+  pregnancyTabMy: 'Менің жүктілігім', pregnancyTabHospitals: 'Алматы перзентханалары', pregnancyTabPrepare: 'Босануға дайындық',
+  hospitalsEyebrow: 'АЛМАТЫ', hospitalsHeading: 'Перзентханалар мен перинаталдық орталықтар',
+  hospitalsIntro: 'Мемлекеттік мекемелердің байланыс деректері. Бармас бұрын қабылдау тәртібі мен қызметтерді телефон арқылы нақтылаңыз.',
+  publicMaternity: 'Мемлекеттік перзентхана', perinatalCenter: 'Перинаталдық орталық',
+  hospital1: '№1 қалалық перзентхана', hospital2: '№2 қалалық перзентхана',
+  hospital4: '№4 қалалық перзентхана', hospital5: '№5 қалалық перзентхана',
+  hospitalPerinatal: '№1 қалалық перинаталдық орталық',
+  hospitalCardio: 'Перинатология және балалар кардиохирургиясы орталығы',
+  openMap: 'Картадан көру', admissionPhone: 'Қабылдау бөлімі: +7 (727) 268-00-50',
+  officialSite: 'Ресми сайт',
+  hospitalDisclaimer: 'Бұл тізім рейтинг немесе медициналық кеңес емес. Телефондар мен қабылдау шарттары өзгеруі мүмкін — ақпаратты мекеменің өзінен нақтылаңыз.',
+  prepareEyebrow: 'САБЫРМЕН ДАЙЫНДАЛУ', prepareHeading: 'Босануға арналған чек-парақ',
+  prepareIntro: 'Дайын болған сайын тармақтарды белгілеңіз. Тізімді таңдаған перзентхананың талаптарына сай толықтыруға болады.',
+  prepDocuments: 'Құжаттар', prepId: 'Жеке куәлік',
+  prepExchange: 'Айырбастау картасы және жүктілікке қатысты құжаттар', prepTests: 'Талдаулар мен тексерулер нәтижелері',
+  prepMotherBag: 'Анаға арналған сөмке', prepClothes: 'Ыңғайлы киім мен іш киім',
+  prepHygiene: 'Жеке гигиена құралдары', prepCharger: 'Телефон және қуаттағыш',
+  prepBabyBag: 'Сәбиге арналған заттар', prepBabyClothes: 'Жаңа туған нәрестеге арналған киім',
+  prepDiapers: 'Жөргектер мен жаялықтар', prepBlanket: 'Шығаруға арналған көрпе немесе конверт',
+  prepDisclaimer: 'Таңдаған перзентханаңыздан өзіңізбен бірге нақты не алу керегін сұраңыз: талаптар әртүрлі болуы мүмкін.'
+});
+
 function bindEvents() {
+  document.querySelectorAll('[data-pregnancy-tab]').forEach(function (button) {
+    button.addEventListener('click', function () { setPregnancyTab(button.dataset.pregnancyTab); });
+  });
+  document.querySelectorAll('[data-prep-check]').forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+      const saved = {};
+      document.querySelectorAll('[data-prep-check]').forEach(function (item) { saved[item.dataset.prepCheck] = item.checked; });
+      localStorage.setItem('sana-pregnancy-checklist', JSON.stringify(saved));
+    });
+  });
+  restorePregnancyChecklist();
+  setPregnancyTab(localStorage.getItem('sana-pregnancy-tab') || 'my');
   document.querySelector('#trackingModeButton').addEventListener('click', openPregnancyMode);
   document.querySelector('#calendarPregnancySettings').addEventListener('click', openPregnancyMode);
   document.querySelector('#activatePregnancy').addEventListener('click', activatePregnancyMode);
